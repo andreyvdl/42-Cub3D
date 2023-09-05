@@ -144,6 +144,36 @@ char    *get_next_line(int fd)
     return (line);
 }
 
+char	*ft_strrchr(char *s, int c)
+{
+	size_t	index;
+
+	index = ft_strlen(s);
+	while (index)
+	{
+		if (s[index] == c)
+			return (s + index);
+		--index;
+	}
+	if (*s == c)
+		return (s);
+	return (NULL);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int		difference;
+
+	while (*s1 != '\0' && *s2 != '\0')
+	{
+		difference = (int)*s1++ - (int)*s2++;
+		if (difference != 0)
+			return (difference);
+	}
+	difference = (int)*s1 - (int)*s2;
+	return (difference);
+}
+
 int	main(int argc, char *argv[])
 {
 	int		fd;
@@ -156,7 +186,27 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	// Fazer validação .cub
+	if (ft_strlen(argv[1]) < 5)
+	{
+		puts("Make the L! 2");
+		return (1);
+	}
+	else if (ft_strrchr(argv[1], '.') == NULL)
+	{
+		puts("Make the L! 3");
+		return (1);
+	}
+	else if (ft_strcmp(ft_strrchr(argv[1], '.'), ".cub"))
+	{
+		puts("Make the L! 4");
+		return (1);
+	}
 	fd = open(argv[1], O_RDONLY);
+	if (fd < 0)
+	{
+		puts("Make the L! 5");
+		return (1);
+	}
 	line = 0;
 	while (line < 15)
 		lines[line++] = get_next_line(fd);
