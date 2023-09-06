@@ -3,8 +3,9 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	len = 0;
+	size_t	len;
 
+	len = 0;
 	if (s == NULL)
 		return (len);
 	while (s[len] != '\0')
@@ -14,9 +15,10 @@ size_t	ft_strlen(const char *s)
 
 char	*ft_strdup(const char *s)
 {
-	size_t	len = 0;
+	size_t	len;
 	char	*dup;
 
+	len = 0;
 	if (!s || s[0] == '\0')
 		return (NULL);
 	while (s[len])
