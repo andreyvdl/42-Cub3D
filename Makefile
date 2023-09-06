@@ -19,8 +19,7 @@ $(NAME): $(OBJS)
 
 dir:
 	$(if ifeq ($(wildcard $(OBJS_FOLDER_DIR_PATH)),), \
-		mkdir -p $(OBJS_FOLDER_DIR_PATH))
-	
+		$(shell mkdir -p $(OBJS_FOLDER_DIR_PATH)))
 
 clean:
 	$(RM) $(OBJS) -r $(OBJS_FOLDER_DIR_PATH)
