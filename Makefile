@@ -1,13 +1,13 @@
 
-NAME		=	cub3D
+NAME					=	cub3D
 
-SCRS		=	get_next_line.c main.c utils.c
-OBJS_FOLDER_DIR_PATH =	objs/
-OBJS		=	$(addprefix $(OBJS_FOLDER_DIR_PATH),$(SCRS:%.c=%.o))
+SCRS					=	get_next_line.c main.c utils.c
+OBJS_FOLDER_DIR_PATH	=	objs/
+OBJS					=	$(addprefix $(OBJS_FOLDER_DIR_PATH),$(SCRS:%.c=%.o))
 
-FLAGS		=	
+FLAGS					=	-g
 
-RM			=	rm -f
+RM						=	rm -f
 
 all: dir $(NAME)
 
