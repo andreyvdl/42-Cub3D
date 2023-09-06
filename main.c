@@ -1,191 +1,12 @@
 # include "cube.h"
 
-size_t    ft_strlen(char *s)
+int	error_checker(int argc, char *argv[])
 {
-    size_t    len = 0;
-
-    if (s == NULL)
-        return (len);
-    while (s[len] != '\0')
-        len++;
-    return (len);
-}
-
-char    *ft_strdup(char *s)
-{
-    size_t    len = 0;
-    char    *dup;
-
-    if (!s || s[0] == '\0')
-        return (NULL);
-    while (s[len])
-        len++;
-    dup = malloc (++len);
-    if (!dup)
-        return (NULL);
-    while (len--)
-        dup[len] = s[len];
-    return (dup);
-}
-
-char	*ft_realloc(char *s1, char *s2)
-{
-	char	*new;
-	size_t	index1 = 0;
-	size_t	index2 = 0;
-	size_t	index_new = 0;
-
-	if (s1 == NULL && s2 == NULL)
-	{
-		return (NULL);
-	}
-	new = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!new)
-	{
-		return (NULL);
-	}
-	while (s1 != NULL && s1[index1] != '\0')
-	{
-		new[index_new] = s1[index1];
-		index_new++;
-		index1++;
-	}
-	free(s1);
-	while (s2 != NULL && s2[index2] != '\0')
-	{
-		new[index_new] = s2[index2];
-		index_new++;
-		index2++;
-	}
-	new[index_new] = 0;
-	return (new);
-}
-
-char    *get_next_line(int fd)
-{
-    static char    *rest;
-    char        *line;
-    char        *aux;
-    int            i = 0;
-    long        bytes_read = 1;
-
-    if (rest != NULL)
-    {
-        while (rest[i] != '\n' && rest[i] != '\0')
-            i++;
-        if (rest[i] == '\n')
-        {
-            char    bkp = rest[i + 1]; 
-            rest[i + 1] = '\0';
-            line = ft_strdup(rest);
-            if (!line)
-            {
-                free(rest);
-                rest = NULL;
-                return (NULL);
-            }
-            rest[i + 1] = bkp; 
-            aux = rest;
-            rest = ft_strdup(&rest[i + 1]); 
-            free(aux);
-            return (line);
-        }
-    }
-    line = malloc(BUFFER_SIZE + 1);
-    while (bytes_read > 0)
-    {
-        bytes_read = read(fd, line, BUFFER_SIZE);
-        if (bytes_read < 0)
-        {
-            free(line);
-            free(rest);
-            rest = NULL;
-            return (NULL);
-        }
-        line[bytes_read] = '\0';
-        if (bytes_read == 0)
-            break;
-        rest = ft_realloc(rest, line);
-        i = 0;
-        while (line[i] != '\n' && line[i] != '\0')
-            i++;
-        if (line[i] == '\n')
-        {
-            break ;
-        }
-    }
-    free(line);
-    if (rest == NULL)
-        return (NULL);
-    i = 0;
-    while (rest[i] != '\n' && rest[i] != '\0')
-        i++;
-    if (rest[i] == '\n')
-    {
-        char    bkp = rest[i + 1];
-        rest[i + 1] = '\0';
-        line = ft_strdup(rest);
-        if (!line)
-        {
-            free(rest);
-            rest = NULL;
-            return (NULL);
-        }
-        rest[i + 1] = bkp;
-        aux = rest;
-        rest = ft_strdup(&rest[i + 1]);
-        free(aux);
-    }
-    else
-    {
-        line = rest;
-        rest = NULL;
-    }
-    return (line);
-}
-
-char	*ft_strrchr(char *s, int c)
-{
-	size_t	index;
-
-	index = ft_strlen(s);
-	while (index)
-	{
-		if (s[index] == c)
-			return (s + index);
-		--index;
-	}
-	if (*s == c)
-		return (s);
-	return (NULL);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int		difference;
-
-	while (*s1 != '\0' && *s2 != '\0')
-	{
-		difference = (int)*s1++ - (int)*s2++;
-		if (difference != 0)
-			return (difference);
-	}
-	difference = (int)*s1 - (int)*s2;
-	return (difference);
-}
-
-int	main(int argc, char *argv[])
-{
-	int		fd;
-	int		line;
-	char	*lines[15];
-
 	if (argc != 2)
 	{
 		puts("Make the L!");
 		return (1);
 	}
-	// Fazer validação .cub
 	if (ft_strlen(argv[1]) < 5)
 	{
 		puts("Make the L! 2");
@@ -201,21 +22,90 @@ int	main(int argc, char *argv[])
 		puts("Make the L! 4");
 		return (1);
 	}
-	fd = open(argv[1], O_RDONLY);
+	return (0);
+}
+
+void print_map(char **map)
+{
+	int	i;
+	for (i = 0; map[i]; i++)
+		printf("%s", map[i]);
+	if (!ft_strrchr(map[i - 1], '\n'))
+		puts("");
+}
+
+int	coun_map_lines(char *file_path)
+{
+	char	*line;
+	int		fd;
+	int		map_lines;
+	int		map_start;
+
+	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
 	{
 		puts("Make the L! 5");
-		return (1);
+		return (-1);
 	}
-	line = 0;
-	while (line < 15)
-		lines[line++] = get_next_line(fd);
-	line = 0;
-	while (lines[line])
+	map_lines = 0;
+	line = get_next_line(fd);
+	map_start = 0;
+	while (line)
 	{
-		printf("linha %2d|%s", line + 1, lines[line]);
-		line++;
+		if (line[0] != '\n')
+			map_start++;
+		if (line[0] != '\n' && map_start > 6)
+			map_lines++;
+		// Casos faltantes: map doesn't exists, wrong map (abyss or too much \n)
+		free(line);
+		line = get_next_line(fd);
 	}
-	puts("");
+	close(fd);
+	return (map_lines);
+}
+
+char	**do_the_map(char *file_path, int map_lines)
+{
+	int		fd;
+	int		map_start;
+	char	*line;
+	char	**map;
+
+	fd = open(file_path, O_RDONLY);
+	map = malloc((map_lines + 1) * sizeof(char *));
+	if (!map)
+		return (NULL);
+	map_start = 0;
+	line = get_next_line(fd);
+	map_lines = 0;
+	while (line)
+	{
+		if (line[0] != '\n')
+			map_start++;
+		else
+			free(line);
+		if (line[0] != '\n' && map_start > 6)
+			map[map_lines++] = line;
+		line = get_next_line(fd);
+	}
+	map[map_lines] = line;
+	close(fd);
+	return (map);
+}
+
+int	main(int argc, char *argv[])
+{
+	int		map_lines;
+	char	**map;
+
+	if (error_checker(argc, argv))
+		return (1);
+	map_lines = coun_map_lines(argv[1]);
+	if (map_lines < 0)
+		return (2);
+	map = do_the_map(argv[1], map_lines);
+	if (!map)
+		return (1);
+	print_map(map);
 	return (0);
 }
