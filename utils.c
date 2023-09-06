@@ -1,7 +1,7 @@
 
 #include "cube.h"
 
-size_t	ft_strlen(const char *s)
+size_t	ft_strlen(char *s)
 {
 	size_t	len;
 
@@ -13,7 +13,7 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-char	*ft_strdup(const char *s)
+char	*ft_strdup(char *s)
 {
 	size_t	len;
 	char	*dup;
@@ -45,6 +45,46 @@ char	*ft_strrchr(char *s, int c)
 	if (*s == c)
 		return (s);
 	return (NULL);
+}
+
+int	ft_strncmp(char *s1, char *s2, size_t n)
+{
+	int		difference;
+	size_t	index;
+
+	if (n == 0)
+		return (0);
+	while (n)
+	{
+		difference = (int)*s1++ - (int)*s2++;
+		if (difference != 0)
+			return (difference);
+		--n;
+	}
+	return (difference);
+}
+
+char	*ft_strtrim(char *s1, char *set)
+{
+	size_t	start;
+	size_t	end;
+	size_t	i;
+	char	*trimmed;
+
+	if (s1 == NULL)
+		return (NULL);
+	start = 0;
+	while (s1[start] && ft_strrchr(set, s1[start]) != NULL)
+		++start;
+	end = ft_strlen(s1) - 1;
+	while (end > start && ft_strrchr(set, s1[end]) != NULL)
+		--end;
+	trimmed = malloc(end - start + 1);
+	i = 0;
+	while (start <= end)
+		trimmed[i++] = s1[start++];
+	trimmed[i] = 0;
+	return (trimmed);
 }
 
 int	ft_strcmp(char *s1, char *s2)

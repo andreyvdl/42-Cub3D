@@ -12,10 +12,13 @@
 # endif
 
 // Utils.c
-size_t	ft_strlen(const char *s);
-char	*ft_strdup(const char *s);
+size_t	ft_strlen(char *s);
+char	*ft_strdup(char *s);
 char	*ft_strrchr(char *s, int c);
 int		ft_strcmp(char *s1, char *s2);
+int		ft_strncmp(char *s1, char *s2, size_t n);
+char	*ft_strtrim(char *s1, char *set);
+
 
 // get_next_line.c
 char	*ft_realloc(char *s1, char *s2);

@@ -34,6 +34,42 @@ void print_map(char **map)
 		puts("");
 }
 
+int	validate_elemente(char *line)
+{
+	// tenho q pensar em como fazer isso aqui
+	static int	matches;
+	const char	*elements[6] = {"NO", "SO", "WE", "EA", "F", "C"};
+	static char	*matched[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
+	int			i;
+
+	return (matches);
+}
+
+int	element_checker(char *file_name, char **map)
+{
+	int		fd;
+	char	*line;
+	int		match;
+
+	fd = open(file_name, O_RDONLY);
+	line = get_next_line(fd);
+	match = 0;
+	while (line && match != 6)
+	{
+		if (line[0] != '\n')
+			match = validate_element(line);
+		if (match == -1)
+		{
+			puts("Make the L! 6");
+			free(line);
+			return (1);
+		}
+		free(line);
+		line = get_next_line(fd);
+	}
+	return (0);
+}
+
 int	coun_map_lines(char *file_path)
 {
 	char	*line;
@@ -105,6 +141,8 @@ int	main(int argc, char *argv[])
 		return (2);
 	map = do_the_map(argv[1], map_lines);
 	if (!map)
+		return (1);
+	if (element_checker(argv[1], map))
 		return (1);
 	print_map(map);
 	return (0);
