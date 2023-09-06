@@ -1,0 +1,15 @@
+Fluxo de desenvolvimento para o cube:
+
+01 - Validar input
+02 - checar se arquivo tem os elementos corretos
+03 - Validação de mapa (existe, tá certo, etc., etc.)
+
+04 - Validar texturas
+05 - Validar cores
+
+06 - Abrir janela
+07 - Criar elementos visuais
+08 - Checar RayCasting
+09 - Colisão de objetos
+10 - Andar (Ver coomo não ser 1 movimento == 1 quadrado)
+11 - Fazer o L!
