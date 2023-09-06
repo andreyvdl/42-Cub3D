@@ -31,3 +31,6 @@ re: fclean all
 #	make
 
 .PHONY: all clean fclean re
+
+v:
+	clear && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./$(NAME) f.cub
