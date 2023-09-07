@@ -18,7 +18,7 @@ char	*ft_strrchr(char *s, int c);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(char *s1, char *s2, size_t n);
 char	*ft_strtrim(char *s1, char *set);
-
+int		ft_isdigit(int c);
 
 // get_next_line.c
 char	*ft_realloc(char *s1, char *s2);

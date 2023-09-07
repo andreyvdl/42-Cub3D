@@ -100,3 +100,20 @@ int	ft_strcmp(char *s1, char *s2)
 	difference = (int)*s1 - (int)*s2;
 	return (difference);
 }
+
+int	ft_isdigit(int c)
+{
+	return (c >= '0' && c <= '9');
+}
+
+size_t	ft_matrixlen(char **matrix)
+{
+	size_t	size;
+
+	if (matrix == NULL)
+		return (0);
+	size = 0;
+	while (matrix[size] != NULL)
+		++size;
+	return (size);
+}
