@@ -45,34 +45,90 @@ void print_map(char **map)
 		puts("");
 }
 
+int	invalid_number(char *str)
+{
+	size_t	i;
+	size_t	j;
+	int		n;
+
+	j = 0;
+	while (str[j] == '0')
+		++j;
+	i = j;
+	while (ft_isdigit(str[i]))
+		++i;
+	if (i - j > 3 || str[i] != '\0')
+		return (-1);
+	n = ft_atoi(str);
+	if (n > 255)
+		return (-1);
+	return (0);
+}
+
+size_t	find_and_count(char *str, char c)
+{
+	size_t	n;
+
+	if (str == NULL)
+		return (0);
+	n = 0;
+	while (*str != '\0')
+		if (*str++ == c)
+			++n;
+	return (n);
+}
+
+int	colors_invalid(char **line)
+{
+	// Validar F e C
+	// Se não houver something that is comma e número, quita (set?) (último número nunca terá vírgula)
+	// Número entre 0 e 255 (montado conforme atoi) [Checar se cabe no range 0-255, vide minishell]
+	// Salvar nada
+	// possibilidades: [123,123,123] | [123,123,123,blblbl] | [123,123,123bla]
+	// [123bla,123,123] | [123,123bla,123]
+	size_t	commas;
+	commas = find_and_count(*line, ',');
+	if (commas != 2)
+		return (-1);
+	// split aqui por virgulas
+	// resto está só pre codado
+	char	**split = ft_split(*line, ',');
+	if (ft_matrixlen(split) != 3)
+	{
+		free(split);
+		return (-1);
+	}
+	else if (invalid_number(split[0]) || invalid_number(split[1]) || invalid_number(split[2]))
+	{
+		free(split);
+		return (-1);
+	}
+	free(split);
+	return (0);
+}
+
 int	validate_elemente(char **line)
 {
-	// tenho q pensar em como fazer isso aqui
-	static int	matches;
 	const char	*elements[6] = {"NO", "SO", "WE", "EA", "F", "C"};
 	static char	*matched[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
+	static int	matches;
 	int			i;
 
 	i = 0;
-	while (i < 6 && ft_strcmp(elements[i], *line) != 0)
+	while (i < 6 && ft_strcmp((char *)elements[i], *line) != 0)
 		++i;
 	if (i == 6)
-		matches = -1;
+		return (-1);
 	else
 	{
 		if (matched[i] == NULL)
 		{
-			matched[i] = elements[i];
+			matched[i] = (char *)elements[i];
 			matches++;
-			if (i < 4 && (line[1] == NULL || line[2] != NULL))
+			if (line[1] == NULL || line[2] != NULL)
 				return (-1);
-			else
-			{
-				// Validar F e C
-				// Se não houver something that is comma e número, quita (set?) (último número nunca terá vírgula)
-				// Número entre 0 e 255 (montado conforme atoi) [Checar se cabe no range 0-255, vide minishell]
-				// Salvar nada
-			}
+			else if (i >= 4 && colors_invalid(&line[1]))
+				return (-1);
 		}
 		else
 		{
