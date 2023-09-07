@@ -45,7 +45,7 @@ void print_map(char **map)
 		puts("");
 }
 
-int	validate_elemente(char *line)
+int	validate_elemente(char **line)
 {
 	// tenho q pensar em como fazer isso aqui
 	static int	matches;
@@ -53,6 +53,33 @@ int	validate_elemente(char *line)
 	static char	*matched[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
 	int			i;
 
+	i = 0;
+	while (i < 6 && ft_strcmp(elements[i], *line) != 0)
+		++i;
+	if (i == 6)
+		matches = -1;
+	else
+	{
+		if (matched[i] == NULL)
+		{
+			matched[i] = elements[i];
+			matches++;
+			if (i < 4 && (line[1] == NULL || line[2] != NULL))
+				return (-1);
+			else
+			{
+				// Validar F e C
+				// Se não houver something that is comma e número, quita (set?) (último número nunca terá vírgula)
+				// Número entre 0 e 255 (montado conforme atoi) [Checar se cabe no range 0-255, vide minishell]
+				// Salvar nada
+			}
+		}
+		else
+		{
+			puts("Make th L! 8");
+			return (-1);
+		}
+	}
 	return (matches);
 }
 
