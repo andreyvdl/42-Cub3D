@@ -1,5 +1,16 @@
 # include "cube.h"
 
+int	all_chars_is_in_set(char *arg, char *set)
+{
+	while (*arg && ft_strchr(set, *arg))
+	{
+		arg++;
+	}
+	if (*arg == 0)
+		return (1);
+	return (0);
+}
+
 int	error_checker(int argc, char *argv[])
 {
 	if (argc != 2)
