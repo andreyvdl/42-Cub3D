@@ -100,7 +100,14 @@ int	coun_map_lines(char *file_path)
 	while (line)
 	{
 		if (line[0] != '\n')
+		{
+			// split (matar \n antes do rolê)
+			// if (split == NULL|| *split == NULL)
+			// free(line);
+			// puts ("Make the L 6");
+			// return (-1);
 			map_start++;
+		}
 		if (line[0] != '\n' && map_start > 6)
 			map_lines++;
 		// Casos faltantes: map doesn't exists, wrong map (abyss or too much \n)
