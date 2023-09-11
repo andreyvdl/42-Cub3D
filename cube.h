@@ -20,6 +20,9 @@ int		ft_strncmp(char *s1, char *s2, size_t n);
 char	*ft_strtrim(char *s1, char *set);
 int		ft_isdigit(int c);
 
+// ft_split.c
+char	**ft_split(char *s, char c);
+
 // get_next_line.c
 char	*ft_realloc(char *s1, char *s2);
 char	*get_next_line(int fd);
