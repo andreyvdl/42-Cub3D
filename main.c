@@ -59,7 +59,7 @@ int	invalid_number(char *str)
 		++i;
 	if (i - j > 3 || str[i] != '\0')
 		return (-1);
-	n = ft_atoi(str);
+	n = ft_atoi(str); // precisa adicionar a atoi
 	if (n > 255)
 		return (-1);
 	return (0);
@@ -78,7 +78,7 @@ size_t	find_and_count(char *str, char c)
 	return (n);
 }
 
-int	colors_invalid(char **line)
+int	colors_invalid(char **lines)
 {
 	// Validar F e C
 	// Se não houver something that is comma e número, quita (set?) (último número nunca terá vírgula)
@@ -86,36 +86,36 @@ int	colors_invalid(char **line)
 	// Salvar nada
 	// possibilidades: [123,123,123] | [123,123,123,blblbl] | [123,123,123bla]
 	// [123bla,123,123] | [123,123bla,123]
-	size_t	commas;
-	commas = find_and_count(*line, ',');
-	if (commas != 2)
+	if (find_and_count(*lines, ' ') != 2)
 		return (-1);
 	// split aqui por virgulas
 	// resto está só pre codado
-	char	**split = ft_split(*line, ',');
+	char	**split = ft_split(*lines, ',');
 	if (ft_matrixlen(split) != 3)
 	{
-		free(split);
+		ft_free_matrix((void **)split);
 		return (-1);
 	}
-	else if (invalid_number(split[0]) || invalid_number(split[1]) || invalid_number(split[2]))
+	else if (invalid_number(split[0]) || invalid_number(split[1]) || \
+	invalid_number(split[2]))
 	{
-		free(split);
+		ft_free_matrix((void **)split);
 		return (-1);
 	}
-	free(split);
+	ft_free_matrix((void **)split);
 	return (0);
 }
 
 int	validate_element(char *line)
 {
-	const char	*elements[6] = {"NO", "SO", "WE", "EA", "F", "C"};
+	char		**splited;
 	static char	*matched[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
+	char		*elements[6] = {"NO ", "SO ", "WE ", "EA ", "F ", "C "};
 	static int	matches;
 	int			i;
 
 	i = 0;
-	while (i < 6 && ft_strcmp((char *)elements[i], *line) != 0)
+	while (i < 6 && ft_strncmp(elements[i], line, ft_strlen(elements[i])) != 0)
 		++i;
 	if (i == 6)
 		return (-1);
@@ -125,10 +125,18 @@ int	validate_element(char *line)
 		{
 			matched[i] = (char *)elements[i];
 			matches++;
-			if (line[1] == NULL || line[2] != NULL)
+			splited = ft_split(line, ' ');
+			if (splited[1] == NULL || splited[2] != NULL)
+			{
+				ft_free_matrix((void **)splited);
 				return (-1);
-			else if (i >= 4 && colors_invalid(&line[1]))
+			}
+			else if (i >= 4 && colors_invalid(splited + 1))
+			{
+				ft_free_matrix((void **)splited);
 				return (-1);
+			}
+			ft_free_matrix((void **)splited);
 		}
 		else
 		{
