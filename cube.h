@@ -22,6 +22,8 @@ char	*ft_strtrim(char *s1, char *set);
 int		ft_isdigit(int c);
 size_t	ft_matrixlen(char **matrix);
 void	ft_free_matrix(void **matrix);
+int		atoi(const char *nptr);
+void	*ft_memmove(void *dest, const void *src, size_t n);
 
 // ft_split.c
 char	**ft_split(char *s, char c);
