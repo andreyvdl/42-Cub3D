@@ -47,6 +47,22 @@ char	*ft_strrchr(char *s, int c)
 	return (NULL);
 }
 
+char	*ft_strchr(char *s, int c)
+{
+	size_t	index;
+
+	index = 0;
+	while (s[index] != '\0')
+	{
+		if (s[index] == c)
+			return (s + index);
+		++index;
+	}
+	if (*s == c)
+		return (s);
+	return (NULL);
+}
+
 int	ft_strncmp(char *s1, char *s2, size_t n)
 {
 	int		difference;
@@ -74,10 +90,10 @@ char	*ft_strtrim(char *s1, char *set)
 	if (s1 == NULL)
 		return (NULL);
 	start = 0;
-	while (s1[start] && ft_strrchr(set, s1[start]) != NULL)
+	while (s1[start] && ft_strchr(set, s1[start]) != NULL)
 		++start;
 	end = ft_strlen(s1) - 1;
-	while (end > start && ft_strrchr(set, s1[end]) != NULL)
+	while (end > start && ft_strchr(set, s1[end]) != NULL)
 		--end;
 	trimmed = malloc(end - start + 1);
 	i = 0;
@@ -89,7 +105,7 @@ char	*ft_strtrim(char *s1, char *set)
 
 int	ft_strcmp(char *s1, char *s2)
 {
-	int		difference;
+	int	difference;
 
 	while (*s1 != '\0' && *s2 != '\0')
 	{
@@ -116,4 +132,17 @@ size_t	ft_matrixlen(char **matrix)
 	while (matrix[size] != NULL)
 		++size;
 	return (size);
+}
+
+void	ft_free_matrix(void **matrix)
+{
+	char	**temp;
+
+	if (matrix)
+	{
+		temp = (char **)matrix;
+		while (*temp)
+			free(*temp++);
+		free(matrix);
+	}
 }
