@@ -1,7 +1,7 @@
 
 NAME					=	cub3D
 
-SCRS					=	get_next_line.c main.c utils.c
+SCRS					=	ft_split.c get_next_line.c main.c utils.c
 OBJS_FOLDER_DIR_PATH	=	objs/
 OBJS					=	$(addprefix $(OBJS_FOLDER_DIR_PATH),$(SCRS:%.c=%.o))
 
