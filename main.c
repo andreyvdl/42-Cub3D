@@ -107,7 +107,7 @@ int	colors_invalid(char **line)
 	return (0);
 }
 
-int	validate_elemente(char **line)
+int	validate_element(char *line)
 {
 	const char	*elements[6] = {"NO", "SO", "WE", "EA", "F", "C"};
 	static char	*matched[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
@@ -139,13 +139,13 @@ int	validate_elemente(char **line)
 	return (matches);
 }
 
-int	element_checker(char *file_name, char **map)
+int	element_checker(char *filename, char **map)
 {
 	int		fd;
 	char	*line;
 	int		match;
 
-	fd = open(file_name, O_RDONLY);
+	fd = open(filename, O_RDONLY);
 	line = get_next_line(fd);
 	match = 0;
 	while (line && match != 6)
@@ -237,13 +237,13 @@ int	main(int argc, char *argv[])
 
 	if (error_checker(argc, argv))
 		return (1);
+	if (element_checker(argv[1], map))
+		return (1);
 	map_lines = coun_map_lines(argv[1]);
 	if (map_lines < 0)
 		return (2);
 	map = do_the_map(argv[1], map_lines);
 	if (!map)
-		return (1);
-	if (element_checker(argv[1], map))
 		return (1);
 	print_map(map);
 	return (0);
