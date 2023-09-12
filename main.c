@@ -119,31 +119,18 @@ int	validate_element(char *line)
 		++i;
 	if (i == 6)
 		return (-1);
-	else
+	if (matched[i] != NULL)
 	{
-		if (matched[i] == NULL)
-		{
-			matched[i] = (char *)elements[i];
-			matches++;
-			splited = ft_split(line, ' ');
-			if (splited[1] == NULL || splited[2] != NULL)
-			{
-				ft_free_matrix((void **)splited);
-				return (-1);
-			}
-			else if (i >= 4 && colors_invalid(splited + 1))
-			{
-				ft_free_matrix((void **)splited);
-				return (-1);
-			}
-			ft_free_matrix((void **)splited);
-		}
-		else
-		{
-			puts("Make th L! 8");
-			return (-1);
-		}
+		puts("Make the L! 8");
+		return (-1);
 	}
+	matched[i] = elements[i];
+	matches++;
+	splited = ft_split(line, ' ');
+	if (splited[1] == NULL || splited[2] != NULL
+		|| (i >= 4 && colors_invalid(splited + 1)))
+		matches = -1;
+	ft_free_matrix((void **)splited);
 	return (matches);
 }
 
