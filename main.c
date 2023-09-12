@@ -147,6 +147,30 @@ int	validate_element(char *line)
 	return (matches);
 }
 
+void	normalize_element(char *start)
+{
+	char	*end;
+
+	end = start;
+	while (*end && *end == ' ')
+		end++;
+	if (start != end)
+		ft_memmove(start, end, ft_strlen(end) + 1);
+	while (*start)
+	{
+		if (*start == ' ')
+		{
+			end = start + 1;
+			while (*end && *end == ' ')
+				end++;
+			if (start + 1 != end)
+				ft_memmove(start + 1, end, ft_strlen(end) + 1);
+		}
+		if (*start)
+			start++;	
+	}
+}
+
 int	element_checker(char *filename, char **map)
 {
 	int		fd;
@@ -159,7 +183,10 @@ int	element_checker(char *filename, char **map)
 	while (line && match != 6)
 	{
 		if (line[0] != '\n')
+		{
+			normalize_element(line);
 			match = validate_element(line);
+		}
 		if (match == -1)
 		{
 			puts("Make the L! 6");
