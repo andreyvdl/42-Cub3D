@@ -190,7 +190,7 @@ int	element_checker(char *filename, char **map)
 	return (close(fd));
 }
 
-int	coun_map_lines(char *file_path)
+int	count_map_lines(char *file_path)
 {
 	char	*line;
 	int		fd;
