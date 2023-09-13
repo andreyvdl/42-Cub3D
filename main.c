@@ -87,7 +87,7 @@ int	colors_invalid(char **lines)
 	// Salvar nada
 	// possibilidades: [123,123,123] | [123,123,123,blblbl] | [123,123,123bla]
 	// [123bla,123,123] | [123,123bla,123]
-	if (find_and_count(*lines, ' ') != 2)
+	if (find_and_count(*lines, ',') != 2)
 		return (-1);
 	// split aqui por virgulas
 	// resto está só pre codado
