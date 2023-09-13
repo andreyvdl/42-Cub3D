@@ -11,7 +11,7 @@ RM						=	rm -f
 
 all: dir $(NAME)
 
-$(OBJS_FOLDER_DIR_PATH)%.o: %.c
+$(OBJS_FOLDER_DIR_PATH)%.o: %.c cube.h
 	cc $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
