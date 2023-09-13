@@ -13,27 +13,28 @@ int	all_chars_is_in_set(char *arg, char *set)
 
 int	error_checker(int argc, char *argv[])
 {
-	// Validar se o arquivo.cub abre
+	char	*file;
+	int		fd;
+
 	if (argc != 2)
 	{
 		puts("Make the L!");
 		return (1);
 	}
-	if (ft_strlen(argv[1]) < 5)
+	file = argv[1];
+	if (ft_strlen(file) < 5 || ft_strrchr(file, '.') == NULL
+		|| ft_strcmp(ft_strrchr(file, '.'), ".cub"))
 	{
 		puts("Make the L! 2");
 		return (1);
 	}
-	else if (ft_strrchr(argv[1], '.') == NULL)
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
 	{
 		puts("Make the L! 3");
 		return (1);
 	}
-	else if (ft_strcmp(ft_strrchr(argv[1], '.'), ".cub"))
-	{
-		puts("Make the L! 4");
-		return (1);
-	}
+	close(fd);
 	return (0);
 }
 
