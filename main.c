@@ -181,12 +181,13 @@ int	element_checker(char *filename, char **map)
 		{
 			puts("Make the L! 6");
 			free(line);
+			close(fd);
 			return (1);
 		}
 		free(line);
 		line = get_next_line(fd);
 	}
-	return (0);
+	return (close(fd));
 }
 
 int	coun_map_lines(char *file_path)
