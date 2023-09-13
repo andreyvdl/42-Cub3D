@@ -111,7 +111,7 @@ int	validate_element(char *line)
 {
 	char		**splited;
 	static char	*matched[6] = {NULL, NULL, NULL, NULL, NULL, NULL};
-	char		*elements[6] = {"NO ", "SO ", "WE ", "EA ", "F ", "C "};
+	const char	*elements[6] = {"NO ", "SO ", "WE ", "EA ", "F ", "C "};
 	static int	matches;
 	int			i;
 
@@ -125,7 +125,7 @@ int	validate_element(char *line)
 		puts("Make the L! 8");
 		return (-1);
 	}
-	matched[i] = elements[i];
+	matched[i] = (char *)elements[i];
 	matches++;
 	splited = ft_split(line, ' ');
 	if (splited[1] == NULL || splited[2] != NULL
