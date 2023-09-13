@@ -122,7 +122,7 @@ int	validate_element(char *line)
 		return (-1);
 	if (matched[i] != NULL)
 	{
-		puts("Make the L! 8");
+		puts("Make the L! 7");
 		return (-1);
 	}
 	matched[i] = (char *)elements[i];
