@@ -41,7 +41,7 @@ void print_map(char **map)
 {
 	int	i;
 	for (i = 0; map[i]; i++)
-		printf("%s", map[i]);
+		printf("'%s'\n", map[i]);
 	if (!ft_strrchr(map[i - 1], '\n'))
 		puts("");
 }
@@ -154,6 +154,8 @@ void	normalize_element(char *start)
 			if (start + 1 != end)
 				ft_memmove(start + 1, end, ft_strlen(end) + 1);
 		}
+		if ((*start == '\n' || *start == '\r') && start[1] == '\0')
+			*start = 0;
 		if (*start)
 			start++;	
 	}
