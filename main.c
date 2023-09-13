@@ -61,7 +61,7 @@ int	invalid_number(char *str)
 		++i;
 	if (i - j > 3 || str[i] != '\0')
 		return (-1);
-	n = ft_atoi(str); // precisa adicionar a atoi
+	n = ft_atoi(str);
 	if (n > 255)
 		return (-1);
 	return (0);
@@ -82,16 +82,8 @@ size_t	find_and_count(char *str, char c)
 
 int	colors_invalid(char **lines)
 {
-	// Validar F e C
-	// Se não houver something that is comma e número, quita (set?) (último número nunca terá vírgula)
-	// Número entre 0 e 255 (montado conforme atoi) [Checar se cabe no range 0-255, vide minishell]
-	// Salvar nada
-	// possibilidades: [123,123,123] | [123,123,123,blblbl] | [123,123,123bla]
-	// [123bla,123,123] | [123,123bla,123]
 	if (find_and_count(*lines, ',') != 2)
 		return (-1);
-	// split aqui por virgulas
-	// resto está só pre codado
 	char	**split = ft_split(*lines, ',');
 	if (ft_matrixlen(split) != 3)
 	{
