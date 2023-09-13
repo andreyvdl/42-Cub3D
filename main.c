@@ -82,9 +82,11 @@ size_t	find_and_count(char *str, char c)
 
 int	colors_invalid(char **lines)
 {
+	char	**split;
+
 	if (find_and_count(*lines, ',') != 2)
 		return (-1);
-	char	**split = ft_split(*lines, ',');
+	split = ft_split(*lines, ',');
 	if (ft_matrixlen(split) != 3)
 	{
 		ft_free_matrix((void **)split);
@@ -150,7 +152,7 @@ void	normalize_element(char *start)
 		if ((*start == '\n' || *start == '\r') && start[1] == '\0')
 			*start = 0;
 		if (*start)
-			start++;	
+			start++;
 	}
 }
 
@@ -379,21 +381,24 @@ void	adjust_attributes(char *textures[])
 	i = 0;
 	while (i < 6)
 	{
-		if (*textures[i] == 'N' || *textures[i] == 'S' || *textures[i] == 'W' || *textures[i] == 'E')
-			ft_memmove(textures[i], textures[i] + 3, ft_strlen(textures[i] + 3) + 1);
+		if (*textures[i] == 'N' || *textures[i] == 'S' 
+			|| *textures[i] == 'W' || *textures[i] == 'E')
+			ft_memmove(textures[i], textures[i] + 3,
+				ft_strlen(textures[i] + 3) + 1);
 		else if (*textures[i] == 'F' || *textures[i] == 'C')
-			ft_memmove(textures[i], textures[i] + 2, ft_strlen(textures[i] + 2) + 1);
+			ft_memmove(textures[i], textures[i] + 2,
+				ft_strlen(textures[i] + 2) + 1);
 		++i;
 	}
 }
 
 void	get_view_attributes(char *textures[], char *filename)
 {
-	int	fd;
-	int	i;
-	int	j;
 	const char	*elements[6] = {"NO ", "SO ", "WE ", "EA ", "F ", "C "};
-	char	*line;
+	char		*line;
+	int			fd;
+	int			i;
+	int			j;
 
 	fd = open(filename, O_RDONLY);
 	i = 0;
