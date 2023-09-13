@@ -13,7 +13,7 @@ static void	clear_matrix(char **matrix)
 	free(matrix);
 }
 
-static void	copy_word(char *s, char *word, char c, size_t *index)
+static void	copy_word(const char *s, char *word, char c, size_t *index)
 {
 	size_t	position;
 
@@ -27,7 +27,7 @@ static void	copy_word(char *s, char *word, char c, size_t *index)
 	word[position] = '\0';
 }
 
-static size_t	get_word_size(char *s, char c)
+static size_t	get_word_size(const char *s, char c)
 {
 	size_t	size;
 
@@ -37,7 +37,7 @@ static size_t	get_word_size(char *s, char c)
 	return (size);
 }
 
-static char	**allocate_strings(char *s, char c, char **matrix, size_t words)
+static char	**allocate_strings(const char *s, char c, char **matrix, size_t words)
 {
 	size_t	index;
 	size_t	line;
@@ -61,7 +61,7 @@ static char	**allocate_strings(char *s, char c, char **matrix, size_t words)
 	return (matrix);
 }
 
-char	**ft_split(char *s, char c)
+char	**ft_split(const char *s, char c)
 {
 	char	**matrix;
 	size_t	index;

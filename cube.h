@@ -12,21 +12,22 @@
 # endif
 
 // Utils.c
-size_t	ft_strlen(char *s);
+size_t	ft_strlen(const char *s);
 char	*ft_strdup(char *s);
 char	*ft_strrchr(char *s, int c);
 char	*ft_strchr(char *s, int c);
 int		ft_strcmp(char *s1, char *s2);
-int		ft_strncmp(char *s1, char *s2, size_t n);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strtrim(char *s1, char *set);
 int		ft_isdigit(int c);
 size_t	ft_matrixlen(char **matrix);
 void	ft_free_matrix(void **matrix);
-int		atoi(const char *nptr);
+int		ft_atoi(const char *nptr);
 void	*ft_memmove(void *dest, const void *src, size_t n);
+void	*ft_memset(void *s, int c, size_t n);
 
 // ft_split.c
-char	**ft_split(char *s, char c);
+char	**ft_split(const char *s, char c);
 
 // get_next_line.c
 char	*ft_realloc(char *s1, char *s2);

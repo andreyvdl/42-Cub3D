@@ -1,7 +1,7 @@
 
 #include "cube.h"
 
-size_t	ft_strlen(char *s)
+size_t	ft_strlen(const char *s)
 {
 	size_t	len;
 
@@ -63,7 +63,7 @@ char	*ft_strchr(char *s, int c)
 	return (NULL);
 }
 
-int	ft_strncmp(char *s1, char *s2, size_t n)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	int		difference;
 	size_t	index;
