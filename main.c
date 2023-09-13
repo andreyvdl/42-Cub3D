@@ -381,7 +381,7 @@ void	adjust_attributes(char *textures[])
 	i = 0;
 	while (i < 6)
 	{
-		if (*textures[i] == 'N' || *textures[i] == 'S' 
+		if (*textures[i] == 'N' || *textures[i] == 'S'
 			|| *textures[i] == 'W' || *textures[i] == 'E')
 			ft_memmove(textures[i], textures[i] + 3,
 				ft_strlen(textures[i] + 3) + 1);
