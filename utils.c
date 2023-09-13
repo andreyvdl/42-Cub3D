@@ -185,3 +185,15 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 			((unsigned char *)dest)[n] = ((unsigned char *)src)[n];
 	return (dest);
 }
+
+void	*ft_memset(void *s, int c, size_t n)
+{
+	size_t	index;
+
+	if (n == 0 || s == NULL)
+		return (s);
+	index = 0;
+	while (index != n)
+		((char *)s)[index++] = c;
+	return (s);
+}
