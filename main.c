@@ -13,6 +13,7 @@ int	all_chars_is_in_set(char *arg, char *set)
 
 int	error_checker(int argc, char *argv[])
 {
+	// Validar se o arquivo.cub abre
 	if (argc != 2)
 	{
 		puts("Make the L!");
