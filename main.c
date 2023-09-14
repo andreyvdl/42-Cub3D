@@ -240,10 +240,10 @@ char	**do_the_map(char *file_path, int map_lines)
 	{
 		if (line[0] != '\n')
 			map_start++;
-		else
-			free(line);
 		if (line[0] != '\n' && map_start > 6)
 			map[map_lines++] = line;
+		else if (line[0] == '\n' || map_start <= 6)
+			free(line);
 		line = get_next_line(fd);
 	}
 	map[map_lines] = line;
