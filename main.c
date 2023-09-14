@@ -163,26 +163,26 @@ int	element_checker(char *filename, char **map)
 	int		match;
 
 	fd = open(filename, O_RDONLY);
-	line = get_next_line(fd);
 	match = 0;
-	while (line && match != 6)
+	while (match != 6)
 	{
+		line = get_next_line(fd);
 		if (line[0] != '\n')
 		{
 			normalize_element(line);
 			match = validate_element(line);
 		}
-		if (match == -1)
-		{
-			puts("Make the L! 6");
-			free(line);
-			close(fd);
-			return (1);
-		}
 		free(line);
-		line = get_next_line(fd);
+		if (match == -1)
+			break;
 	}
-	return (close(fd));
+	close(fd);
+	if (match == -1)
+	{
+		puts("Make the L! 6");
+		return (1);
+	}
+	return (0);
 }
 
 int	count_map_lines(char *file_path)
