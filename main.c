@@ -407,13 +407,28 @@ void	adjust_attributes(char *textures[])
 	}
 }
 
+int	got_new_attribute(char *textures[], char **elements, char *new)
+{
+	int	i;
+
+	i = 0;
+	if (!new[0])
+	{
+		free(new);
+		return (0);
+	}
+	while (ft_strncmp(new, elements[i], ft_strlen(elements[i])) != 0)
+		++i;
+	textures[i] = &*new;
+	return (1);
+}
+
 int	get_view_attributes(char *textures[], char *filename)
 {
 	const char	*elements[6] = {"NO ", "SO ", "WE ", "EA ", "F ", "C "};
 	char		*line;
 	int			fd;
 	int			i;
-	int			j;
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
@@ -428,17 +443,9 @@ int	get_view_attributes(char *textures[], char *filename)
 			free_local_matrix(textures);
 			return (-1);
 		}
-		if (line[0] == '\n')
-			free(line);
-		else
-		{
-			normalize_element(line);
-			j = 0;
-			while (ft_strncmp(line, elements[j], ft_strlen(elements[j])) != 0)
-				++j;
-			textures[j] = line;
+		normalize_element(line);
+		if (got_new_attribute(textures, elements, line))
 			++i;
-		}
 	}
 	close(fd);
 	adjust_attributes(textures);
