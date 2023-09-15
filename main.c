@@ -445,26 +445,47 @@ int	get_view_attributes(char *textures[], char *filename)
 	return (0);
 }
 
-int	main(int argc, char *argv[])
+char	**get_map(char *filename)
 {
 	int		map_lines;
 	char	**map;
-	char	*textures[6];
+
+	map_lines = count_map_lines(filename);
+	if (map_lines < 0)
+		return (NULL);
+	map = do_the_map(filename, map_lines);
+	if (!map)
+		return (NULL);
+	if (map_normalizer(map))
+		return (NULL);
+	if (validate_map(map))
+	{
+		ft_free_matrix((void **)map);
+		map = NULL;
+	}
+	return (map);
+}
+
+int	main(int argc, char *argv[])
+{
+	char	**map;
+	char	*textures[7];
 
 	if (error_checker(argc, argv))
 		return (1);
 	if (element_checker(argv[1], map))
 		return (1);
-	// Validar texturas das Coordenadas
-	get_view_attributes(textures, argv[1]);
-	map_lines = count_map_lines(argv[1]);
-	if (map_lines < 0)
-		return (2);
-	map = do_the_map(argv[1], map_lines);
-	if (!map)
+	map = get_map(argv[1]);
+	if (map == NULL)
 		return (1);
-	map_normalizer(map);
-	validate_map(map);
+	ft_memset(textures, 0, sizeof(char *[7]));
+	if (get_view_attributes(textures, argv[1]))
+	{
+		ft_free_matrix((void **)map);
+		return (1);
+	}
 	print_map(map);
+	ft_free_matrix((void **)map);
+	free_local_matrix(textures);
 	return (0);
 }
