@@ -230,6 +230,8 @@ char	**do_the_map(char *file_path, int map_lines)
 	char	**map;
 
 	fd = open(file_path, O_RDONLY);
+	if (fd == -1)
+		return (NULL);
 	map = malloc((map_lines + 1) * sizeof(char *));
 	if (!map)
 		return (NULL);
@@ -258,6 +260,11 @@ char	*do_the_new_line(char *line, size_t new_size)
 
 	line_size = ft_strlen(line);
 	new_line = malloc(new_size + 1);
+	if (!new_line)
+	{
+		free(line);
+		return (NULL);
+	}
 	// Verificar erro
 	ft_memmove(new_line, line, line_size);
 	ft_memset(new_line + line_size, ' ', new_size - line_size);
@@ -269,7 +276,7 @@ char	*do_the_new_line(char *line, size_t new_size)
 	return (new_line);
 }
 
-void	map_normalizer(char **map)
+int	map_normalizer(char **map)
 {
 	size_t	max_line_size;
 	size_t	index;
@@ -290,12 +297,20 @@ void	map_normalizer(char **map)
 		}
 		map++;
 	}
+	map = start;
 	while (*start)
 	{
 		if (ft_strlen(*start) < max_line_size)
 			*start = do_the_new_line(*start, max_line_size);
+		if (!*start)
+		{
+			free_local_matrix(start + 1);
+			ft_free_matrix((void **)map);
+			return (-1);
+		}
 		start++;
 	}
+	return (0);
 }
 
 int	validate_map(char **map)
@@ -392,7 +407,7 @@ void	adjust_attributes(char *textures[])
 	}
 }
 
-void	get_view_attributes(char *textures[], char *filename)
+int	get_view_attributes(char *textures[], char *filename)
 {
 	const char	*elements[6] = {"NO ", "SO ", "WE ", "EA ", "F ", "C "};
 	char		*line;
@@ -401,10 +416,18 @@ void	get_view_attributes(char *textures[], char *filename)
 	int			j;
 
 	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (-1);
 	i = 0;
 	while (i < 6)
 	{
 		line = get_next_line(fd);
+		if (line == NULL)
+		{
+			close(fd);
+			free_local_matrix(textures);
+			return (-1);
+		}
 		if (line[0] == '\n')
 			free(line);
 		else
@@ -419,6 +442,7 @@ void	get_view_attributes(char *textures[], char *filename)
 	}
 	close(fd);
 	adjust_attributes(textures);
+	return (0);
 }
 
 int	main(int argc, char *argv[])
