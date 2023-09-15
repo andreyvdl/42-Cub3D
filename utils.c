@@ -147,6 +147,17 @@ void	ft_free_matrix(void **matrix)
 	}
 }
 
+void	free_local_matrix(char *matrix[])
+{
+	int	i;
+
+	if (!matrix)
+		return ;
+	i = 0;
+	while (matrix[i])
+		free(matrix[i++]);
+}
+
 static int	ft_isspace(char c)
 {
 	return (c == ' '
