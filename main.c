@@ -205,11 +205,6 @@ int	count_map_lines(char *file_path)
 	{
 		if (line[0] != '\n')
 		{
-			// split (matar \n antes do rolê)
-			// if (split == NULL|| *split == NULL)
-			// free(line);
-			// puts ("Make the L 6");
-			// return (-1);
 			map_start++;
 		}
 		if (line[0] != '\n' && map_start > 6)
@@ -265,14 +260,10 @@ char	*do_the_new_line(char *line, size_t new_size)
 		free(line);
 		return (NULL);
 	}
-	// Verificar erro
 	ft_memmove(new_line, line, line_size);
 	ft_memset(new_line + line_size, ' ', new_size - line_size);
 	new_line[new_size] = 0;
 	free(line);
-	/* while (line_size < new_size)
-		new_line[line_size++] = ' ';
-	new_line[line_size] = 0; */
 	return (new_line);
 }
 
