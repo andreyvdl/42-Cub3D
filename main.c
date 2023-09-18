@@ -1,5 +1,12 @@
 # include "cube.h"
 
+int	you_made_the_l(char *str)
+{
+	puts("Error\n");
+	puts(str);
+	return (-1);
+}
+
 int	all_chars_is_in_set(char *arg, char *set)
 {
 	while (*arg && ft_strchr(set, *arg))
@@ -17,28 +24,19 @@ int	error_checker(int argc, char *argv[])
 	int		fd;
 
 	if (argc != 2)
-	{
-		puts("Make the L!");
-		return (1);
-	}
+		return (you_made_the_l("Make the L!"));
 	file = argv[1];
-	if (ft_strlen(file) < 5 || ft_strrchr(file, '.') == NULL
-		|| ft_strcmp(ft_strrchr(file, '.'), ".cub"))
-	{
-		puts("Make the L! 2");
-		return (1);
-	}
+	if (ft_strlen(file) < 5 || ft_strrchr(file, '.') == NULL \
+	|| ft_strcmp(ft_strrchr(file, '.'), ".cub"))
+		return (you_made_the_l("Make the L! 2"));
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-	{
-		puts("Make the L! 3");
-		return (1);
-	}
+		return (you_made_the_l("Make the L! 3"));
 	close(fd);
 	return (0);
 }
 
-void print_map(char **map)
+void	print_map(char **map)
 {
 	int	i;
 	for (i = 0; map[i]; i++)
@@ -116,10 +114,7 @@ int	validate_element(char *line)
 	if (i == 6)
 		return (-1);
 	if (matched[i] != NULL)
-	{
-		puts("Make the L! 7");
-		return (-1);
-	}
+		return (you_made_the_l("Make the L! 7"));
 	matched[i] = (char *)elements[i];
 	matches++;
 	splited = ft_split(line, ' ');
@@ -174,14 +169,11 @@ int	element_checker(char *filename, char **map)
 		}
 		free(line);
 		if (match == -1)
-			break;
+			break ;
 	}
 	close(fd);
 	if (match == -1)
-	{
-		puts("Make the L! 6");
-		return (1);
-	}
+		return (you_made_the_l("Make the L! 6"));
 	return (0);
 }
 
@@ -194,19 +186,14 @@ int	count_map_lines(char *file_path)
 
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
-	{
-		puts("Make the L! 5");
-		return (-1);
-	}
+		return (you_made_the_l("Make the L! 5"));
 	map_lines = 0;
 	line = get_next_line(fd);
 	map_start = 0;
 	while (line)
 	{
 		if (line[0] != '\n')
-		{
 			map_start++;
-		}
 		if (line[0] != '\n' && map_start > 6)
 			map_lines++;
 		// Casos faltantes: map doesn't exists, wrong map (abyss or too much \n)
@@ -267,6 +254,23 @@ char	*do_the_new_line(char *line, size_t new_size)
 	return (new_line);
 }
 
+void	remove_newline_and_carriage(char **map)
+{
+	size_t	i;
+
+	while (*map)
+	{
+		i = 0;
+		while ((*map)[i])
+		{
+			if ((*map)[i] == '\n' || (*map)[i] == '\r')
+				(*map)[i] = 0;
+			++i;
+		}
+		++map;
+	}
+}
+
 int	map_normalizer(char **map)
 {
 	size_t	max_line_size;
@@ -275,17 +279,14 @@ int	map_normalizer(char **map)
 
 	max_line_size = 0;
 	start = map;
+	remove_newline_and_carriage(map); // aqui
 	while (*map)
 	{
 		index = 0;
-		while (map[0][index])
-		{
-			if (map[0][index] == '\n' || map[0][index] == '\r')
-				map[0][index] = 0;
-			if (map[0][index] && index + 1 > max_line_size)
-				max_line_size = index + 1;
+		while (map[0][index]) // mexi aqui, qualquer coisa volta pra versão que funcionava
 			index++;
-		}
+		if (index > max_line_size)
+			max_line_size = index;
 		map++;
 	}
 	map = start;
@@ -304,11 +305,16 @@ int	map_normalizer(char **map)
 	return (0);
 }
 
-int	has_valid_characters(char **map)
+int	validate_map(char **map)
 {
 	size_t	line_index;
 	size_t	column_index;
 
+	// Valid size
+	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
+		return (you_made_the_l("Make the L! 11"));
+
+	// Valid characters
 	line_index = 0;
 	while (map[line_index])
 	{
@@ -316,25 +322,15 @@ int	has_valid_characters(char **map)
 		while (map[line_index][column_index])
 		{
 			if (!ft_strchr("0 1NSWE", map[line_index][column_index]))
-			{
-				puts("Make the L 8!");
-				return (-1);
-			}
+				return (you_made_the_l("Make the L! 8"));
 			column_index++;
 		}
 		line_index++;
 	}
-	return (0);
-}
-
-int	has_invalid_number_of_players(char **map)
-{
-	size_t	line_index;
-	size_t	column_index;
-	int		players;
+	// More than one player
+	int	players = 0;
 
 	line_index = 0;
-	players = 0;
 	while (map[line_index])
 	{
 		column_index = 0;
@@ -349,58 +345,26 @@ int	has_invalid_number_of_players(char **map)
 		line_index++;
 	}
 	if (players != 1)
-	{
-		puts("Make the L 9!");
-		return (-1);
-	}
-	return (0);
-}
-
-int	has_invalid_walls(char **map)
-{
-	size_t	line_index;
-	size_t	column_index;
+		return (you_made_the_l("Make the L! 9"));
 	// Map surrounded by walls
 	line_index = 0;
+
 	while (map[line_index])
 	{
 		column_index = 0;
 		while (map[line_index][column_index])
 		{
-			if ((map[line_index][column_index] == '0' || ft_strchr("NSEW", map[line_index][column_index])) 
-				&& (
-					(line_index == 0 || !map[line_index + 1])// Linha zero ou linha final
-					|| (column_index == 0)
-					|| (!map[line_index][column_index + 1] || map[line_index][column_index + 1] == ' ') // Próximo é inválido
-					|| (column_index > 0 && (!map[line_index][column_index - 1] || map[line_index][column_index - 1] == ' ')) // Anterior é inválido
-				))
-			{
-				puts("Make the L! 10");
-				return (-1);
-			}
+			if ((map[line_index][column_index] == '0' || ft_strchr("NSEW", map[line_index][column_index])) \
+			&& ((line_index == 0 || !map[line_index + 1]) // Linha zero ou linha final
+				|| (column_index == 0)
+				|| (!map[line_index][column_index + 1] || map[line_index][column_index + 1] == ' ') // Próximo é inválido
+				|| (column_index > 0 && (!map[line_index][column_index - 1] || map[line_index][column_index - 1] == ' ')) // Anterior é inválido
+			))
+				return (you_made_the_l("Make the L! 10"));
 			column_index++;
 		}
 		line_index++;
 	}
-	return (0);
-}
-
-int	validate_map(char **map)
-{
-	size_t	line_index;
-	size_t	column_index;
-
-	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
-	{
-		puts("Make the L! 11");
-		return (-1);
-	}
-	if (has_valid_characters(map))
-		return (-1);
-	if (has_invalid_number_of_players(map))
-		return (-1);
-	if (has_invalid_walls(map))
-		return (-1);
 	return (0);
 }
 
@@ -411,8 +375,8 @@ void	adjust_attributes(char *textures[])
 	i = 0;
 	while (i < 6)
 	{
-		if (*textures[i] == 'N' || *textures[i] == 'S'
-			|| *textures[i] == 'W' || *textures[i] == 'E')
+		if (*textures[i] == 'N' || *textures[i] == 'S' \
+		|| *textures[i] == 'W' || *textures[i] == 'E')
 			ft_memmove(textures[i], textures[i] + 3,
 				ft_strlen(textures[i] + 3) + 1);
 		else if (*textures[i] == 'F' || *textures[i] == 'C')
@@ -459,7 +423,7 @@ int	get_view_attributes(char *textures[], char *filename)
 			return (-1);
 		}
 		normalize_element(line);
-		if (got_new_attribute(textures, elements, line))
+		if (got_new_attribute(textures, (char **)elements, line))
 			++i;
 	}
 	close(fd);
