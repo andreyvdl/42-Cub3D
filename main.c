@@ -177,6 +177,21 @@ int	element_checker(char *filename, char **map)
 	return (0);
 }
 
+int	is_only_spaces(char *line)
+{
+	while (line && *line)
+	{
+		if (*line != ' ')
+			break;
+		line++;
+	}
+	if (line && (*line == '\n' || *line == '\r'))
+		*line = 0;
+	if (line && *line == 0)
+		return (1);
+	return (0);
+}
+
 int	count_map_lines(char *file_path)
 {
 	char	*line;
