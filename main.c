@@ -182,7 +182,7 @@ int	is_only_spaces(char *line)
 	while (line && *line)
 	{
 		if (*line != ' ')
-			break;
+			break ;
 		line++;
 	}
 	if (line && (*line == '\n' || *line == '\r'))
@@ -190,6 +190,22 @@ int	is_only_spaces(char *line)
 	if (line && *line == 0)
 		return (1);
 	return (0);
+}
+
+char	*essa_funcao_precisa_de_um_nome_melhor_n_sei_o_q_ela_faz_exatamente(char *line, int *map_start, int *map_lines, int fd)
+{
+	if (*map_start > 6 && is_only_spaces(line) == 0)
+	{
+		free(line);
+		return (NULL);
+	}
+	if (line[0] != '\n')
+		++(*map_start);
+	if (line[0] != '\n' && *map_start > 6)
+		++(*map_lines);
+	// Casos faltantes: map doesn't exists, wrong map (abyss or too much \n)
+	free(line);
+	return (get_next_line(fd));
 }
 
 int	count_map_lines(char *file_path)
@@ -206,15 +222,7 @@ int	count_map_lines(char *file_path)
 	line = get_next_line(fd);
 	map_start = 0;
 	while (line)
-	{
-		if (line[0] != '\n')
-			map_start++;
-		if (line[0] != '\n' && map_start > 6)
-			map_lines++;
-		// Casos faltantes: map doesn't exists, wrong map (abyss or too much \n)
-		free(line);
-		line = get_next_line(fd);
-	}
+		line = essa_funcao_precisa_de_um_nome_melhor_n_sei_o_q_ela_faz_exatamente(line, &map_start, &map_lines, fd);
 	close(fd);
 	return (map_lines);
 }
@@ -341,7 +349,7 @@ int	has_invalid_number_of_players(char **map)
 {
 	size_t	line_index;
 	size_t	column_index;
-	int	players;
+	int		players;
 
 	players = 0;
 	line_index = 0;
