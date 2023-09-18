@@ -304,19 +304,11 @@ int	map_normalizer(char **map)
 	return (0);
 }
 
-int	validate_map(char **map)
+int	has_valid_characters(char **map)
 {
 	size_t	line_index;
 	size_t	column_index;
 
-	// Valid size
-	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
-	{
-		puts("Make the L! 11");
-		return (-1);
-	}
-
-	// Valid characters
 	line_index = 0;
 	while (map[line_index])
 	{
@@ -332,10 +324,17 @@ int	validate_map(char **map)
 		}
 		line_index++;
 	}
-	// More than one player
-	int	players = 0;
+	return (0);
+}
+
+int	has_invalid_number_of_players(char **map)
+{
+	size_t	line_index;
+	size_t	column_index;
+	int		players;
 
 	line_index = 0;
+	players = 0;
 	while (map[line_index])
 	{
 		column_index = 0;
@@ -354,9 +353,15 @@ int	validate_map(char **map)
 		puts("Make the L 9!");
 		return (-1);
 	}
+	return (0);
+}
+
+int	has_invalid_walls(char **map)
+{
+	size_t	line_index;
+	size_t	column_index;
 	// Map surrounded by walls
 	line_index = 0;
-
 	while (map[line_index])
 	{
 		column_index = 0;
@@ -377,6 +382,25 @@ int	validate_map(char **map)
 		}
 		line_index++;
 	}
+	return (0);
+}
+
+int	validate_map(char **map)
+{
+	size_t	line_index;
+	size_t	column_index;
+
+	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
+	{
+		puts("Make the L! 11");
+		return (-1);
+	}
+	if (has_valid_characters(map))
+		return (-1);
+	if (has_invalid_number_of_players(map))
+		return (-1);
+	if (has_invalid_walls(map))
+		return (-1);
 	return (0);
 }
 
