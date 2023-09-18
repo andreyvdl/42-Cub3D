@@ -241,6 +241,8 @@ char	*do_the_new_line(char *line, size_t new_size)
 	char	*new_line;
 
 	line_size = ft_strlen(line);
+	if (line_size == new_size)
+		return (line);
 	new_line = malloc(new_size + 1);
 	if (!new_line)
 	{
@@ -282,25 +284,20 @@ int	map_normalizer(char **map)
 	remove_newline_and_carriage(map); // aqui
 	while (*map)
 	{
-		index = 0;
-		while (map[0][index]) // mexi aqui, qualquer coisa volta pra versão que funcionava
-			index++;
+		index = ft_strlen(*map++);
 		if (index > max_line_size)
 			max_line_size = index;
-		map++;
 	}
 	map = start;
 	while (*start)
 	{
-		if (ft_strlen(*start) < max_line_size)
-			*start = do_the_new_line(*start, max_line_size);
-		if (!*start)
+		*start = do_the_new_line(*start, max_line_size);
+		if (!*start++)
 		{
-			free_local_matrix(start + 1);
+			free_local_matrix(start);
 			ft_free_matrix((void **)map);
 			return (-1);
 		}
-		start++;
 	}
 	return (0);
 }
