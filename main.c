@@ -359,11 +359,14 @@ int	has_invalid_walls(char **map)
 		column_index = 0;
 		while (map[line_index][column_index])
 		{
-			if ((map[line_index][column_index] == '0' || ft_strchr("NSEW", map[line_index][column_index])) \
+			if ((map[line_index][column_index] == '0'
+				|| ft_strchr("NSEW", map[line_index][column_index])) \
 			&& ((line_index == 0 || !map[line_index + 1])
 				|| (column_index == 0)
-				|| (!map[line_index][column_index + 1] || map[line_index][column_index + 1] == ' ')
-				|| (column_index > 0 && (!map[line_index][column_index - 1] || map[line_index][column_index - 1] == ' '))
+				|| (!map[line_index][column_index + 1]
+				|| map[line_index][column_index + 1] == ' ')
+				|| (column_index > 0 && (!map[line_index][column_index - 1]
+				|| map[line_index][column_index - 1] == ' '))
 			))
 				return (1);
 			column_index++;
