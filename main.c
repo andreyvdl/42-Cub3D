@@ -310,7 +310,6 @@ int	has_invalid_character(char **map)
 	size_t	line_index;
 	size_t	column_index;
 
-	// Valid characters
 	line_index = 0;
 	while (map[line_index])
 	{
@@ -357,7 +356,6 @@ int	has_invalid_walls(char **map)
 	size_t	line_index;
 	size_t	column_index;
 
-	// Map surrounded by walls
 	line_index = 0;
 	while (map[line_index])
 	{
@@ -365,10 +363,10 @@ int	has_invalid_walls(char **map)
 		while (map[line_index][column_index])
 		{
 			if ((map[line_index][column_index] == '0' || ft_strchr("NSEW", map[line_index][column_index])) \
-			&& ((line_index == 0 || !map[line_index + 1]) // Linha zero ou linha final
+			&& ((line_index == 0 || !map[line_index + 1])
 				|| (column_index == 0)
-				|| (!map[line_index][column_index + 1] || map[line_index][column_index + 1] == ' ') // Próximo é inválido
-				|| (column_index > 0 && (!map[line_index][column_index - 1] || map[line_index][column_index - 1] == ' ')) // Anterior é inválido
+				|| (!map[line_index][column_index + 1] || map[line_index][column_index + 1] == ' ')
+				|| (column_index > 0 && (!map[line_index][column_index - 1] || map[line_index][column_index - 1] == ' '))
 			))
 				return (1);
 			column_index++;
