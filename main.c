@@ -281,7 +281,7 @@ int	map_normalizer(char **map)
 
 	max_line_size = 0;
 	start = map;
-	remove_newline_and_carriage(map); // aqui
+	remove_newline_and_carriage(map);
 	while (*map)
 	{
 		index = ft_strlen(*map++);
