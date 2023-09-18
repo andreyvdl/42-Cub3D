@@ -305,14 +305,10 @@ int	map_normalizer(char **map)
 	return (0);
 }
 
-int	validate_map(char **map)
+int	has_invalid_character(char **map)
 {
 	size_t	line_index;
 	size_t	column_index;
-
-	// Valid size
-	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
-		return (you_made_the_l("Make the L! 11"));
 
 	// Valid characters
 	line_index = 0;
@@ -322,14 +318,21 @@ int	validate_map(char **map)
 		while (map[line_index][column_index])
 		{
 			if (!ft_strchr("0 1NSWE", map[line_index][column_index]))
-				return (you_made_the_l("Make the L! 8"));
+				return (1);
 			column_index++;
 		}
 		line_index++;
 	}
-	// More than one player
-	int	players = 0;
+	return (0);
+}
 
+int	has_invalid_number_of_players(char **map)
+{
+	size_t	line_index;
+	size_t	column_index;
+	int	players;
+
+	players = 0;
 	line_index = 0;
 	while (map[line_index])
 	{
@@ -345,10 +348,17 @@ int	validate_map(char **map)
 		line_index++;
 	}
 	if (players != 1)
-		return (you_made_the_l("Make the L! 9"));
+		return (1);
+	return (0);
+}
+
+int	has_invalid_walls(char **map)
+{
+	size_t	line_index;
+	size_t	column_index;
+
 	// Map surrounded by walls
 	line_index = 0;
-
 	while (map[line_index])
 	{
 		column_index = 0;
@@ -360,11 +370,27 @@ int	validate_map(char **map)
 				|| (!map[line_index][column_index + 1] || map[line_index][column_index + 1] == ' ') // Próximo é inválido
 				|| (column_index > 0 && (!map[line_index][column_index - 1] || map[line_index][column_index - 1] == ' ')) // Anterior é inválido
 			))
-				return (you_made_the_l("Make the L! 10"));
+				return (1);
 			column_index++;
 		}
 		line_index++;
 	}
+	return (0);
+}
+
+int	validate_map(char **map)
+{
+	size_t	line_index;
+	size_t	column_index;
+
+	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
+		return (you_made_the_l("Make the L! 11"));
+	if (has_invalid_character(map))
+		return (you_made_the_l("Make the L! 8"));
+	if (has_invalid_number_of_players(map))
+		return (you_made_the_l("Make the L! 9"));
+	if (has_invalid_walls(map))
+		return (you_made_the_l("Make the L! 10"));
 	return (0);
 }
 
