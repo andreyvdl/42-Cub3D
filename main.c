@@ -192,22 +192,6 @@ int	is_only_spaces(char *line)
 	return (0);
 }
 
-char	*essa_funcao_precisa_de_um_nome_melhor_n_sei_o_q_ela_faz_exatamente(char *line, int *map_start, int *map_lines, int fd)
-{
-	if (*map_start > 6 && is_only_spaces(line) == 0)
-	{
-		free(line);
-		return (NULL);
-	}
-	if (line[0] != '\n')
-		++(*map_start);
-	if (line[0] != '\n' && *map_start > 6)
-		++(*map_lines);
-	// Casos faltantes: map doesn't exists, wrong map (abyss or too much \n)
-	free(line);
-	return (get_next_line(fd));
-}
-
 int	count_map_lines(char *file_path)
 {
 	char	*line;
