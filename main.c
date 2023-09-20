@@ -199,16 +199,41 @@ int	count_map_lines(char *file_path)
 	char	*line;
 	int		fd;
 	int		map_lines;
+	int		itens_ignore;
 	int		map_start;
 
 	fd = open(file_path, O_RDONLY);
 	if (fd < 0)
 		return (you_made_the_l("Make the L! 5"));
-	map_lines = 0;
 	line = get_next_line(fd);
+	if (!line)
+		return (-1);
+	map_lines = 0;
 	map_start = 0;
+	itens_ignore = 0;
 	while (line)
-		line = essa_funcao_precisa_de_um_nome_melhor_n_sei_o_q_ela_faz_exatamente(line, &map_start, &map_lines, fd);
+	{
+		if (line[0] != '\n' && itens_ignore < 6)
+			itens_ignore++;
+		else if (line[0] != '\n' && itens_ignore == 6)
+		{
+			if (map_start == 2)
+			{
+				free(line);
+				return (you_made_the_l("Abyss, mother fucker!"));
+			}
+			if (is_only_spaces(line))
+			{
+				free(line);
+				return (you_made_the_l("Line with only spaces."));
+			}
+			map_lines++;
+		}
+		else if (line[0] == '\n' && itens_ignore == 6 && map_lines > 0)
+			map_start = 2;
+		free(line);
+		line = get_next_line(fd);
+	}
 	close(fd);
 	return (map_lines);
 }
