@@ -158,6 +158,8 @@ int	element_checker(char *filename, char **map)
 	int		match;
 
 	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (you_made_the_l("Depois penso numa mensagem"));
 	match = 0;
 	while (match != 6)
 	{
@@ -224,8 +226,10 @@ char	**do_the_map(char *file_path, int map_lines)
 	map = malloc((map_lines + 1) * sizeof(char *));
 	if (!map)
 		return (NULL);
-	map_start = 0;
 	line = get_next_line(fd);
+	if (!line)
+		return (NULL);
+	map_start = 0;
 	map_lines = 0;
 	while (line)
 	{
