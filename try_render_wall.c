@@ -1,6 +1,7 @@
 #include "MLX42/include/MLX42/MLX42.h"
 #include <stdio.h>
 #include <stdlib.h>
+// gcc try_render_wall.c MLX42/build/libmlx42.a -g3 -ldl -lglfw -pthread -lm
 
 typedef struct s_mlx
 {
