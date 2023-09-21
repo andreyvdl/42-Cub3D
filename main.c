@@ -211,28 +211,23 @@ int	count_map_lines(char *file_path)
 	map_lines = 0;
 	map_start = 0;
 	itens_ignore = 0;
-	while (line)
+	while (line && map_lines >= 0)
 	{
 		if (line[0] != '\n' && itens_ignore < 6)
 			itens_ignore++;
 		else if (line[0] != '\n' && itens_ignore == 6)
 		{
 			if (map_start == 2)
-			{
-				free(line);
-				return (you_made_the_l("Abyss, mother fucker!"));
-			}
+				map_lines = (you_made_the_l("Abyss, mother fucker!")) - 1;
 			if (is_only_spaces(line))
-			{
-				free(line);
-				return (you_made_the_l("Line with only spaces."));
-			}
+				map_lines = (you_made_the_l("Line with only spaces.")) - 1;
 			map_lines++;
 		}
 		else if (line[0] == '\n' && itens_ignore == 6 && map_lines > 0)
 			map_start = 2;
 		free(line);
-		line = get_next_line(fd);
+		if (map_lines >= 0)
+			line = get_next_line(fd);
 	}
 	close(fd);
 	return (map_lines);
