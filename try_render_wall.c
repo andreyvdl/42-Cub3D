@@ -31,14 +31,38 @@ void	xiaolin_draw(t_mlx *mlx)
 {
 }
 
+void	throw_rays(t_mlx *mlx, int width)
+{
+}
+
+void	render_wall(t_mlx *mlx)
+{
+	int	width;
+	int	wall_h;
+	int	dist;
+
+	width = 0;
+	while (width < 800)
+	{
+		dist = mlx->dist;
+		wall_h = mlx->dist;
+		while (dist++ < 600 - mlx->dist)
+		{
+			mlx_put_pixel(mlx->img, width, wall_h, 0x00FF00FF);
+			wall_h++;
+		}
+		width++;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	t_mlx	mlx;
 
 	if (argc != 2)
 		return (puts("USA DIREITO"), 1);
-	mlx.dist = (float)atof(argv[1]);
-	if (mlx.dist < (float)0.1)
+	mlx.dist = atoi(argv[1]);
+	if (mlx.dist < 1)
 		return (puts("DISTANCIA INVALIDA"), 2);
 	mlx.win = mlx_init(800, 600, "titulo", false);
 	if (mlx.win == NULL)
@@ -46,6 +70,8 @@ int	main(int argc, char *argv[])
 	mlx.img = mlx_new_image(mlx.win, 800, 600);
 	if (mlx.img == NULL)
 		return (puts(mlx_strerror(mlx_errno)), mlx_terminate(mlx.win), 4);
+	render_wall(&mlx);
+	// throw_rays(&mlx, 801);
 	// dda_draw(mlx);
 	// breseham_draw(mlx);
 	// xiaolin_draw(mlx);
