@@ -6,10 +6,29 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include "MLX42/include/MLX42/MLX42.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
 # endif
+
+# ifndef SIZE
+#  define SIZE 24
+# endif
+
+struct s_l
+{
+	mlx_t		*mlx;
+	mlx_image_t	*image;
+	char		**map;
+	int			player_x;
+	int			player_y;
+	int			player_map_x;
+	int			player_map_y;
+};
+
+typedef struct s_l t_l;
+
 
 // Utils.c
 size_t	ft_strlen(const char *s);
