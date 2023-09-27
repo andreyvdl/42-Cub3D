@@ -32,5 +32,19 @@ re: fclean all
 
 .PHONY: all clean fclean re
 
-v:
-	clear && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./$(NAME) f.cub
+r: all
+	./$(NAME) f.cub
+
+v: all
+	clear && valgrind --suppressions=log1 --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=log ./$(NAME) f.cub
+	
+#############################
+# 			MLX CODAM		#
+#############################
+#
+# Remover as pastas: .git e .github
+#
+# Tem que mudar a versão do cmake pra uma que a máquina aguente (cmake --version)
+# cmake -B <nome de pasta>
+# cmake --build <nome da pasta criada anteriormente>
+# (libmlx42.a) estará criada na pasta que você atribuiu o nome
