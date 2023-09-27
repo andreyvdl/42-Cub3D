@@ -15,7 +15,7 @@ $(OBJS_FOLDER_DIR_PATH)%.o: %.c cube.h
 	cc $(FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	cc $(FLAGS) $^ -o $@
+	cc $(FLAGS) $^ MLX42/build/libmlx42.a -o $@ -g3 -ldl -lglfw -pthread -lm
 
 dir:
 	$(if ifeq ($(wildcard $(OBJS_FOLDER_DIR_PATH)),), \
