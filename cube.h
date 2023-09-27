@@ -45,6 +45,7 @@ void	free_local_matrix(char *matrix[]);
 int		ft_atoi(const char *nptr);
 void	*ft_memmove(void *dest, const void *src, size_t n);
 void	*ft_memset(void *s, int c, size_t n);
+void	put_map_on_screen(void *tudo);
 
 // ft_split.c
 char	**ft_split(const char *s, char c);

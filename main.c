@@ -507,6 +507,181 @@ char	**get_map(char *filename)
 	return (map);
 }
 
+void	key_press(mlx_key_data_t coisas, void *p)
+{
+	t_l	*param;
+
+	param = (t_l *)p;
+	if (coisas.key == MLX_KEY_ESCAPE)
+	{
+		puts("Quitando!");
+		mlx_close_hook(param->mlx, (mlx_closefunc)key_press, p);
+		mlx_delete_image(param->mlx, param->image);
+		param->image = NULL;
+		mlx_close_window(param->mlx);
+	}
+	else if (coisas.action > 0 && coisas.key == MLX_KEY_LEFT)
+	{
+		--param->player_x;
+		// put_map_on_screen(param->map, param);
+	}
+	else if (coisas.action > 0 && coisas.key == MLX_KEY_RIGHT)
+	{
+		++param->player_x;
+		// put_map_on_screen(param->map, param);
+	}
+	else if (coisas.action > 0 && coisas.key == MLX_KEY_UP)
+	{
+		--param->player_y;
+		// put_map_on_screen(param->map, param);
+	}
+	else if (coisas.action > 0 && coisas.key == MLX_KEY_DOWN)
+	{
+		++param->player_y;
+		// put_map_on_screen(param->map, param);
+	}
+	printf("Posição do jogador. X = %d, Y = %d\n", param->player_x, param->player_y);
+}
+
+void	little_quadradinho(t_l *tudo, int color)
+{
+	int	i;
+	int	j;
+	int	tmp1;
+	int	tmp2;
+
+	i = tudo->player_x - SIZE / 4;
+	while (i < tudo->player_x + SIZE / 4)
+	{
+		j = tudo->player_y - SIZE / 4;
+		while (j < tudo->player_y + SIZE / 2)
+		{
+			mlx_put_pixel(tudo->image, i , j, color);
+			j++;
+		}
+		i++;
+	}
+	
+}
+
+void	quadradinho(t_l *tudo, int x, int y, int color)
+{
+	int	i;
+	int	j;
+
+	i = x;
+	while (i < x + SIZE)
+	{
+		j = y;
+		while (j < y + SIZE)
+		{
+			mlx_put_pixel(tudo->image, i, j, color);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	draw_line(t_l *tudo)
+{
+	int	x;
+	int	copy_x;
+	int	copy_y;
+	int	keep;
+
+	copy_x = tudo->player_x / SIZE;
+	copy_y = tudo->player_y / SIZE;
+	keep = !(tudo->map[copy_y][copy_x + 1] == '1');
+	while (keep)
+	{
+		x = 0;
+		while (x < SIZE)
+		{
+			mlx_put_pixel(tudo->image, copy_x * SIZE + SIZE + x, copy_y * SIZE + 5, 0xFFFFFFFF);
+			x++;
+		}
+		if (tudo->map[copy_y][++copy_x + 1] == '1' || !tudo->map[copy_y][copy_x + 1])
+			keep = 0;
+	}
+}
+
+void	put_map_on_screen(void *t)
+{
+	char	*line;
+	int		i;
+	int		j;
+	char	**map;
+	t_l		*tudo = t;
+	i = 0;
+	map = tudo->map;
+	while (*map)
+	{
+		line = *map;
+		j = 0;
+		while (*line)
+		{
+			if (*line == ' ')
+				quadradinho(tudo, j * SIZE, i * SIZE, 0xFF0000FF);
+			else if (*line == '1')
+				quadradinho(tudo, j * SIZE, i * SIZE, 0x00FF00FF);
+			else if (*line == '0')
+				quadradinho(tudo, j * SIZE, i * SIZE, 0x0000FFFF);
+			else
+			{
+				quadradinho(tudo, j * SIZE, i * SIZE, 0x0000FFFF);
+				// quadradinho(tudo, j * SIZE, i * SIZE, 0xFF00FFFF);
+				tudo->player_map_x = j;
+				tudo->player_map_y = i;
+			}
+			line++;
+			j++;
+		}
+		i++;
+		map++;
+	}
+	little_quadradinho(tudo, 0xFF00FFFF);
+	mlx_put_pixel(tudo->image, tudo->player_x, tudo->player_y, 0xFF00FFFF);
+	//draw_line(tudo);
+
+	/* while (index < lines)
+	{
+		if (map[index / lines][index % lines] == ' ')
+			quadradinho(tudo, index % lines * 30, index / lines * 30, 0xFF0000FF);
+		else if (map[index / lines][index % lines] == '1')
+			quadradinho(tudo, index % lines * 30, index / lines * 30, 0x00FF00FF);
+		else if (map[index / lines][index % lines] == '0')
+			quadradinho(tudo, index % lines * 30, index / lines * 30, 0x0000FFFF);
+		else
+			quadradinho(tudo, index % lines * 30, index / lines * 30, 0xFF00FFFF);
+		index++;
+	} */
+}
+
+void	get_player_position(t_l *tudo)
+{
+	size_t	line_index;
+	size_t	column_index;
+	char	**map;
+
+	line_index = 0;
+	map = tudo->map;
+	while (map[line_index])
+	{
+		column_index = 0;
+		while (map[line_index][column_index])
+		{
+			if (ft_strchr("NSWE", map[line_index][column_index]))
+			{
+				tudo->player_x = column_index * SIZE;
+				tudo->player_y = line_index * SIZE;
+				return ;
+			}
+			column_index++;
+		}
+		line_index++;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	char	**map;
@@ -525,7 +700,39 @@ int	main(int argc, char *argv[])
 		ft_free_matrix((void **)map);
 		return (1);
 	}
-	print_map(map);
+	//print_map(map);
+	t_l			tudo;
+
+	tudo.mlx = mlx_init(800, 600, "Teste", false);
+	tudo.image = mlx_new_image(tudo.mlx, 800, 600);
+	tudo.map = map;
+	// mini-mapa
+	// int	line = 0;
+	// int	col = 0;
+	// while (/* condition */)
+	// {
+	// 	col = 0;
+	// 	while (/* condition */)
+	// 	{
+	// 		/* code */
+	// 	}
+		
+	// }
+	// char	*vector[] = {"1234", "Bom ", "Dia ", "para", "o L!"};
+	// int pos = 0;put_map_on_scree
+	// while (pos < 5 * 5)
+	// {
+	// 	printf("[y]%i [x]%i = %c\n", pos / 5, pos % 5, vector[pos / 5][pos % 5]);
+	// 	pos++;
+	// }
+	get_player_position(&tudo);
+	mlx_put_pixel(tudo.image, 400, 300, 0xFFFFFFFF);
+	mlx_image_to_window(tudo.mlx, tudo.image, 0, 0);
+	//put_map_on_screen(map, &tudo);
+	mlx_key_hook(tudo.mlx, key_press, (void *)&tudo);
+	mlx_loop_hook(tudo.mlx, put_map_on_screen, (void *)&tudo);
+	mlx_loop(tudo.mlx);
+	mlx_terminate(tudo.mlx);
 	ft_free_matrix((void **)map);
 	free_local_matrix(textures);
 	return (0);
