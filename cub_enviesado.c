@@ -5,9 +5,8 @@
 
 #define SIZE 16
 #define LITTLE_PI 3.14
-#define PI M_PI
 
-float g_player_x = 3 * SIZE;
+float g_player_x = 3 * SIZE; // posição inicial do player
 float g_player_y = 3 * SIZE;
 float g_player_angle;
 float g_dir_x;
@@ -71,6 +70,7 @@ void	draw_map(t_mlx *mlx)
 
 void	draw_player(t_mlx *mlx)
 {
+	//desenha o player
 	for (int i = g_player_y - 4; i < g_player_y + 4; ++i) {
 		for (int j = g_player_x - 4; j < g_player_x + 4; ++j) {
 			mlx_put_pixel(mlx->img, j, i, 0xFFFF00FF);
@@ -78,8 +78,10 @@ void	draw_player(t_mlx *mlx)
 	}
 }
 
-void	draw_direction(t_mlx *mlx) // basicamente o DDA
+void	draw_direction(t_mlx *mlx)
 {
+	//desenha a linha reta da direção do player
+	// o algoritmo é o DDA
 	float	dist_x;
 	float	dist_y;
 	float	x;
@@ -103,7 +105,7 @@ void	draw_direction(t_mlx *mlx) // basicamente o DDA
 	}
 }
 
-void	draw_ray(t_mlx *mlx)
+void	draw_ray(t_mlx *mlx) // WIP
 {
 	float	ray_y;
 	float	ray_x;
@@ -155,7 +157,7 @@ void	render(void *var)
 	draw_map(mlx);
 	draw_player(mlx);
 	draw_direction(mlx);
-	draw_ray(mlx);
+	// draw_ray(mlx);
 	mlx_image_to_window(mlx->win, mlx->img, 0, 0);
 }
 
@@ -169,8 +171,8 @@ void	keyboard(mlx_key_data_t data, void *var)
 		g_player_angle -= 0.1;
 		if (g_player_angle < 0)
 			g_player_angle += 2 * M_PI;
-		g_dir_x = cos(g_player_angle) * 5;
-		g_dir_y = sin(g_player_angle) * 5;
+		g_dir_x = cos(g_player_angle) * 5; // altera a rotação do player,
+		g_dir_y = sin(g_player_angle) * 5; // permite andar livremente
 	}
 	else if (data.key == MLX_KEY_D && data.action > MLX_RELEASE)
 	{
@@ -205,7 +207,7 @@ int	main(void)
 	mlx.img = mlx_new_image(mlx.win, 800, 600);
 	if (mlx.img == NULL)
 		return (puts(mlx_strerror(mlx_errno)), mlx_terminate(mlx.win), 2);
-	g_player_angle = -(M_PI / 2);
+	g_player_angle = -(M_PI / 2); // precisa ser negativo pra inverter o sentido
 	g_dir_x = cos(g_player_angle) * 5;
 	g_dir_y = sin(g_player_angle) * 5;
 	mlx_key_hook(mlx.win, &keyboard, &mlx);
