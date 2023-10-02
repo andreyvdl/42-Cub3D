@@ -6,8 +6,8 @@
 #define SIZE 16
 #define ROT_ANG 11
 
-float g_player_x = 3 * SIZE; // posição inicial do player
-float g_player_y = 3 * SIZE;
+float g_player_x = SIZE * 1.5; // posição inicial do player
+float g_player_y = SIZE * 1.5;
 float g_player_angle;
 float g_dir_x;
 float g_dir_y;
