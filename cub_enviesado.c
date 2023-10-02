@@ -178,8 +178,9 @@ void	keyboard(mlx_key_data_t data, void *var)
 {
 	t_mlx	*mlx;
 
-	(void)data;
 	mlx = (t_mlx *)var;
+	if (data.key == MLX_KEY_ESCAPE)
+		mlx_close_window(mlx->win);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_LEFT))
 	{
 		g_player_angle -= ROT_ANG;
@@ -195,11 +196,11 @@ void	keyboard(mlx_key_data_t data, void *var)
 	if (mlx_is_key_down(mlx->win, MLX_KEY_S))
 		change_pos(-g_dir_x, -g_dir_y);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_A))
-		change_pos(cos(deg_to_rad(g_player_angle + 90)) * 3, sin(deg_to_rad(g_player_angle + 90)) * 3);
+		change_pos(cos(deg_to_rad(g_player_angle + 90)) * 3,\
+		sin(deg_to_rad(g_player_angle + 90)) * 3);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_D))
-		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 3, -sin(deg_to_rad(g_player_angle + 90)) * 3);
-	if (mlx_is_key_down(mlx->win, MLX_KEY_ESCAPE))
-		mlx_close_window(mlx->win);
+		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 3,\
+		-sin(deg_to_rad(g_player_angle + 90)) * 3);
 }
 
 int	main(void)
