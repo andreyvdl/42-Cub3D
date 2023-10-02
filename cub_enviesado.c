@@ -4,7 +4,6 @@
 #include <math.h>
 
 #define SIZE 16
-#define LITTLE_PI 3.14
 
 float g_player_x = 3 * SIZE; // posição inicial do player
 float g_player_y = 3 * SIZE;
