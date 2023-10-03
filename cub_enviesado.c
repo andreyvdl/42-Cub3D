@@ -168,6 +168,8 @@ void	render(void *var)
 
 void	change_pos(float x, float y)
 {
+	if (g_map[(int)((g_player_y  + y) / SIZE)][(int)((g_player_x + x) / SIZE )] == '1')
+		return ;
 	if (g_player_x + x > 0.9)
 		g_player_x += x;
 	if (g_player_y + y > 0.9)
