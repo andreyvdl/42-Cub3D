@@ -120,39 +120,42 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	int		depth_of_field;
 	int		map_x;
 	int		map_y;
-	int		map_point;
 
-	depth_of_field = 0;
+	depth_of_field = 8;
 	for (int rays = 0; rays < 1; ++rays) {
-		if (g_player_angle > M_PI)
+		printf("angle: %f", g_player_angle);
+		if (g_player_angle > 0 && g_player_angle < 180)
 		{
-			ray_y = g_player_y / 64 - 0.0001;
-			ray_x = g_player_y - ray_y * (-1 / tan(g_player_angle)) + g_player_x;
-			ray_offset_y = -64;
-			ray_offset_x = ray_offset_y * (-1 / tan(g_player_angle));
+			ray_y = g_player_y / SIZE;
+			ray_x = g_player_y - ray_y * (-1 / tan(deg_to_rad(g_player_angle))) + g_player_x;
+			ray_offset_y = -SIZE;
+			ray_offset_x = ray_offset_y * (-1 / tan(deg_to_rad(g_player_angle)));
 		}
-		if (g_player_angle < M_PI)
+		if (g_player_angle > 180 && g_player_angle < 360)
 		{
-			ray_y = g_player_y / 64 + 64;
-			ray_x = g_player_y - ray_y * (-1 / tan(g_player_angle)) + g_player_x;
-			ray_offset_y = 64;
-			ray_offset_x = ray_offset_y * (-1 / tan(g_player_angle));
+			ray_y = g_player_y / SIZE + SIZE;
+			ray_x = g_player_y - ray_y * (-1 / tan(deg_to_rad(g_player_angle))) + g_player_x;
+			ray_offset_y = SIZE;
+			ray_offset_x = ray_offset_y * (-1 / tan(deg_to_rad(g_player_angle)));
 		}
-		if (g_player_angle == 0) // precisa adicionar (|| g_player_angle == M_PI)
+		if (g_player_angle == 0 || g_player_angle == 180 || g_player_angle == 360) // precisa adicionar (|| g_player_angle == M_PI)
 		{
 			ray_x = g_player_x;
 			ray_y = g_player_y;
-			depth_of_field = 8;
+			depth_of_field = 0;
 		}
-		while (depth_of_field < 8)
+		while (depth_of_field--)
 		{
-			map_x = ray_x / 64;
-			map_y = ray_y / 64;
-			map_point = map_y * 8 + map_x; // 8 pq é o tamanho do mapa
-			if (map_point < 8 * 8 && g_map[map_point] == '1') // mapa dele é plano, tem q converter isso pra matriz
+			map_x = ray_x / SIZE;
+			map_y = ray_y / SIZE;
+			if (g_map[map_y][map_x] == '1') // mapa dele é plano, tem q converter isso pra matriz
+			{
+				draw_line(mlx, g_player_x, g_player_y, map_x, map_y);
+				return ;
+			}
 		}
 	}
-} */
+}
 
 void	render(void *var)
 {
@@ -163,7 +166,7 @@ void	render(void *var)
 	draw_map(mlx);
 	draw_player(mlx);
 	draw_direction(mlx, g_player_x, g_player_y);
-	// draw_ray(mlx);
+	draw_ray(mlx);
 }
 
 void	change_pos(float x, float y)
