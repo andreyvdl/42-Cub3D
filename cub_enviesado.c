@@ -6,11 +6,11 @@
 #define SIZE 16
 #define ROT_ANG 11
 
-float g_player_x = SIZE * 1.5; // posição inicial do player
-float g_player_y = SIZE * 1.5;
-float g_player_angle;
-float g_dir_x;
-float g_dir_y;
+float	g_player_x = SIZE * 1.5; // posição inicial do player
+float	g_player_y = SIZE * 1.5;
+int	 	g_player_angle;
+float	g_dir_x;
+float	g_dir_y;
 
 typedef struct s_mlx
 {
@@ -21,23 +21,26 @@ typedef struct s_mlx
 const char	*g_map[] = {
 	"11111111",
 	"10000001",
-	"10000001",
-	"10000001",
-	"10000001",
 	"10011001",
-	"11000011",
+	"10000001",
+	"10100101",
+	"10111101",
+	"10000001",
 	"11111111",
 	NULL
 };
 
-float	deg_to_rad(float deg)
+float	deg_to_rad(int deg)
 {
-	return (-(deg * M_PI / 180));
+	return (deg * M_PI / 180);
 }
 
+{
+}
+
+// loop que desenha o fundo da tela
 void	draw_background(t_mlx *mlx)
 {
-	// loop que desenha o fundo da tela
 	int	y;
 	int	x;
 
@@ -60,9 +63,9 @@ void	draw_background(t_mlx *mlx)
 void	draw_map(t_mlx *mlx)
 {
 	for (int y = 0; g_map[y]; ++y) {
-		for (int x = 0; g_map[y][x]; ++x) { // esses dois for olham o mapa
+		for (int x = 0; g_map[y][x]; ++x) {
 			for (int i = y * SIZE + 1; i < y * SIZE + SIZE ; ++i) {
-				for (int j = x * SIZE + 1; j < x * SIZE + SIZE; ++j) { // esses definem o limite do que vão desenhar
+				for (int j = x * SIZE + 1; j < x * SIZE + SIZE; ++j) {
 					if (g_map[y][x] == '1')
 						mlx_put_pixel(mlx->img, j, i, 0x00FF00FF);
 					else
@@ -73,11 +76,11 @@ void	draw_map(t_mlx *mlx)
 	}
 }
 
-	//desenha o player
+//desenha o player
 void	draw_player(t_mlx *mlx)
 {
-	for (int i = g_player_y - 4; i < g_player_y + 4; ++i) {
-		for (int j = g_player_x - 4; j < g_player_x + 4; ++j) {
+	for (int i = g_player_y - 2; i < g_player_y + 2; ++i) {
+		for (int j = g_player_x - 2; j < g_player_x + 2; ++j) {
 			if (i < 0 || j < 0)
 				break ;
 			mlx_put_pixel(mlx->img, j, i, 0xFFFF00FF);
@@ -93,7 +96,7 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	float	dist_y;
 	float	step;
 
-	dist_x = g_dir_x * SIZE; // multiplicação define a distancia do vetor
+	dist_x = g_dir_x * SIZE;
 	dist_y = g_dir_y * SIZE;
 	if (fabs(dist_x) > fabs(dist_y))
 		step = fabs(dist_x);
@@ -111,84 +114,69 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	}
 }
 
-void	swap(float *a, float *b)
-{
-	float	temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-void	draw_line(t_mlx *mlx, float x0, float y0, float x1, float y1)
+void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1)
 {
 	float	dist_x;
 	float	dist_y;
 	float	step;
 
 	dist_x = x1 - x0;
-	dist_y = y1 - x0;
+	dist_y = y1 - y0;
 	if (fabs(dist_x) > fabs(dist_y))
 		step = fabs(dist_x);
 	else
 		step = fabs(dist_y);
-	if (x1 < x0)
-		swap(&x0, &x1);
-	if (y1 < y0)
-		swap(&y0, &y1);
 	dist_x /= step;
 	dist_y /= step;
 	while ((int)step--)
 	{
+		if (x0 < 0 || y0 < 0 || x0 > 800 || y0 > 600)
+			break ;
+		else if (x1 < 0 || y1 < 0 || x1 > 800 || y1 > 600)
+			break ;
 		mlx_put_pixel(mlx->img, x0, y0, 0xFF0000FF);
 		x0 += dist_x;
 		y0 += dist_y;
 	}
 }
 
-void	draw_ray(t_mlx *mlx) // WIP
+void	cast_rays(t_mlx *mlx)
 {
-	float	ray_y;
-	float	ray_x;
-	float	ray_offset_x;
-	float	ray_offset_y;
-	int		depth_of_field;
-	int		map_x;
-	int		map_y;
+	int		ray, mapX, mapY, DoF;
+	float	rayX, rayY, rayAng, xOff, yOff;
 
-	depth_of_field = 8;
-	for (int rays = 0; rays < 1; ++rays) {
-		printf("angle: %f", g_player_angle);
-		if (g_player_angle > 0 && g_player_angle < 180)
-		{
-			ray_y = g_player_y / SIZE;
-			ray_x = g_player_y - ray_y * (-1 / tan(deg_to_rad(g_player_angle))) + g_player_x;
-			ray_offset_y = -SIZE;
-			ray_offset_x = ray_offset_y * (-1 / tan(deg_to_rad(g_player_angle)));
+	rayAng = deg_to_rad(g_player_angle + 30);
+	for (ray = 0; ray < 60; ray++) {
+		DoF = 0;
+		float aTan = -1 / tan(rayAng);
+		if (rayAng > M_PI) {
+			rayY = ((int)g_player_y / SIZE * SIZE) - 0.0001;
+			rayX = (g_player_y - rayY) * aTan + g_player_x;
+			yOff = -SIZE;
+			xOff = -yOff * aTan;
 		}
-		if (g_player_angle > 180 && g_player_angle < 360)
-		{
-			ray_y = g_player_y / SIZE + SIZE;
-			ray_x = g_player_y - ray_y * (-1 / tan(deg_to_rad(g_player_angle))) + g_player_x;
-			ray_offset_y = SIZE;
-			ray_offset_x = ray_offset_y * (-1 / tan(deg_to_rad(g_player_angle)));
+		if (rayAng < M_PI) {
+			rayY = ((int)g_player_y / SIZE * SIZE) + SIZE;
+			rayX = (g_player_y - rayY) * aTan + g_player_x;
+			yOff = SIZE;
+			xOff = -yOff * aTan;
 		}
-		if (g_player_angle == 0 || g_player_angle == 180 || g_player_angle == 360) // precisa adicionar (|| g_player_angle == M_PI)
-		{
-			ray_x = g_player_x;
-			ray_y = g_player_y;
-			depth_of_field = 0;
+		if (rayAng == 0 || rayAng == (float)M_PI) {
+			rayX = g_player_x;
+			rayY = g_player_y;
+			DoF = 8;
 		}
-		while (depth_of_field--)
-		{
-			map_x = ray_x / SIZE;
-			map_y = ray_y / SIZE;
-			if (g_map[map_y][map_x] == '1') // mapa dele é plano, tem q converter isso pra matriz
-			{
-				draw_line(mlx, g_player_x, g_player_y, map_x, map_y);
-				return ;
-			}
+		while (DoF < 8) {
+			mapX = (int)(rayX / SIZE);
+			mapY = (int)(rayY / SIZE);
+			if (mapX < 0 || mapY < 0 || mapX > 8 || mapY > 8 ||g_map[mapY][mapX] == '1')
+				break ;
+			rayX += xOff;
+			rayY += yOff;
+			DoF--;
 		}
+		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY);
+		rayAng -= deg_to_rad(1);
 	}
 }
 
@@ -201,16 +189,17 @@ void	render(void *var)
 	draw_map(mlx);
 	draw_player(mlx);
 	draw_direction(mlx, g_player_x, g_player_y);
-	draw_ray(mlx);
+	cast_rays(mlx);
 }
 
+//changed to make player drift when facing a wall
 void	change_pos(float x, float y)
 {
-	if (g_map[(int)((g_player_y  + y) / SIZE)][(int)((g_player_x + x) / SIZE )] == '1')
-		return ;
-	if (g_player_x + x > 0.9)
+	if (g_player_x + x > 0.9 \
+	&& g_map[(int)(g_player_y / SIZE)][(int)((g_player_x + x) / SIZE )] != '1')
 		g_player_x += x;
-	if (g_player_y + y > 0.9)
+	if (g_player_y + y > 0.9 \
+	&& g_map[(int)((g_player_y + y) / SIZE)][(int)(g_player_x / SIZE )] != '1')
 		g_player_y += y;
 }
 
@@ -235,12 +224,12 @@ void	keyboard(mlx_key_data_t data, void *var)
 		change_pos(g_dir_x, g_dir_y);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_S))
 		change_pos(-g_dir_x, -g_dir_y);
-	if (mlx_is_key_down(mlx->win, MLX_KEY_A))
-		change_pos(cos(deg_to_rad(g_player_angle + 90)) * 5,\
-		sin(deg_to_rad(g_player_angle + 90)) * 5);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_D))
-		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 5,\
-		-sin(deg_to_rad(g_player_angle + 90)) * 5);
+		change_pos(cos(deg_to_rad(g_player_angle + 90)) * 2,\
+		sin(deg_to_rad(g_player_angle + 90)) * 2);
+	if (mlx_is_key_down(mlx->win, MLX_KEY_A))
+		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 2,\
+		-sin(deg_to_rad(g_player_angle + 90)) * 2);
 }
 
 int	main(void)
