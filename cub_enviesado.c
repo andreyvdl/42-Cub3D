@@ -111,7 +111,42 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	}
 }
 
-/* void	draw_ray(t_mlx *mlx) // WIP
+void	swap(float *a, float *b)
+{
+	float	temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+void	draw_line(t_mlx *mlx, float x0, float y0, float x1, float y1)
+{
+	float	dist_x;
+	float	dist_y;
+	float	step;
+
+	dist_x = x1 - x0;
+	dist_y = y1 - x0;
+	if (fabs(dist_x) > fabs(dist_y))
+		step = fabs(dist_x);
+	else
+		step = fabs(dist_y);
+	if (x1 < x0)
+		swap(&x0, &x1);
+	if (y1 < y0)
+		swap(&y0, &y1);
+	dist_x /= step;
+	dist_y /= step;
+	while ((int)step--)
+	{
+		mlx_put_pixel(mlx->img, x0, y0, 0xFF0000FF);
+		x0 += dist_x;
+		y0 += dist_y;
+	}
+}
+
+void	draw_ray(t_mlx *mlx) // WIP
 {
 	float	ray_y;
 	float	ray_x;
