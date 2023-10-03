@@ -21,11 +21,11 @@ typedef struct s_mlx
 const char	*g_map[] = {
 	"11111111",
 	"10000001",
+	"10000001",
+	"10000001",
+	"10000001",
 	"10011001",
-	"10000001",
-	"10100101",
-	"10111101",
-	"10000001",
+	"11000011",
 	"11111111",
 	NULL
 };
@@ -35,7 +35,9 @@ float	deg_to_rad(int deg)
 	return (deg * M_PI / 180);
 }
 
+int	rad_to_deg(float rad)
 {
+	return ((rad / M_PI * 180) + 0.5);
 }
 
 // loop que desenha o fundo da tela
@@ -67,9 +69,9 @@ void	draw_map(t_mlx *mlx)
 			for (int i = y * SIZE + 1; i < y * SIZE + SIZE ; ++i) {
 				for (int j = x * SIZE + 1; j < x * SIZE + SIZE; ++j) {
 					if (g_map[y][x] == '1')
-						mlx_put_pixel(mlx->img, j, i, 0x00FF00FF);
+						mlx_put_pixel(mlx->img, j, i, 0xFFFFFFFF);
 					else
-						mlx_put_pixel(mlx->img, j, i, 0x0000FFFF);
+						mlx_put_pixel(mlx->img, j, i, 0x000000FF);
 				}
 			}
 		}
@@ -114,7 +116,7 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	}
 }
 
-void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1)
+void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color)
 {
 	float	dist_x;
 	float	dist_y;
@@ -134,7 +136,7 @@ void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1)
 			break ;
 		else if (x1 < 0 || y1 < 0 || x1 > 800 || y1 > 600)
 			break ;
-		mlx_put_pixel(mlx->img, x0, y0, 0xFF0000FF);
+		mlx_put_pixel(mlx->img, x0, y0, color);
 		x0 += dist_x;
 		y0 += dist_y;
 	}
@@ -145,9 +147,12 @@ void	cast_rays(t_mlx *mlx)
 	int		ray, mapX, mapY, DoF;
 	float	rayX, rayY, rayAng, xOff, yOff;
 
-	rayAng = deg_to_rad(g_player_angle + 30);
-	for (ray = 0; ray < 60; ray++) {
+	rayAng = deg_to_rad(g_player_angle - 25);
+	for (ray = 0; ray < 50; ray++) {
 		DoF = 0;
+		// é importante tudo ser IF
+		// algoritmo para colisão vertical
+		
 		float aTan = -1 / tan(rayAng);
 		if (rayAng > M_PI) {
 			rayY = ((int)g_player_y / SIZE * SIZE) - 0.0001;
@@ -169,14 +174,44 @@ void	cast_rays(t_mlx *mlx)
 		while (DoF < 8) {
 			mapX = (int)(rayX / SIZE);
 			mapY = (int)(rayY / SIZE);
-			if (mapX < 0 || mapY < 0 || mapX > 8 || mapY > 8 ||g_map[mapY][mapX] == '1')
+			if (mapX < 0 || mapY < 0 || mapX > 7 || mapY > 7 ||g_map[mapY][mapX] == '1')
 				break ;
 			rayX += xOff;
 			rayY += yOff;
 			DoF--;
 		}
-		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY);
-		rayAng -= deg_to_rad(1);
+		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY, 0xFF0000FF);
+		
+		// algoritimo para a colisão horizontal
+		aTan = -tan(rayAng);
+		if (rayAng > M_PI / 2 && rayAng < 3 * M_PI / 2) {
+			rayX = ((int)g_player_x / SIZE * SIZE) - 0.0001;
+			rayY = (g_player_x - rayX) * aTan + g_player_y;
+			xOff = -SIZE;
+			yOff = -xOff * aTan;
+		}
+		if (rayAng < M_PI / 2 || rayAng > 3 * M_PI / 2) {
+			rayX = ((int)g_player_x / SIZE * SIZE) + SIZE;
+			rayY = (g_player_x - rayX) * aTan + g_player_y;
+			xOff = SIZE;
+			yOff = -xOff * aTan;
+		}
+		if (rayAng == M_PI / 2 || rayAng == 3 * M_PI / 2) {
+			rayX = g_player_x;
+			rayY = g_player_y;
+			DoF = 8;
+		}
+		while (DoF < 8) {
+			mapX = (int)(rayX / SIZE);
+			mapY = (int)(rayY / SIZE);
+			if (mapX < 0 || mapY < 0 || mapX > 7 || mapY > 7 ||g_map[mapY][mapX] == '1')
+				break ;
+			rayX += xOff;
+			rayY += yOff;
+			DoF--;
+		}
+		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY, 0x00FF007F);
+		rayAng += deg_to_rad(1);
 	}
 }
 
@@ -244,7 +279,7 @@ int	main(void)
 	if (mlx.img == NULL)
 		return (puts(mlx_strerror(mlx_errno)), mlx_terminate(mlx.win), 2);
 	mlx_image_to_window(mlx.win, mlx.img, 0, 0);
-	g_player_angle = -90; // precisa ser negativo pra inverter o sentido
+	g_player_angle = 0; // precisa ser negativo pra inverter o sentido
 	g_dir_x = cos(deg_to_rad(g_player_angle) * 5);
 	g_dir_y = sin(deg_to_rad(g_player_angle) * 5);
 	mlx_key_hook(mlx.win, &keyboard, &mlx);
