@@ -93,8 +93,8 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	float	dist_y;
 	float	step;
 
-	dist_x = g_dir_x * SIZE / 2; // multiplicação define a distancia do vetor
-	dist_y = g_dir_y * SIZE / 2;
+	dist_x = g_dir_x * SIZE; // multiplicação define a distancia do vetor
+	dist_y = g_dir_y * SIZE;
 	if (fabs(dist_x) > fabs(dist_y))
 		step = fabs(dist_x);
 	else
@@ -189,18 +189,18 @@ void	keyboard(mlx_key_data_t data, void *var)
 	}
 	if (mlx_is_key_down(mlx->win, MLX_KEY_RIGHT))
 		g_player_angle = (int)(g_player_angle + ROT_ANG) % 360;
-	g_dir_x = cos(deg_to_rad(g_player_angle)) * 3; // altera a rotação do player,
-	g_dir_y = sin(deg_to_rad(g_player_angle)) * 3; // permite andar livremente
+	g_dir_x = cos(deg_to_rad(g_player_angle)); // altera a rotação do player,
+	g_dir_y = sin(deg_to_rad(g_player_angle)); // permite andar livremente
 	if (mlx_is_key_down(mlx->win, MLX_KEY_W))
 		change_pos(g_dir_x, g_dir_y);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_S))
 		change_pos(-g_dir_x, -g_dir_y);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_A))
-		change_pos(cos(deg_to_rad(g_player_angle + 90)) * 3,\
-		sin(deg_to_rad(g_player_angle + 90)) * 3);
+		change_pos(cos(deg_to_rad(g_player_angle + 90)) * 5,\
+		sin(deg_to_rad(g_player_angle + 90)) * 5);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_D))
-		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 3,\
-		-sin(deg_to_rad(g_player_angle + 90)) * 3);
+		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 5,\
+		-sin(deg_to_rad(g_player_angle + 90)) * 5);
 }
 
 int	main(void)
@@ -216,8 +216,8 @@ int	main(void)
 		return (puts(mlx_strerror(mlx_errno)), mlx_terminate(mlx.win), 2);
 	mlx_image_to_window(mlx.win, mlx.img, 0, 0);
 	g_player_angle = -90; // precisa ser negativo pra inverter o sentido
-	g_dir_x = cos(deg_to_rad(g_player_angle)) * 3;
-	g_dir_y = sin(deg_to_rad(g_player_angle)) * 3;
+	g_dir_x = cos(deg_to_rad(g_player_angle) * 5);
+	g_dir_y = sin(deg_to_rad(g_player_angle) * 5);
 	mlx_key_hook(mlx.win, &keyboard, &mlx);
 	mlx_loop_hook(mlx.win, &render, &mlx);
 	mlx_loop(mlx.win);
