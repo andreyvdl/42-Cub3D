@@ -4,7 +4,16 @@
 #include <math.h>
 
 #define SIZE 16
-#define ROT_ANG 11
+#define ROT_ANG 1
+#define RAD_1 0.01745329
+#define RED 0xFF0000FF
+#define GREEN 0x00FF00FF
+#define BLUE 0x0000FFFF
+#define WHITE 0xFFFFFFFF
+#define BLACK 0x000000FF
+#define YELLOW 0xFFFF00FF
+#define CYAN 0x00FFFFFF
+#define PINK 0xFF00FFFF
 
 float	g_player_x = SIZE * 1.5; // posição inicial do player
 float	g_player_y = SIZE * 1.5;
@@ -33,11 +42,6 @@ const char	*g_map[] = {
 float	deg_to_rad(int deg)
 {
 	return (deg * M_PI / 180);
-}
-
-int	rad_to_deg(float rad)
-{
-	return ((rad / M_PI * 180) + 0.5);
 }
 
 // loop que desenha o fundo da tela
@@ -69,9 +73,9 @@ void	draw_map(t_mlx *mlx)
 			for (int i = y * SIZE + 1; i < y * SIZE + SIZE ; ++i) {
 				for (int j = x * SIZE + 1; j < x * SIZE + SIZE; ++j) {
 					if (g_map[y][x] == '1')
-						mlx_put_pixel(mlx->img, j, i, 0xFFFFFFFF);
+						mlx_put_pixel(mlx->img, j, i, WHITE);
 					else
-						mlx_put_pixel(mlx->img, j, i, 0x000000FF);
+						mlx_put_pixel(mlx->img, j, i, BLACK);
 				}
 			}
 		}
@@ -85,7 +89,7 @@ void	draw_player(t_mlx *mlx)
 		for (int j = g_player_x - 2; j < g_player_x + 2; ++j) {
 			if (i < 0 || j < 0)
 				break ;
-			mlx_put_pixel(mlx->img, j, i, 0xFFFF00FF);
+			mlx_put_pixel(mlx->img, j, i, YELLOW);
 		}
 	}
 }
@@ -110,10 +114,19 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	{
 		if (x0 < 0 || y0 < 0)
 			break ;
-		mlx_put_pixel(mlx->img, x0, y0, 0xFFFF00FF);
+		mlx_put_pixel(mlx->img, x0, y0, YELLOW);
 		x0 += dist_x;
 		y0 += dist_y;
 	}
+}
+
+void	swap(float *a, float *b)
+{
+	float	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }
 
 void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color)
@@ -132,9 +145,7 @@ void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color
 	dist_y /= step;
 	while ((int)step--)
 	{
-		if (x0 < 0 || y0 < 0 || x0 > 800 || y0 > 600)
-			break ;
-		else if (x1 < 0 || y1 < 0 || x1 > 800 || y1 > 600)
+		if (x0 <= 0 || y0 <= 0 || x0 >= 499 || y0 >= 399)
 			break ;
 		mlx_put_pixel(mlx->img, x0, y0, color);
 		x0 += dist_x;
@@ -147,21 +158,23 @@ void	cast_rays(t_mlx *mlx)
 	int		ray, mapX, mapY, DoF;
 	float	rayX, rayY, rayAng, xOff, yOff;
 
-	rayAng = deg_to_rad(g_player_angle - 25);
-	for (ray = 0; ray < 50; ray++) {
+	rayAng = deg_to_rad(g_player_angle - 30);
+	for (ray = 0; ray < 60; ray++) {
+		if (rayAng < 0 )
+			rayAng += 2 * M_PI;
+		if (rayAng > 2 * M_PI)
+			rayAng -= 2 * M_PI;
 		DoF = 0;
-		// é importante tudo ser IF
 		// algoritmo para colisão vertical
-		
 		float aTan = -1 / tan(rayAng);
-		if (rayAng > M_PI) {
-			rayY = ((int)g_player_y / SIZE * SIZE) - 0.0001;
+		if (rayAng > M_PI && rayAng < 2 * M_PI) {
+			rayY = ((int)(g_player_y / SIZE) * SIZE) - 0.0001;
 			rayX = (g_player_y - rayY) * aTan + g_player_x;
 			yOff = -SIZE;
 			xOff = -yOff * aTan;
 		}
-		if (rayAng < M_PI) {
-			rayY = ((int)g_player_y / SIZE * SIZE) + SIZE;
+		if (rayAng < M_PI && (rayAng > 0 && rayAng < 3 * M_PI / 2)) {
+			rayY = ((int)(g_player_y / SIZE) * SIZE) + SIZE;
 			rayX = (g_player_y - rayY) * aTan + g_player_x;
 			yOff = SIZE;
 			xOff = -yOff * aTan;
@@ -180,18 +193,18 @@ void	cast_rays(t_mlx *mlx)
 			rayY += yOff;
 			DoF--;
 		}
-		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY, 0xFF0000FF);
+		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY, RED);
 		
 		// algoritimo para a colisão horizontal
 		aTan = -tan(rayAng);
 		if (rayAng > M_PI / 2 && rayAng < 3 * M_PI / 2) {
-			rayX = ((int)g_player_x / SIZE * SIZE) - 0.0001;
+			rayX = ((int)(g_player_x / SIZE) * SIZE) - 0.0001;
 			rayY = (g_player_x - rayX) * aTan + g_player_y;
 			xOff = -SIZE;
 			yOff = -xOff * aTan;
 		}
 		if (rayAng < M_PI / 2 || rayAng > 3 * M_PI / 2) {
-			rayX = ((int)g_player_x / SIZE * SIZE) + SIZE;
+			rayX = ((int)(g_player_x / SIZE) * SIZE) + SIZE;
 			rayY = (g_player_x - rayX) * aTan + g_player_y;
 			xOff = SIZE;
 			yOff = -xOff * aTan;
@@ -210,8 +223,8 @@ void	cast_rays(t_mlx *mlx)
 			rayY += yOff;
 			DoF--;
 		}
-		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY, 0x00FF007F);
-		rayAng += deg_to_rad(1);
+		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY, GREEN);
+		rayAng += RAD_1;
 	}
 }
 
@@ -249,7 +262,7 @@ void	keyboard(mlx_key_data_t data, void *var)
 	{
 		g_player_angle -= ROT_ANG;
 		if (g_player_angle < 0)
-			g_player_angle += 359;
+			g_player_angle = 360 + g_player_angle;
 	}
 	if (mlx_is_key_down(mlx->win, MLX_KEY_RIGHT))
 		g_player_angle = (int)(g_player_angle + ROT_ANG) % 360;
