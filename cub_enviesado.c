@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
+#include <float.h> // PQ OS LIMITES DO FLOAT ESTAO AQUI E N NA LIMITS??????????
 
 #define SIZE 16
-#define ROT_ANG 1
+#define ROT_ANG 2
 #define RAD_1 0.01745329
 #define RED 0xFF0000FF
 #define GREEN 0x00FF00FF
@@ -120,15 +122,6 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	}
 }
 
-void	swap(float *a, float *b)
-{
-	float	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
 void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color)
 {
 	float	dist_x;
@@ -153,14 +146,23 @@ void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color
 	}
 }
 
+float	pythagoras(float x0, float y0, float x1, float y1)
+{
+	return (sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)));
+}
+
 void	cast_rays(t_mlx *mlx)
 {
 	int		ray, mapX, mapY, DoF;
 	float	rayX, rayY, rayAng, xOff, yOff;
+	float	dist_h, hx, hy;
+	float	dist_v, vx, vy;
 
 	rayAng = deg_to_rad(g_player_angle - 30);
 	for (ray = 0; ray < 60; ray++) {
-		if (rayAng < 0 )
+		dist_h = FLT_MAX;
+		dist_v = FLT_MAX;
+		if (rayAng < 0)
 			rayAng += 2 * M_PI;
 		if (rayAng > 2 * M_PI)
 			rayAng -= 2 * M_PI;
@@ -187,14 +189,16 @@ void	cast_rays(t_mlx *mlx)
 		while (DoF < 8) {
 			mapX = (int)(rayX / SIZE);
 			mapY = (int)(rayY / SIZE);
-			if (mapX < 0 || mapY < 0 || mapX > 7 || mapY > 7 ||g_map[mapY][mapX] == '1')
+			if (mapX < 0 || mapY < 0 || mapX > 7 || mapY > 7 ||g_map[mapY][mapX] == '1') {
+				hx = rayX;
+				hy = rayY;
+				dist_h = pythagoras(g_player_x, g_player_y, rayX, rayY);
 				break ;
+			}
 			rayX += xOff;
 			rayY += yOff;
 			DoF--;
 		}
-		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY, RED);
-		
 		// algoritimo para a colisão horizontal
 		aTan = -tan(rayAng);
 		if (rayAng > M_PI / 2 && rayAng < 3 * M_PI / 2) {
@@ -217,13 +221,20 @@ void	cast_rays(t_mlx *mlx)
 		while (DoF < 8) {
 			mapX = (int)(rayX / SIZE);
 			mapY = (int)(rayY / SIZE);
-			if (mapX < 0 || mapY < 0 || mapX > 7 || mapY > 7 ||g_map[mapY][mapX] == '1')
-				break ;
+			if (mapX < 0 || mapY < 0 || mapX > 7 || mapY > 7 ||g_map[mapY][mapX] == '1') {
+				vx = rayX;
+				vy = rayY;
+				dist_v = pythagoras(g_player_x, g_player_y, rayX, rayY);
+				break;
+			}
 			rayX += xOff;
 			rayY += yOff;
 			DoF--;
 		}
-		draw_ray(mlx, g_player_x, g_player_y, rayX, rayY, GREEN);
+		if (dist_h < dist_v)
+			draw_ray(mlx, g_player_x, g_player_y, hx, hy, RED);
+		else
+			draw_ray(mlx, g_player_x, g_player_y, vx, vy, GREEN);
 		rayAng += RAD_1;
 	}
 }
