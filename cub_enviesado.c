@@ -151,7 +151,8 @@ float	pythagoras(float x0, float y0, float x1, float y1)
 	return (sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)));
 }
 
-void	cast_rays(t_mlx *mlx)
+// A original
+/* void	cast_rays(t_mlx *mlx)
 {
 	int		ray, mapX, mapY, DoF;
 	float	rayX, rayY, rayAng, xOff, yOff;
