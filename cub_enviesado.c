@@ -241,8 +241,8 @@ float	pythagoras(float x0, float y0, float x1, float y1)
 }
 */
 
-#define	H 0
-#define	W 1
+#define H 0
+#define W 1
 
 void	fake_moulinette(float *x, float *y, float *ray, float *off)
 {
@@ -252,12 +252,12 @@ void	fake_moulinette(float *x, float *y, float *ray, float *off)
 	{
 		map[W] = (int)(ray[W] / SIZE);
 		map[H] = (int)(ray[H] / SIZE);
-		if (map[W] < 0 || map[H] < 0 ||	map[W] > 7 || map[H] > 7
+		if (map[W] < 0 || map[H] < 0 || map[W] > 7 || map[H] > 7
 			|| g_map[map[H]][map[W]] == '1')
 		{
 			*x = ray[W];
 			*y = ray[H];
-			break;
+			break ;
 		}
 		ray[W] += off[W];
 		ray[H] += off[H];
@@ -266,81 +266,101 @@ void	fake_moulinette(float *x, float *y, float *ray, float *off)
 
 float	cost_y_ray_distance(float *x, float *y, float aTan, float rayAng)
 {
-	float	Off[2];
+	float	off[2];
 	float	ray[2];
 
 	if (rayAng > M_PI && rayAng < 2 * M_PI)
 	{
 		ray[H] = ((int)(g_player_y / SIZE) * SIZE) - 0.0001;
 		ray[W] = (g_player_y - ray[H]) * aTan + g_player_x;
-		Off[H] = -SIZE;
-		Off[W] = -Off[H] * aTan;
+		off[H] = -SIZE;
+		off[W] = -off[H] * aTan;
 	}
 	if (rayAng < M_PI && rayAng < 3 * M_PI / 2)
 	{
 		ray[H] = ((int)(g_player_y / SIZE) * SIZE) + SIZE;
 		ray[W] = (g_player_y - ray[H]) * aTan + g_player_x;
-		Off[H] = SIZE;
-		Off[W] = -Off[H] * aTan;
+		off[H] = SIZE;
+		off[W] = -off[H] * aTan;
 	}
 	if (rayAng == 0 || rayAng == (float)M_PI)
 	{
 		ray[W] = g_player_x;
 		ray[H] = g_player_y;
 	}
-	fake_moulinette(x, y, ray, Off);
+	fake_moulinette(x, y, ray, off);
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
 
 
 float	cost_x_ray_distance(float *x, float *y, float aTan, float rayAng)
 {
-	float	Off[2];
+	float	off[2];
 	float	ray[2];
 
-	if (rayAng > M_PI / 2 && rayAng < 3 * M_PI / 2) {
+	if (rayAng > M_PI / 2 && rayAng < 3 * M_PI / 2)
+	{
 		ray[W] = ((int)(g_player_x / SIZE) * SIZE) - 0.0001;
 		ray[H] = (g_player_x - ray[W]) * aTan + g_player_y;
-		Off[W] = -SIZE;
-		Off[H] = -Off[W] * aTan;
+		off[W] = -SIZE;
+		off[H] = -off[W] * aTan;
 	}
-	if (rayAng < M_PI / 2 || rayAng > 3 * M_PI / 2) {
+	if (rayAng < M_PI / 2 || rayAng > 3 * M_PI / 2)
+	{
 		ray[W] = ((int)(g_player_x / SIZE) * SIZE) + SIZE;
 		ray[H] = (g_player_x - ray[W]) * aTan + g_player_y;
-		Off[W] = SIZE;
-		Off[H] = -Off[W] * aTan;
+		off[W] = SIZE;
+		off[H] = -off[W] * aTan;
 	}
-	if (rayAng == M_PI / 2 || rayAng == 3 * M_PI / 2) {
+	if (rayAng == M_PI / 2 || rayAng == 3 * M_PI / 2)
+	{
 		ray[W] = g_player_x;
 		ray[H] = g_player_y;
 	}
-	fake_moulinette(x, y, ray, Off);
+	fake_moulinette(x, y, ray, off);
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
 
-void	cast_rays(t_mlx *mlx, int angle)
+void	draw_wall(t_mlx *mlx, float height, int thickness)
 {
-	float	rayAng;
+	if (height > 428)
+		height = 428;
+	for (int y = 128 + height; y < 428 - height; ++y) {
+		for (int x = 0 + thickness; x < thickness * SIZE; ++x) {
+			mlx_put_pixel(mlx->img, x + SIZE, y, CYAN);
+		}
+	}
+}
+
+void	cast_rays(t_mlx *mlx, int fov)
+{
+	float	ray_ang;
 	float	dist[2];
 	float	x[2];
 	float	y[2];
 
-	rayAng = deg_to_rad(g_player_angle - (angle / 2));
-	while (angle--)
+	ray_ang = deg_to_rad(g_player_angle - (fov / 2));
+	while (fov--)
 	{
 		dist[H] = FLT_MAX;
 		dist[W] = FLT_MAX;
-		if (rayAng < 0)
-			rayAng += 2 * M_PI;
-		if (rayAng > 2 * M_PI)
-			rayAng -= 2 * M_PI;
-		dist[H] = cost_y_ray_distance(&x[H], &y[H], -1 / tan(rayAng), rayAng);
-		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(rayAng), rayAng);
+		if (ray_ang < 0)
+			ray_ang += 2 * M_PI;
+		if (ray_ang > 2 * M_PI)
+			ray_ang -= 2 * M_PI;
+		dist[H] = cost_y_ray_distance(&x[H], &y[H], -1 / tan(ray_ang), ray_ang);
+		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(ray_ang), ray_ang);
 		if (dist[H] < dist[W])
+		{
 			draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
+			draw_wall(mlx, SIZE * 472 / dist[H], fov * SIZE);
+		}
 		else
+		{
 			draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
-		rayAng += RAD_1;
+			draw_wall(mlx, SIZE * 472 / dist[W], fov * SIZE);
+		}
+		ray_ang += RAD_1;
 	}
 }
 
@@ -352,9 +372,9 @@ void	render(void *var)
 	mlx = (t_mlx *)var;
 	draw_background(mlx);
 	draw_map(mlx);
+	cast_rays(mlx, 30);
 	draw_player(mlx);
 	draw_direction(mlx, g_player_x, g_player_y);
-	cast_rays(mlx, 60);
 }
 
 //changed to make player drift when facing a wall
@@ -390,11 +410,11 @@ void	keyboard(mlx_key_data_t data, void *var)
 	if (mlx_is_key_down(mlx->win, MLX_KEY_S))
 		change_pos(-g_dir_x, -g_dir_y);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_D))
-		change_pos(cos(deg_to_rad(g_player_angle + 90)) * 2,\
-		sin(deg_to_rad(g_player_angle + 90)) * 2);
+		change_pos(cos(deg_to_rad(g_player_angle + 90)) * 2,
+			sin(deg_to_rad(g_player_angle + 90)) * 2);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_A))
-		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 2,\
-		-sin(deg_to_rad(g_player_angle + 90)) * 2);
+		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 2,
+			-sin(deg_to_rad(g_player_angle + 90)) * 2);
 }
 
 int	main(void)
