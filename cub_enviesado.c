@@ -323,12 +323,12 @@ float	cost_x_ray_distance(float *x, float *y, float aTan, float rayAng)
 
 void	draw_wall(t_mlx *mlx, float height, int thickness)
 {
-	if (height > 428)
-		height = 428;
-	for (int y = 128 + height; y < 428 - height; ++y) {
-		for (int x = 0 + thickness; x < thickness * SIZE; ++x) {
-			mlx_put_pixel(mlx->img, x + SIZE, y, CYAN);
-		}
+	printf("height: %f\n", height);
+	if (height > 320)
+		height = 320;
+	// algo de errado não está certo
+	for (int y = 128 + height; y < 600 - height; ++y) {
+		mlx_put_pixel(mlx->img, thickness, y, CYAN);
 	}
 }
 
@@ -342,8 +342,8 @@ void	cast_rays(t_mlx *mlx, int fov)
 	ray_ang = deg_to_rad(g_player_angle - (fov / 2));
 	while (fov--)
 	{
-		dist[H] = FLT_MAX;
-		dist[W] = FLT_MAX;
+		dist[H] = (float)INT_MAX;
+		dist[W] = (float)INT_MAX;
 		if (ray_ang < 0)
 			ray_ang += 2 * M_PI;
 		if (ray_ang > 2 * M_PI)
@@ -353,12 +353,12 @@ void	cast_rays(t_mlx *mlx, int fov)
 		if (dist[H] < dist[W])
 		{
 			draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
-			draw_wall(mlx, SIZE * 472 / dist[H], fov * SIZE);
+			draw_wall(mlx, dist[H], fov);// a formula do vídeo não funciona passa o float direto
 		}
 		else
 		{
 			draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
-			draw_wall(mlx, SIZE * 472 / dist[W], fov * SIZE);
+			draw_wall(mlx, dist[W], fov);
 		}
 		ray_ang += RAD_1;
 	}
