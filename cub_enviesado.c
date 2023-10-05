@@ -239,6 +239,111 @@ float	pythagoras(float x0, float y0, float x1, float y1)
 		rayAng += RAD_1;
 	}
 }
+*/
+
+#define	H 0
+#define	W 1
+
+void	fake_moulinette(float *x, float *y, float *ray, float *off)
+{
+	int	map[2];
+
+	while (1)
+	{
+		map[W] = (int)(ray[W] / SIZE);
+		map[H] = (int)(ray[H] / SIZE);
+		if (map[W] < 0 || map[H] < 0 ||	map[W] > 7 || map[H] > 7
+			|| g_map[map[H]][map[W]] == '1')
+		{
+			*x = ray[W];
+			*y = ray[H];
+			break;
+		}
+		ray[W] += off[W];
+		ray[H] += off[H];
+	}
+}
+
+float	cost_y_ray_distance(float *x, float *y, float aTan, float rayAng)
+{
+	float	Off[2];
+	float	ray[2];
+
+	if (rayAng > M_PI && rayAng < 2 * M_PI)
+	{
+		ray[H] = ((int)(g_player_y / SIZE) * SIZE) - 0.0001;
+		ray[W] = (g_player_y - ray[H]) * aTan + g_player_x;
+		Off[H] = -SIZE;
+		Off[W] = -Off[H] * aTan;
+	}
+	if (rayAng < M_PI && rayAng < 3 * M_PI / 2)
+	{
+		ray[H] = ((int)(g_player_y / SIZE) * SIZE) + SIZE;
+		ray[W] = (g_player_y - ray[H]) * aTan + g_player_x;
+		Off[H] = SIZE;
+		Off[W] = -Off[H] * aTan;
+	}
+	if (rayAng == 0 || rayAng == (float)M_PI)
+	{
+		ray[W] = g_player_x;
+		ray[H] = g_player_y;
+	}
+	fake_moulinette(x, y, ray, Off);
+	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
+}
+
+
+float	cost_x_ray_distance(float *x, float *y, float aTan, float rayAng)
+{
+	float	Off[2];
+	float	ray[2];
+
+	if (rayAng > M_PI / 2 && rayAng < 3 * M_PI / 2) {
+		ray[W] = ((int)(g_player_x / SIZE) * SIZE) - 0.0001;
+		ray[H] = (g_player_x - ray[W]) * aTan + g_player_y;
+		Off[W] = -SIZE;
+		Off[H] = -Off[W] * aTan;
+	}
+	if (rayAng < M_PI / 2 || rayAng > 3 * M_PI / 2) {
+		ray[W] = ((int)(g_player_x / SIZE) * SIZE) + SIZE;
+		ray[H] = (g_player_x - ray[W]) * aTan + g_player_y;
+		Off[W] = SIZE;
+		Off[H] = -Off[W] * aTan;
+	}
+	if (rayAng == M_PI / 2 || rayAng == 3 * M_PI / 2) {
+		ray[W] = g_player_x;
+		ray[H] = g_player_y;
+	}
+	fake_moulinette(x, y, ray, Off);
+	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
+}
+
+void	cast_rays(t_mlx *mlx, int angle)
+{
+	float	rayAng;
+	float	dist[2];
+	float	x[2];
+	float	y[2];
+
+	rayAng = deg_to_rad(g_player_angle - (angle / 2));
+	while (angle--)
+	{
+		dist[H] = FLT_MAX;
+		dist[W] = FLT_MAX;
+		if (rayAng < 0)
+			rayAng += 2 * M_PI;
+		if (rayAng > 2 * M_PI)
+			rayAng -= 2 * M_PI;
+		dist[H] = cost_y_ray_distance(&x[H], &y[H], -1 / tan(rayAng), rayAng);
+		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(rayAng), rayAng);
+		if (dist[H] < dist[W])
+			draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
+		else
+			draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
+		rayAng += RAD_1;
+	}
+}
+
 
 void	render(void *var)
 {
@@ -249,7 +354,7 @@ void	render(void *var)
 	draw_map(mlx);
 	draw_player(mlx);
 	draw_direction(mlx, g_player_x, g_player_y);
-	cast_rays(mlx);
+	cast_rays(mlx, 60);
 }
 
 //changed to make player drift when facing a wall
