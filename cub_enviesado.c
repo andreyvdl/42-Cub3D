@@ -323,8 +323,10 @@ float	cost_x_ray_distance(float *x, float *y, float aTan, float rayAng)
 
 void	draw_wall(t_mlx *mlx, float height, int thickness, int start_x, uint32_t color)
 {
+	printf("height: %f\n", height);
 	if (height > 320)
 		height = 320;
+	printf("height: %f\n", height);
 	// algo de errado não está certo
 	for (int y = 128 + height; y < 600 - height; ++y) {
 		for (int x = start_x; x < start_x + thickness; ++x)
@@ -340,10 +342,11 @@ void	cast_rays(t_mlx *mlx, int fov)
 	float	y[2];
 	int		thickness;
 	int		start_x;
+	float	fisheye_fix;
 
 	thickness = 800.0 / fov;
 	start_x = 800 - thickness;
-	ray_ang = deg_to_rad(g_player_angle - (fov / 2));
+	ray_ang = deg_to_rad(g_player_angle + (fov / 2));
 	while (fov--)
 	{
 		dist[H] = (float)INT_MAX;
@@ -352,26 +355,33 @@ void	cast_rays(t_mlx *mlx, int fov)
 			ray_ang += 2 * M_PI;
 		if (ray_ang > 2 * M_PI)
 			ray_ang -= 2 * M_PI;
-		dist[H] = cost_y_ray_distance(&x[H], &y[H], -1 / tan(ray_ang), ray_ang);
+		dist[H] = cost_y_ray_distance(&x[H], &y[H], 1 / -tan(ray_ang), ray_ang);
 		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(ray_ang), ray_ang);
-		/* if (fov == 0)
+		if (fov == 0)
 		{
-			printf("start_x: %d\n", start_x);
 			thickness += start_x;
 			start_x = 0;
-		} */
+		}
+		fisheye_fix = deg_to_rad(g_player_angle) - ray_ang;
+		if (fisheye_fix < 0)
+			fisheye_fix += 2 * M_PI;
+		else if (fisheye_fix > 2 * M_PI)
+			fisheye_fix -= 2 * M_PI;
 		if (dist[H] < dist[W])
 		{
 			draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
-			draw_wall(mlx, dist[H], thickness, start_x, RED - (int)dist[H]);// a formula do vídeo não funciona passa o float direto
+			// a formula do vídeo não funciona passa o float direto
+			// draw_wall(mlx, dist[H] / (SIZE * 800), thickness, start_x, RED);
+			draw_wall(mlx, dist[H] * cos(fisheye_fix), thickness, start_x, RED - (int)dist[H]);
 		}
 		else
 		{
 			draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
-			draw_wall(mlx, dist[W], thickness, start_x, GREEN - (int)dist[W]);
+			// draw_wall(mlx, (SIZE * 800) / dist[W] , thickness, start_x, GREEN);
+			draw_wall(mlx, dist[W] * cos(fisheye_fix), thickness, start_x, GREEN - (int)dist[W]);
 		}
 		start_x -= thickness;
-		ray_ang += RAD_1;
+		ray_ang -= RAD_1;
 	}
 }
 
