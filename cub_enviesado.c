@@ -321,14 +321,14 @@ float	cost_x_ray_distance(float *x, float *y, float aTan, float rayAng)
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
 
-void	draw_wall(t_mlx *mlx, float height, int thickness)
+void	draw_wall(t_mlx *mlx, float height, int thickness, int start_x, uint32_t color)
 {
 	if (height > 320)
 		height = 320;
 	// algo de errado não está certo
 	for (int y = 128 + height; y < 600 - height; ++y) {
-		for (int x = thickness + 90; x < thickness + 90 + SIZE; ++x)
-		mlx_put_pixel(mlx->img, x, y, CYAN);
+		for (int x = start_x; x < start_x + thickness; ++x)
+			mlx_put_pixel(mlx->img, x, y, color);
 	}
 }
 
@@ -338,7 +338,11 @@ void	cast_rays(t_mlx *mlx, int fov)
 	float	dist[2];
 	float	x[2];
 	float	y[2];
+	int		thickness;
+	int		start_x;
 
+	thickness = 800.0 / fov;
+	start_x = 800 - thickness;
 	ray_ang = deg_to_rad(g_player_angle - (fov / 2));
 	while (fov--)
 	{
@@ -350,16 +354,23 @@ void	cast_rays(t_mlx *mlx, int fov)
 			ray_ang -= 2 * M_PI;
 		dist[H] = cost_y_ray_distance(&x[H], &y[H], -1 / tan(ray_ang), ray_ang);
 		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(ray_ang), ray_ang);
+		/* if (fov == 0)
+		{
+			printf("start_x: %d\n", start_x);
+			thickness += start_x;
+			start_x = 0;
+		} */
 		if (dist[H] < dist[W])
 		{
 			draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
-			draw_wall(mlx, dist[H], fov * SIZE);// a formula do vídeo não funciona passa o float direto
+			draw_wall(mlx, dist[H], thickness, start_x, RED - (int)dist[H]);// a formula do vídeo não funciona passa o float direto
 		}
 		else
 		{
 			draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
-			draw_wall(mlx, dist[W], fov * SIZE);
+			draw_wall(mlx, dist[W], thickness, start_x, GREEN - (int)dist[W]);
 		}
+		start_x -= thickness;
 		ray_ang += RAD_1;
 	}
 }
@@ -372,7 +383,7 @@ void	render(void *var)
 	mlx = (t_mlx *)var;
 	draw_background(mlx);
 	draw_map(mlx);
-	cast_rays(mlx, 30);
+	cast_rays(mlx, 80);
 	draw_player(mlx);
 	draw_direction(mlx, g_player_x, g_player_y);
 }
