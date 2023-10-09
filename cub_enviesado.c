@@ -3,11 +3,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <limits.h>
-#include <float.h> // PQ OS LIMITES DO FLOAT ESTAO AQUI E N NA LIMITS??????????
 
-#define SIZE 16
-#define ROT_ANG 2
-#define RAD_1 0.01745329
+#define SIZE 8
+#define ROT_ANG 3
+#define RAD_1 0.0174532925199
+#define RAD_90 1.57079632679
+#define RAD_270 4.71238898037
+#define RAD_360 6.28318530716
 #define RED 0xFF0000FF
 #define GREEN 0x00FF00FF
 #define BLUE 0x0000FFFF
@@ -16,18 +18,6 @@
 #define YELLOW 0xFFFF00FF
 #define CYAN 0x00FFFFFF
 #define PINK 0xFF00FFFF
-
-float	g_player_x = SIZE * 1.5; // posição inicial do player
-float	g_player_y = SIZE * 1.5;
-int	 	g_player_angle;
-float	g_dir_x;
-float	g_dir_y;
-
-typedef struct s_mlx
-{
-	mlx_t		*win;
-	mlx_image_t	*img;
-}	t_mlx;
 
 const char	*g_map[] = {
 	"11111111",
@@ -40,13 +30,23 @@ const char	*g_map[] = {
 	"11111111",
 	NULL
 };
+float		g_player_x = SIZE * 1.5;
+float		g_player_y = SIZE * 1.5;
+int	 		g_player_angle;
+float		g_dir_x;
+float		g_dir_y;
+
+typedef struct s_mlx
+{
+	mlx_t		*win;
+	mlx_image_t	*img;
+}	t_mlx;
 
 float	deg_to_rad(int deg)
 {
-	return (deg * M_PI / 180);
+	return (deg * RAD_1);
 }
 
-// loop que desenha o fundo da tela
 void	draw_background(t_mlx *mlx)
 {
 	int	y;
@@ -68,44 +68,56 @@ void	draw_background(t_mlx *mlx)
 	}
 }
 
-void	draw_map(t_mlx *mlx)
+void	draw_map(t_mlx *mlx, int map_x, int map_y)
 {
-	for (int y = 0; g_map[y]; ++y) {
-		for (int x = 0; g_map[y][x]; ++x) {
-			for (int i = y * SIZE; i < y * SIZE + SIZE ; ++i) {
-				for (int j = x * SIZE; j < x * SIZE + SIZE; ++j) {
-					if (g_map[y][x] == '1')
-						mlx_put_pixel(mlx->img, j, i, WHITE);
-					else
-						mlx_put_pixel(mlx->img, j, i, BLACK);
-				}
-			}
+	int	x;
+	int	y;
+
+	y = map_y * SIZE;
+	while (y < map_y * SIZE + SIZE)
+	{
+		x = map_x * SIZE;
+		while (x < map_x * SIZE + SIZE)
+		{
+			if (g_map[map_y][map_x] == '1')
+				mlx_put_pixel(mlx->img, x, y, WHITE);
+			else
+				mlx_put_pixel(mlx->img, x, y, BLACK);
+			++x;
 		}
+		++y;
 	}
 }
 
 //desenha o player
 void	draw_player(t_mlx *mlx)
 {
-	for (int i = g_player_y - 2; i < g_player_y + 2; ++i) {
-		for (int j = g_player_x - 2; j < g_player_x + 2; ++j) {
-			if (i < 0 || j < 0)
+	int	x;
+	int	y;
+
+	y = (int)g_player_y - (SIZE >> 2);
+	while (y < (int)g_player_y + (SIZE >> 2))
+	{
+		x = (int)g_player_x - (SIZE >> 2);
+		while (x < (int)g_player_x + (SIZE >> 2))
+		{
+			if (y < 0 || x < 0)
 				break ;
-			mlx_put_pixel(mlx->img, j, i, YELLOW);
+			mlx_put_pixel(mlx->img, x, y, YELLOW);
+			++x;
 		}
+		++y;
 	}
 }
 
-//desenha a linha reta da direção do player
-// o algoritmo é o DDA
 void	draw_direction(t_mlx *mlx, float x0, float y0)
 {
 	float	dist_x;
 	float	dist_y;
 	float	step;
 
-	dist_x = g_dir_x * SIZE;
-	dist_y = g_dir_y * SIZE;
+	dist_x = g_dir_x * 8;
+	dist_y = g_dir_y * 8;
 	if (fabs(dist_x) > fabs(dist_y))
 		step = fabs(dist_x);
 	else
@@ -116,13 +128,13 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	{
 		if (x0 < 0 || y0 < 0)
 			break ;
-		mlx_put_pixel(mlx->img, x0, y0, YELLOW);
+		mlx_put_pixel(mlx->img, x0, y0, CYAN);
 		x0 += dist_x;
 		y0 += dist_y;
 	}
 }
 
-void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color)
+/* void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color)
 {
 	float	dist_x;
 	float	dist_y;
@@ -144,107 +156,17 @@ void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color
 		x0 += dist_x;
 		y0 += dist_y;
 	}
-}
+} */
 
 float	pythagoras(float x0, float y0, float x1, float y1)
 {
 	return (sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)));
 }
 
-// A original
-/* void	cast_rays(t_mlx *mlx)
-{
-	int		ray, mapX, mapY, DoF;
-	float	rayX, rayY, rayAng, xOff, yOff;
-	float	dist_h, hx, hy;
-	float	dist_v, vx, vy;
-
-	rayAng = deg_to_rad(g_player_angle - 30);
-	for (ray = 0; ray < 60; ray++) {
-		dist_h = FLT_MAX;
-		dist_v = FLT_MAX;
-		if (rayAng < 0)
-			rayAng += 2 * M_PI;
-		if (rayAng > 2 * M_PI)
-			rayAng -= 2 * M_PI;
-		DoF = 0;
-		// algoritmo para colisão vertical
-		float aTan = -1 / tan(rayAng);
-		if (rayAng > M_PI && rayAng < 2 * M_PI) {
-			rayY = ((int)(g_player_y / SIZE) * SIZE) - 0.0001;
-			rayX = (g_player_y - rayY) * aTan + g_player_x;
-			yOff = -SIZE;
-			xOff = -yOff * aTan;
-		}
-		if (rayAng < M_PI && (rayAng > 0 && rayAng < 3 * M_PI / 2)) {
-			rayY = ((int)(g_player_y / SIZE) * SIZE) + SIZE;
-			rayX = (g_player_y - rayY) * aTan + g_player_x;
-			yOff = SIZE;
-			xOff = -yOff * aTan;
-		}
-		if (rayAng == 0 || rayAng == (float)M_PI) {
-			rayX = g_player_x;
-			rayY = g_player_y;
-			DoF = 8;
-		}
-		while (DoF < 8) {
-			mapX = (int)(rayX / SIZE);
-			mapY = (int)(rayY / SIZE);
-			if (mapX < 0 || mapY < 0 || mapX > 7 || mapY > 7 ||g_map[mapY][mapX] == '1') {
-				hx = rayX;
-				hy = rayY;
-				dist_h = pythagoras(g_player_x, g_player_y, rayX, rayY);
-				break ;
-			}
-			rayX += xOff;
-			rayY += yOff;
-			DoF--;
-		}
-		// algoritimo para a colisão horizontal
-		aTan = -tan(rayAng);
-		if (rayAng > M_PI / 2 && rayAng < 3 * M_PI / 2) {
-			rayX = ((int)(g_player_x / SIZE) * SIZE) - 0.0001;
-			rayY = (g_player_x - rayX) * aTan + g_player_y;
-			xOff = -SIZE;
-			yOff = -xOff * aTan;
-		}
-		if (rayAng < M_PI / 2 || rayAng > 3 * M_PI / 2) {
-			rayX = ((int)(g_player_x / SIZE) * SIZE) + SIZE;
-			rayY = (g_player_x - rayX) * aTan + g_player_y;
-			xOff = SIZE;
-			yOff = -xOff * aTan;
-		}
-		if (rayAng == M_PI / 2 || rayAng == 3 * M_PI / 2) {
-			rayX = g_player_x;
-			rayY = g_player_y;
-			DoF = 8;
-		}
-		while (DoF < 8) {
-			mapX = (int)(rayX / SIZE);
-			mapY = (int)(rayY / SIZE);
-			if (mapX < 0 || mapY < 0 || mapX > 7 || mapY > 7 ||g_map[mapY][mapX] == '1') {
-				vx = rayX;
-				vy = rayY;
-				dist_v = pythagoras(g_player_x, g_player_y, rayX, rayY);
-				break;
-			}
-			rayX += xOff;
-			rayY += yOff;
-			DoF--;
-		}
-		if (dist_h < dist_v)
-			draw_ray(mlx, g_player_x, g_player_y, hx, hy, RED);
-		else
-			draw_ray(mlx, g_player_x, g_player_y, vx, vy, GREEN);
-		rayAng += RAD_1;
-	}
-}
-*/
-
 #define H 0
 #define W 1
 
-void	fake_moulinette(float *x, float *y, float *ray, float *off)
+void	update_distance(float *x, float *y, float *ray, float *off)
 {
 	int	map[2];
 
@@ -269,14 +191,14 @@ float	cost_y_ray_distance(float *x, float *y, float aTan, float rayAng)
 	float	off[2];
 	float	ray[2];
 
-	if (rayAng > M_PI && rayAng < 2 * M_PI)
+	if (rayAng > M_PI && rayAng < RAD_360)
 	{
 		ray[H] = ((int)(g_player_y / SIZE) * SIZE) - 0.0001;
 		ray[W] = (g_player_y - ray[H]) * aTan + g_player_x;
 		off[H] = -SIZE;
 		off[W] = -off[H] * aTan;
 	}
-	if (rayAng < M_PI && rayAng < 3 * M_PI / 2)
+	if (rayAng < M_PI && rayAng < RAD_270)
 	{
 		ray[H] = ((int)(g_player_y / SIZE) * SIZE) + SIZE;
 		ray[W] = (g_player_y - ray[H]) * aTan + g_player_x;
@@ -288,53 +210,71 @@ float	cost_y_ray_distance(float *x, float *y, float aTan, float rayAng)
 		ray[W] = g_player_x;
 		ray[H] = g_player_y;
 	}
-	fake_moulinette(x, y, ray, off);
+	update_distance(x, y, ray, off);
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
-
 
 float	cost_x_ray_distance(float *x, float *y, float aTan, float rayAng)
 {
 	float	off[2];
 	float	ray[2];
 
-	if (rayAng > M_PI / 2 && rayAng < 3 * M_PI / 2)
+	if (rayAng > RAD_90 && rayAng < RAD_270)
 	{
 		ray[W] = ((int)(g_player_x / SIZE) * SIZE) - 0.0001;
 		ray[H] = (g_player_x - ray[W]) * aTan + g_player_y;
 		off[W] = -SIZE;
 		off[H] = -off[W] * aTan;
 	}
-	if (rayAng < M_PI / 2 || rayAng > 3 * M_PI / 2)
+	if (rayAng < RAD_90 || rayAng > RAD_270)
 	{
 		ray[W] = ((int)(g_player_x / SIZE) * SIZE) + SIZE;
 		ray[H] = (g_player_x - ray[W]) * aTan + g_player_y;
 		off[W] = SIZE;
 		off[H] = -off[W] * aTan;
 	}
-	if (rayAng == M_PI / 2 || rayAng == 3 * M_PI / 2)
+	if (rayAng == (float)RAD_90 || rayAng == (float)RAD_270)
 	{
 		ray[W] = g_player_x;
 		ray[H] = g_player_y;
 	}
-	fake_moulinette(x, y, ray, off);
+	update_distance(x, y, ray, off);
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
 
-void	draw_wall(t_mlx *mlx, float height, int thickness, int start_x, uint32_t color)
+void	draw_wall(t_mlx *mlx, float height, int width, int init, uint32_t color)
 {
 	int	y;
+	int	x;
+	int	length;
 
 	if (height > 300)
 		height = 300;
 	y = 300;
-	while ((int)height--)
+	length = width + init;
+	while ((int)height >= 0)
 	{
-		for (int x = start_x; x < start_x + thickness; ++x) {
-			mlx_put_pixel(mlx->img, x, y + height, color);
-			mlx_put_pixel(mlx->img, x, y - height, color);
+		x = init;
+		while (x < length)
+		{
+			mlx_put_pixel(mlx->img, x, y + height, color - 64);
+			mlx_put_pixel(mlx->img, x, y - height, color - 64);
+			++x;
 		}
+		--height;
 	}
+}
+
+float	fisheye_fix(float ray_angle)
+{
+	float	fisheye;
+
+	fisheye = deg_to_rad(g_player_angle) - ray_angle;
+	if (fisheye < 0)
+		fisheye += RAD_360;
+	else if (fisheye > RAD_360)
+		fisheye -= RAD_360;
+	return (cos(fisheye));
 }
 
 void	cast_rays(t_mlx *mlx, int fov)
@@ -345,7 +285,7 @@ void	cast_rays(t_mlx *mlx, int fov)
 	float	y[2];
 	int		thickness;
 	int		start_x;
-	float	fisheye_fix;
+	float	fisheye;
 
 	thickness = 800.0 / fov;
 	start_x = 800 - thickness;
@@ -355,9 +295,9 @@ void	cast_rays(t_mlx *mlx, int fov)
 		dist[H] = (float)INT_MAX;
 		dist[W] = (float)INT_MAX;
 		if (ray_ang < 0)
-			ray_ang += 2 * M_PI;
-		if (ray_ang > 2 * M_PI)
-			ray_ang -= 2 * M_PI;
+			ray_ang += RAD_360;
+		if (ray_ang > RAD_360)
+			ray_ang -= RAD_360;
 		dist[H] = cost_y_ray_distance(&x[H], &y[H], 1 / -tan(ray_ang), ray_ang);
 		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(ray_ang), ray_ang);
 		if (fov == 0)
@@ -365,23 +305,16 @@ void	cast_rays(t_mlx *mlx, int fov)
 			thickness += start_x;
 			start_x = 0;
 		}
-		fisheye_fix = deg_to_rad(g_player_angle) - ray_ang;
-		if (fisheye_fix < 0)
-			fisheye_fix += 2 * M_PI;
-		else if (fisheye_fix > 2 * M_PI)
-			fisheye_fix -= 2 * M_PI;
+		fisheye = fisheye_fix(ray_ang);
 		if (dist[H] < dist[W])
 		{
 			// draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
-			// a formula do vídeo não funciona passa o float direto
-			// draw_wall(mlx, dist[H] / (SIZE * 800), thickness, start_x, RED);
-			draw_wall(mlx, (SIZE * 800) / (dist[H] * cos(fisheye_fix)), thickness, start_x, RED - (int)dist[H]);
+			draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), thickness, start_x, RED - (int)dist[H]);
 		}
 		else
 		{
 			// draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
-			// draw_wall(mlx, (SIZE * 800) / dist[W] , thickness, start_x, GREEN);
-			draw_wall(mlx, (SIZE * 800) / (dist[W] * cos(fisheye_fix)), thickness, start_x, GREEN - (int)dist[W]);
+			draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), thickness, start_x, GREEN - (int)dist[W]);
 		}
 		start_x -= thickness;
 		ray_ang -= RAD_1;
@@ -391,23 +324,34 @@ void	cast_rays(t_mlx *mlx, int fov)
 void	render(void *var)
 {
 	t_mlx	*mlx;
+	int		i;
+	int		j;
 
 	mlx = (t_mlx *)var;
 	draw_background(mlx);
 	cast_rays(mlx, 80);
-	draw_map(mlx);
-	draw_player(mlx);
+	i = 0;
+	while (g_map[i] != NULL)
+	{
+		j = 0;
+		while (g_map[i][j] != '\0')
+		{
+			draw_map(mlx, j, i);
+			++j;
+		}
+		++i;
+	}
 	draw_direction(mlx, g_player_x, g_player_y);
+	draw_player(mlx);
 }
 
-//changed to make player drift when facing a wall
 void	change_pos(float x, float y)
 {
 	if (g_player_x + x > 0.9 \
-	&& g_map[(int)(g_player_y / SIZE)][(int)((g_player_x + x) / SIZE )] != '1')
+	&& g_map[(int)(g_player_y / SIZE)][(int)((g_player_x + x) / SIZE)] != '1')
 		g_player_x += x;
 	if (g_player_y + y > 0.9 \
-	&& g_map[(int)((g_player_y + y) / SIZE)][(int)(g_player_x / SIZE )] != '1')
+	&& g_map[(int)((g_player_y + y) / SIZE)][(int)(g_player_x / SIZE)] != '1')
 		g_player_y += y;
 }
 
@@ -426,8 +370,8 @@ void	keyboard(mlx_key_data_t data, void *var)
 	}
 	if (mlx_is_key_down(mlx->win, MLX_KEY_RIGHT))
 		g_player_angle = (int)(g_player_angle + ROT_ANG) % 360;
-	g_dir_x = cos(deg_to_rad(g_player_angle)); // altera a rotação do player,
-	g_dir_y = sin(deg_to_rad(g_player_angle)); // permite andar livremente
+	g_dir_x = cos(deg_to_rad(g_player_angle));
+	g_dir_y = sin(deg_to_rad(g_player_angle));
 	if (mlx_is_key_down(mlx->win, MLX_KEY_W))
 		change_pos(g_dir_x, g_dir_y);
 	if (mlx_is_key_down(mlx->win, MLX_KEY_S))
