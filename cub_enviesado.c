@@ -72,8 +72,8 @@ void	draw_map(t_mlx *mlx)
 {
 	for (int y = 0; g_map[y]; ++y) {
 		for (int x = 0; g_map[y][x]; ++x) {
-			for (int i = y * SIZE + 1; i < y * SIZE + SIZE ; ++i) {
-				for (int j = x * SIZE + 1; j < x * SIZE + SIZE; ++j) {
+			for (int i = y * SIZE; i < y * SIZE + SIZE ; ++i) {
+				for (int j = x * SIZE; j < x * SIZE + SIZE; ++j) {
 					if (g_map[y][x] == '1')
 						mlx_put_pixel(mlx->img, j, i, WHITE);
 					else
@@ -323,14 +323,17 @@ float	cost_x_ray_distance(float *x, float *y, float aTan, float rayAng)
 
 void	draw_wall(t_mlx *mlx, float height, int thickness, int start_x, uint32_t color)
 {
-	printf("height: %f\n", height);
-	if (height > 320)
-		height = 320;
-	printf("height: %f\n", height);
-	// algo de errado não está certo
-	for (int y = 128 + height; y < 600 - height; ++y) {
-		for (int x = start_x; x < start_x + thickness; ++x)
-			mlx_put_pixel(mlx->img, x, y, color);
+	int	y;
+
+	if (height > 300)
+		height = 300;
+	y = 300;
+	while ((int)height--)
+	{
+		for (int x = start_x; x < start_x + thickness; ++x) {
+			mlx_put_pixel(mlx->img, x, y + height, color);
+			mlx_put_pixel(mlx->img, x, y - height, color);
+		}
 	}
 }
 
@@ -369,22 +372,21 @@ void	cast_rays(t_mlx *mlx, int fov)
 			fisheye_fix -= 2 * M_PI;
 		if (dist[H] < dist[W])
 		{
-			draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
+			// draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
 			// a formula do vídeo não funciona passa o float direto
 			// draw_wall(mlx, dist[H] / (SIZE * 800), thickness, start_x, RED);
-			draw_wall(mlx, dist[H] * cos(fisheye_fix), thickness, start_x, RED - (int)dist[H]);
+			draw_wall(mlx, (SIZE * 800) / (dist[H] * cos(fisheye_fix)), thickness, start_x, RED - (int)dist[H]);
 		}
 		else
 		{
-			draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
+			// draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
 			// draw_wall(mlx, (SIZE * 800) / dist[W] , thickness, start_x, GREEN);
-			draw_wall(mlx, dist[W] * cos(fisheye_fix), thickness, start_x, GREEN - (int)dist[W]);
+			draw_wall(mlx, (SIZE * 800) / (dist[W] * cos(fisheye_fix)), thickness, start_x, GREEN - (int)dist[W]);
 		}
 		start_x -= thickness;
 		ray_ang -= RAD_1;
 	}
 }
-
 
 void	render(void *var)
 {
@@ -392,8 +394,8 @@ void	render(void *var)
 
 	mlx = (t_mlx *)var;
 	draw_background(mlx);
-	draw_map(mlx);
 	cast_rays(mlx, 80);
+	draw_map(mlx);
 	draw_player(mlx);
 	draw_direction(mlx, g_player_x, g_player_y);
 }
