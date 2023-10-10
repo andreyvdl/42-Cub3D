@@ -44,8 +44,11 @@ double		g_dir_y;
 
 typedef struct s_mlx
 {
-	mlx_t		*win;
-	mlx_image_t	*img;
+	mlx_image_t		*tex_img[4];
+	mlx_texture_t	*tex;
+	mlx_image_t		*img;
+	mlx_t			*win;
+	bool			m_cntl;
 }	t_mlx;
 
 double	deg_to_rad(int deg)
@@ -331,6 +334,35 @@ void	cast_rays(t_mlx *mlx, int fov)
 	}
 }
 
+void	draw_aim(t_mlx *mlx)
+{
+	const int	x = 800 / 2;
+	const int	y = 600 / 2;
+	uint32_t	color;
+	int			counter;
+
+	if (g_player_angle < 45 || g_player_angle > 315)
+		color = BLUE;
+	else if (g_player_angle > 45 && g_player_angle < 135)
+		color = PINK;
+	else if (g_player_angle > 135 && g_player_angle < 225)
+		color = CYAN;
+	else if (g_player_angle > 225 && g_player_angle < 315)
+		color = YELLOW;
+	else
+		color = WHITE;
+	counter = 1;
+	mlx_put_pixel(mlx->img, x, y, color);
+	while (counter < 15)
+	{
+		mlx_put_pixel(mlx->img, x + counter, y, color);
+		mlx_put_pixel(mlx->img, x - counter, y, color);
+		mlx_put_pixel(mlx->img, x, y + counter, color);
+		mlx_put_pixel(mlx->img, x, y - counter, color);
+		++counter;
+	}
+}
+
 void	render(void *var)
 {
 	t_mlx	*mlx;
@@ -393,6 +425,38 @@ void	keyboard(mlx_key_data_t data, void *var)
 	if (mlx_is_key_down(mlx->win, MLX_KEY_A))
 		change_pos(-cos(deg_to_rad(g_player_angle + 90)) * 2,
 			-sin(deg_to_rad(g_player_angle + 90)) * 2);
+	if (data.key == MLX_KEY_L && data.action == MLX_RELEASE)
+	{
+		if (mlx->m_cntl == true)
+		{
+			mlx_set_cursor_mode(mlx->win, MLX_MOUSE_HIDDEN);
+			mlx->m_cntl = false;
+		}
+		else
+		{
+			mlx_set_cursor_mode(mlx->win, MLX_MOUSE_NORMAL);
+			mlx->m_cntl = true;
+		}
+		mlx_set_mouse_pos(mlx->win, 400, 300);
+	}
+
+}
+
+void	mouse(double x_pos, double y_pos, void *var)
+{
+	t_mlx	*mlx;
+
+	(void)y_pos;
+	mlx = (t_mlx *)var;
+	if (mlx->m_cntl == true)
+		return ;
+	if (x_pos < 400)
+		g_player_angle -= ROT_ANG;
+	else if (x_pos > 400)
+		g_player_angle += ROT_ANG;
+	g_dir_x = cos(deg_to_rad(g_player_angle));
+	g_dir_y = sin(deg_to_rad(g_player_angle));
+	mlx_set_mouse_pos(mlx->win, 400, 300);
 }
 
 int	angle_fix(int angle)
@@ -458,7 +522,10 @@ int	main(void)
 	g_dir_x = cos(deg_to_rad(g_player_angle) * 5);
 	g_dir_y = sin(deg_to_rad(g_player_angle) * 5);
 	mlx_key_hook(mlx.win, &keyboard, &mlx);
+	mlx_cursor_hook(mlx.win, &mouse, &mlx);
 	mlx_loop_hook(mlx.win, &render, &mlx);
+	mlx_set_mouse_pos(mlx.win, 400, 300);
+	mlx_set_cursor_mode(mlx.win, MLX_MOUSE_HIDDEN);
 	mlx_image_to_window(mlx.win, mlx.img, 0, 0);
 	// mlx_image_to_window(mlx.win, mlx.tex_img[NO], 336, 86);
 	// mlx_image_to_window(mlx.win, mlx.tex_img[SO], 336, 450);
