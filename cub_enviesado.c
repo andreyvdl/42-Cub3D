@@ -5,7 +5,7 @@
 #include <limits.h>
 
 #define SIZE 8
-#define ROT_ANG 3
+#define ROT_ANG 5
 #define RAD_1 0.0174532925199
 #define RAD_90 1.57079632679
 #define RAD_270 4.71238898037
@@ -22,19 +22,19 @@
 const char	*g_map[] = {
 	"11111111",
 	"10000001",
+	"10100101",
 	"10000001",
 	"10000001",
+	"10100101",
 	"10000001",
-	"10011001",
-	"11000011",
 	"11111111",
 	NULL
 };
-float		g_player_x = SIZE * 1.5;
-float		g_player_y = SIZE * 1.5;
+double		g_player_x = SIZE * 1.5;
+double		g_player_y = SIZE * 1.5;
 int	 		g_player_angle;
-float		g_dir_x;
-float		g_dir_y;
+double		g_dir_x;
+double		g_dir_y;
 
 typedef struct s_mlx
 {
@@ -42,7 +42,7 @@ typedef struct s_mlx
 	mlx_image_t	*img;
 }	t_mlx;
 
-float	deg_to_rad(int deg)
+double	deg_to_rad(int deg)
 {
 	return (deg * RAD_1);
 }
@@ -115,11 +115,11 @@ void	draw_player(t_mlx *mlx)
 	}
 }
 
-void	draw_direction(t_mlx *mlx, float x0, float y0)
+void	draw_direction(t_mlx *mlx, double x0, double y0)
 {
-	float	dist_x;
-	float	dist_y;
-	float	step;
+	double	dist_x;
+	double	dist_y;
+	double	step;
 
 	dist_x = g_dir_x * 8;
 	dist_y = g_dir_y * 8;
@@ -139,11 +139,11 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	}
 }
 
-/* void	draw_ray(t_mlx *mlx, float x0, float y0, float x1, float y1, uint32_t color)
+/* void	draw_ray(t_mlx *mlx, double x0, double y0, double x1, double y1, uint32_t color)
 {
-	float	dist_x;
-	float	dist_y;
-	float	step;
+	double	dist_x;
+	double	dist_y;
+	double	step;
 
 	dist_x = x1 - x0;
 	dist_y = y1 - y0;
@@ -163,7 +163,7 @@ void	draw_direction(t_mlx *mlx, float x0, float y0)
 	}
 } */
 
-float	pythagoras(float x0, float y0, float x1, float y1)
+double	pythagoras(double x0, double y0, double x1, double y1)
 {
 	return (sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)));
 }
@@ -171,7 +171,7 @@ float	pythagoras(float x0, float y0, float x1, float y1)
 #define H 0
 #define W 1
 
-void	update_distance(float *x, float *y, float *ray, float *off)
+void	update_distance(double *x, double *y, double *ray, double *off)
 {
 	int	map[2];
 
@@ -191,10 +191,10 @@ void	update_distance(float *x, float *y, float *ray, float *off)
 	}
 }
 
-float	cost_y_ray_distance(float *x, float *y, float tangent, float ray_angle)
+double	cost_y_ray_distance(double *x, double *y, double tangent, double ray_angle)
 {
-	float	off[2];
-	float	ray[2];
+	double	off[2];
+	double	ray[2];
 
 	if (ray_angle > M_PI)
 	{
@@ -210,7 +210,7 @@ float	cost_y_ray_distance(float *x, float *y, float tangent, float ray_angle)
 		off[H] = SIZE;
 		off[W] = -off[H] * tangent;
 	}
-	if (ray_angle == 0 || ray_angle == (float)M_PI)
+	if (ray_angle == 0 || ray_angle == (double)M_PI)
 	{
 		ray[W] = g_player_x;
 		ray[H] = g_player_y;
@@ -219,10 +219,10 @@ float	cost_y_ray_distance(float *x, float *y, float tangent, float ray_angle)
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
 
-float	cost_x_ray_distance(float *x, float *y, float tangent, float ray_angle)
+double	cost_x_ray_distance(double *x, double *y, double tangent, double ray_angle)
 {
-	float	off[2];
-	float	ray[2];
+	double	off[2];
+	double	ray[2];
 
 	if (ray_angle > RAD_90 && ray_angle < RAD_270)
 	{
@@ -238,7 +238,7 @@ float	cost_x_ray_distance(float *x, float *y, float tangent, float ray_angle)
 		off[W] = SIZE;
 		off[H] = -off[W] * tangent;
 	}
-	if (ray_angle == (float)RAD_90 || ray_angle == (float)RAD_270)
+	if (ray_angle == (double)RAD_90 || ray_angle == (double)RAD_270)
 	{
 		ray[W] = g_player_x;
 		ray[H] = g_player_y;
@@ -247,7 +247,7 @@ float	cost_x_ray_distance(float *x, float *y, float tangent, float ray_angle)
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
 
-void	draw_wall(t_mlx *mlx, float height, int width, int init, uint32_t color)
+void	draw_wall(t_mlx *mlx, double height, int width, int init, uint32_t color)
 {
 	int	y;
 	int	x;
@@ -262,17 +262,17 @@ void	draw_wall(t_mlx *mlx, float height, int width, int init, uint32_t color)
 		x = init;
 		while (x < length)
 		{
-			mlx_put_pixel(mlx->img, x, y + height, color - 64);
-			mlx_put_pixel(mlx->img, x, y - height, color - 64);
+			mlx_put_pixel(mlx->img, x, y + height, color - 128);
+			mlx_put_pixel(mlx->img, x, y - height, color - 128);
 			++x;
 		}
 		--height;
 	}
 }
 
-float	fisheye_fix(float ray_angle)
+double	fisheye_fix(double ray_angle)
 {
-	float	fisheye;
+	double	fisheye;
 
 	fisheye = deg_to_rad(g_player_angle) - ray_angle;
 	if (fisheye < 0)
@@ -284,21 +284,21 @@ float	fisheye_fix(float ray_angle)
 
 void	cast_rays(t_mlx *mlx, int fov)
 {
-	float	ray_ang;
-	float	dist[2];
-	float	x[2];
-	float	y[2];
+	double	ray_ang;
+	double	dist[2];
+	double	x[2];
+	double	y[2];
 	int		thickness;
 	int		start_x;
-	float	fisheye;
+	double	fisheye;
 
 	thickness = 800.0 / fov;
 	start_x = 800 - thickness;
 	ray_ang = deg_to_rad(g_player_angle + (fov / 2));
 	while (fov--)
 	{
-		dist[H] = (float)INT_MAX;
-		dist[W] = (float)INT_MAX;
+		dist[H] = (double)INT_MAX;
+		dist[W] = (double)INT_MAX;
 		if (ray_ang < 0)
 			ray_ang += RAD_360;
 		if (ray_ang > RAD_360)
@@ -350,7 +350,7 @@ void	render(void *var)
 	draw_player(mlx);
 }
 
-void	change_pos(float x, float y)
+void	change_pos(double x, double y)
 {
 	if (g_player_x + x > 0.9 \
 	&& g_map[(int)(g_player_y / SIZE)][(int)((g_player_x + x) / SIZE)] != '1')
@@ -389,6 +389,14 @@ void	keyboard(mlx_key_data_t data, void *var)
 			-sin(deg_to_rad(g_player_angle + 90)) * 2);
 }
 
+int	angle_fix(int angle)
+{
+	if (angle > 90)
+		return (360 - angle);
+	else
+		return (90 - angle);
+}
+
 int	main(void)
 {
 	t_mlx	mlx;
@@ -401,7 +409,7 @@ int	main(void)
 	if (mlx.img == NULL)
 		return (puts(mlx_strerror(mlx_errno)), mlx_terminate(mlx.win), 2);
 	mlx_image_to_window(mlx.win, mlx.img, 0, 0);
-	g_player_angle = 0; // precisa ser negativo pra inverter o sentido
+	g_player_angle = angle_fix(90); // precisa ser negativo pra inverter o sentido
 	g_dir_x = cos(deg_to_rad(g_player_angle) * 5);
 	g_dir_y = sin(deg_to_rad(g_player_angle) * 5);
 	mlx_key_hook(mlx.win, &keyboard, &mlx);
