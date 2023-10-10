@@ -5,7 +5,7 @@
 #include <limits.h>
 
 #define SIZE 8
-#define ROT_ANG 5
+#define ROT_ANG 1
 #define RAD_1 0.0174532925199
 #define RAD_90 1.57079632679
 #define RAD_270 4.71238898037
@@ -20,14 +20,20 @@
 #define PINK 0xFF00FFFF
 
 const char	*g_map[] = {
-	"11111111",
-	"10000001",
-	"10100101",
-	"10000001",
-	"10000001",
-	"10100101",
-	"10000001",
-	"11111111",
+	"1111111111111111",
+	"1000000000000001",
+	"1000000000000001",
+	"1001100000011001",
+	"1001100000011001",
+	"1000000000000001",
+	"1000000000000001",
+	"1000000000000001",
+	"1000000000000001",
+	"1001100000011001",
+	"1001100000011001",
+	"1000000000000001",
+	"1000000000000001",
+	"1111111111111111",
 	NULL
 };
 double		g_player_x = SIZE * 1.5;
@@ -91,7 +97,6 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 	}
 }
 
-//desenha o player
 void	draw_player(t_mlx *mlx)
 {
 	static const int	size = SIZE >> 2;
@@ -179,7 +184,7 @@ void	update_distance(double *x, double *y, double *ray, double *off)
 	{
 		map[W] = (int)(ray[W] / SIZE);
 		map[H] = (int)(ray[H] / SIZE);
-		if (map[W] < 0 || map[H] < 0 || map[W] > 7 || map[H] > 7
+		if (map[W] < 0 || map[H] < 0 || map[W] > 15 || map[H] > 13
 			|| g_map[map[H]][map[W]] == '1')
 		{
 			*x = ray[W];
@@ -253,8 +258,8 @@ void	draw_wall(t_mlx *mlx, double height, int width, int init, uint32_t color)
 	int	x;
 	int	length;
 
-	if (height > 300)
-		height = 300;
+	if (height > 299)
+		height = 299;
 	y = 300;
 	length = width + init;
 	while ((int)height >= 0)
@@ -262,8 +267,8 @@ void	draw_wall(t_mlx *mlx, double height, int width, int init, uint32_t color)
 		x = init;
 		while (x < length)
 		{
-			mlx_put_pixel(mlx->img, x, y + height, color - 128);
-			mlx_put_pixel(mlx->img, x, y - height, color - 128);
+			mlx_put_pixel(mlx->img, x, y + height, color - 100);
+			mlx_put_pixel(mlx->img, x, y - height, color - 100);
 			++x;
 		}
 		--height;
@@ -348,14 +353,15 @@ void	render(void *var)
 	}
 	draw_direction(mlx, g_player_x, g_player_y);
 	draw_player(mlx);
+	draw_aim(mlx);
 }
 
 void	change_pos(double x, double y)
 {
-	if (g_player_x + x > 0.9 \
+	if (g_player_x + x > 1 \
 	&& g_map[(int)(g_player_y / SIZE)][(int)((g_player_x + x) / SIZE)] != '1')
 		g_player_x += x;
-	if (g_player_y + y > 0.9 \
+	if (g_player_y + y > 1 \
 	&& g_map[(int)((g_player_y + y) / SIZE)][(int)(g_player_x / SIZE)] != '1')
 		g_player_y += y;
 }
@@ -397,6 +403,44 @@ int	angle_fix(int angle)
 		return (90 - angle);
 }
 
+#define NO 0
+#define SO 1
+#define WE 2
+#define EA 3
+
+bool	load_textures(t_mlx *mlx)
+{
+	mlx->tex = mlx_load_png("NORTH.png");
+	if (mlx->tex == NULL)
+		return (puts(mlx_strerror(mlx_errno)), true);
+	mlx->tex_img[NO] = mlx_texture_to_image(mlx->win, mlx->tex);
+	mlx_delete_texture(mlx->tex);
+	if (mlx->tex_img[NO] == NULL)
+		return (puts(mlx_strerror(mlx_errno)), true);
+	mlx->tex = mlx_load_png("SOUTH.png");
+	if (mlx->tex == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), true);
+	mlx->tex_img[SO] = mlx_texture_to_image(mlx->win, mlx->tex);
+	mlx_delete_texture(mlx->tex);
+	if (mlx->tex_img[SO] == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), true);
+	mlx->tex = mlx_load_png("WEST.png");
+	if (mlx->tex == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), mlx_delete_image(mlx->win, mlx->tex_img[SO]), true);
+	mlx->tex_img[WE] = mlx_texture_to_image(mlx->win, mlx->tex);
+	mlx_delete_texture(mlx->tex);
+	if (mlx->tex_img[WE] == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), mlx_delete_image(mlx->win, mlx->tex_img[SO]), true);
+	mlx->tex = mlx_load_png("EAST.png");
+	if (mlx->tex == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), mlx_delete_image(mlx->win, mlx->tex_img[SO]), mlx_delete_image(mlx->win, mlx->tex_img[WE]), true);
+	mlx->tex_img[EA] = mlx_texture_to_image(mlx->win, mlx->tex);
+	mlx_delete_texture(mlx->tex);
+	if (mlx->tex_img[EA] == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), mlx_delete_image(mlx->win, mlx->tex_img[SO]), mlx_delete_image(mlx->win, mlx->tex_img[WE]), true);
+	return (false);
+}
+
 int	main(void)
 {
 	t_mlx	mlx;
@@ -408,13 +452,20 @@ int	main(void)
 	mlx.img = mlx_new_image(mlx.win, 800, 600);
 	if (mlx.img == NULL)
 		return (puts(mlx_strerror(mlx_errno)), mlx_terminate(mlx.win), 2);
-	mlx_image_to_window(mlx.win, mlx.img, 0, 0);
-	g_player_angle = angle_fix(90); // precisa ser negativo pra inverter o sentido
+	if (load_textures(&mlx))
+		return (mlx_delete_image(mlx.win, mlx.img), mlx_terminate(mlx.win), 3);
+	g_player_angle = angle_fix(90);
 	g_dir_x = cos(deg_to_rad(g_player_angle) * 5);
 	g_dir_y = sin(deg_to_rad(g_player_angle) * 5);
 	mlx_key_hook(mlx.win, &keyboard, &mlx);
 	mlx_loop_hook(mlx.win, &render, &mlx);
+	mlx_image_to_window(mlx.win, mlx.img, 0, 0);
+	// mlx_image_to_window(mlx.win, mlx.tex_img[NO], 336, 86);
+	// mlx_image_to_window(mlx.win, mlx.tex_img[SO], 336, 450);
+	// mlx_image_to_window(mlx.win, mlx.tex_img[WE], 136, 236);
+	// mlx_image_to_window(mlx.win, mlx.tex_img[EA], 600, 236);
 	mlx_loop(mlx.win);
+	mlx_delete_image(mlx.win, mlx.img);
 	mlx_terminate(mlx.win);
 	return (0);
 }
