@@ -70,14 +70,16 @@ void	draw_background(t_mlx *mlx)
 
 void	draw_map(t_mlx *mlx, int map_x, int map_y)
 {
-	int	x;
-	int	y;
+	const int	limit_y = map_y * SIZE + SIZE;
+	const int	limit_x = map_x * SIZE + SIZE;
+	int			x;
+	int			y;
 
 	y = map_y * SIZE;
-	while (y < map_y * SIZE + SIZE)
+	while (y < limit_y)
 	{
 		x = map_x * SIZE;
-		while (x < map_x * SIZE + SIZE)
+		while (x < limit_x)
 		{
 			if (g_map[map_y][map_x] == '1')
 				mlx_put_pixel(mlx->img, x, y, WHITE);
@@ -92,14 +94,17 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 //desenha o player
 void	draw_player(t_mlx *mlx)
 {
-	int	x;
-	int	y;
+	static const int	size = SIZE >> 2;
+	const int			limit_y = (int)g_player_y + size;
+	const int			limit_x = (int)g_player_x + size;
+	int					x;
+	int					y;
 
-	y = (int)g_player_y - (SIZE >> 2);
-	while (y < (int)g_player_y + (SIZE >> 2))
+	y = (int)g_player_y - size;
+	while (y < limit_y)
 	{
-		x = (int)g_player_x - (SIZE >> 2);
-		while (x < (int)g_player_x + (SIZE >> 2))
+		x = (int)g_player_x - size;
+		while (x < limit_x)
 		{
 			if (y < 0 || x < 0)
 				break ;
@@ -186,26 +191,26 @@ void	update_distance(float *x, float *y, float *ray, float *off)
 	}
 }
 
-float	cost_y_ray_distance(float *x, float *y, float aTan, float rayAng)
+float	cost_y_ray_distance(float *x, float *y, float tangent, float ray_angle)
 {
 	float	off[2];
 	float	ray[2];
 
-	if (rayAng > M_PI && rayAng < RAD_360)
+	if (ray_angle > M_PI)
 	{
 		ray[H] = ((int)(g_player_y / SIZE) * SIZE) - 0.0001;
-		ray[W] = (g_player_y - ray[H]) * aTan + g_player_x;
+		ray[W] = (g_player_y - ray[H]) * tangent + g_player_x;
 		off[H] = -SIZE;
-		off[W] = -off[H] * aTan;
+		off[W] = -off[H] * tangent;
 	}
-	if (rayAng < M_PI && rayAng < RAD_270)
+	if (ray_angle < M_PI)
 	{
 		ray[H] = ((int)(g_player_y / SIZE) * SIZE) + SIZE;
-		ray[W] = (g_player_y - ray[H]) * aTan + g_player_x;
+		ray[W] = (g_player_y - ray[H]) * tangent + g_player_x;
 		off[H] = SIZE;
-		off[W] = -off[H] * aTan;
+		off[W] = -off[H] * tangent;
 	}
-	if (rayAng == 0 || rayAng == (float)M_PI)
+	if (ray_angle == 0 || ray_angle == (float)M_PI)
 	{
 		ray[W] = g_player_x;
 		ray[H] = g_player_y;
@@ -214,26 +219,26 @@ float	cost_y_ray_distance(float *x, float *y, float aTan, float rayAng)
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
 
-float	cost_x_ray_distance(float *x, float *y, float aTan, float rayAng)
+float	cost_x_ray_distance(float *x, float *y, float tangent, float ray_angle)
 {
 	float	off[2];
 	float	ray[2];
 
-	if (rayAng > RAD_90 && rayAng < RAD_270)
+	if (ray_angle > RAD_90 && ray_angle < RAD_270)
 	{
 		ray[W] = ((int)(g_player_x / SIZE) * SIZE) - 0.0001;
-		ray[H] = (g_player_x - ray[W]) * aTan + g_player_y;
+		ray[H] = (g_player_x - ray[W]) * tangent + g_player_y;
 		off[W] = -SIZE;
-		off[H] = -off[W] * aTan;
+		off[H] = -off[W] * tangent;
 	}
-	if (rayAng < RAD_90 || rayAng > RAD_270)
+	if (ray_angle < RAD_90 || ray_angle > RAD_270)
 	{
 		ray[W] = ((int)(g_player_x / SIZE) * SIZE) + SIZE;
-		ray[H] = (g_player_x - ray[W]) * aTan + g_player_y;
+		ray[H] = (g_player_x - ray[W]) * tangent + g_player_y;
 		off[W] = SIZE;
-		off[H] = -off[W] * aTan;
+		off[H] = -off[W] * tangent;
 	}
-	if (rayAng == (float)RAD_90 || rayAng == (float)RAD_270)
+	if (ray_angle == (float)RAD_90 || ray_angle == (float)RAD_270)
 	{
 		ray[W] = g_player_x;
 		ray[H] = g_player_y;
