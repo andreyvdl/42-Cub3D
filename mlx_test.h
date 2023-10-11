@@ -62,10 +62,11 @@ void	draw_wall(t_mlx *mlx, double height, int width, int init, \
 void	cast_rays(t_mlx *mlx, int fov);
 
 // utils.c ===========================================================
+int		start_looking_fix(int angle);
+double	rad_overflow(double radians);
 double	fisheye_fix(double ray_angle);
 double	pythagoras(double x0, double y0, double x1, double y1);
 void	change_pos(double x, double y);
-int		angle_fix(int angle);
 
 // mouse.c ===========================================================
 void	toggle_mouse(t_mlx *mlx);

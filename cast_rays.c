@@ -114,19 +114,16 @@ void	cast_rays(t_mlx *mlx, int fov)
 
 	thickness = 800.0 / fov;
 	start_x = 800 - thickness;
-	ray_ang = RAD_1 * (g_player_angle + (double)fov / 2);
+	ray_ang = RAD_1 * (g_player_angle + fov / 2);
 	while (fov--)
 	{
 		dist[H] = (double)INT_MAX;
 		dist[W] = (double)INT_MAX;
-		if (ray_ang < 0)
-			ray_ang += RAD_360;
-		if (ray_ang > RAD_360)
-			ray_ang -= RAD_360;
+		ray_ang = rad_overflow(ray_ang);
 		dist[H] = cost_y_ray_distance(&x[H], &y[H], 1 / -tan(ray_ang), ray_ang);
 		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(ray_ang), ray_ang);
 		if (fov == 0)
-		{
+		{ // needed for starting fov different to 100
 			thickness += start_x;
 			start_x = 0;
 		}

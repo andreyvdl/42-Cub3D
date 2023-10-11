@@ -1,6 +1,15 @@
 #include "mlx_test.h"
 
-int	angle_fix(int angle)
+double	rad_overflow(double radians)
+{
+	if (radians < 0)
+		return (radians + RAD_360);
+	if (radians > RAD_360)
+		return (radians - RAD_360);
+	return (radians);
+}
+
+int	start_looking_fix(int angle)
 {
 	if (angle > 90)
 		return (360 - angle);
@@ -23,10 +32,7 @@ double	fisheye_fix(double ray_angle)
 	double	fisheye;
 
 	fisheye = RAD_1 * g_player_angle - ray_angle;
-	if (fisheye < 0)
-		fisheye += RAD_360;
-	else if (fisheye > RAD_360)
-		fisheye -= RAD_360;
+	fisheye = rad_overflow(fisheye);
 	return (cos(fisheye));
 }
 

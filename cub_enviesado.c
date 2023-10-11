@@ -90,7 +90,7 @@ int	main(void)
 	t_mlx	mlx;
 
 	mlx = (t_mlx){0};
-	mlx.win = mlx_init(800, 600, "titulo", false);
+	mlx.win = mlx_init(800, 600, "uowfemistaim", false);
 	if (mlx.win == NULL)
 		return (puts(mlx_strerror(mlx_errno)), 1);
 	mlx.img = mlx_new_image(mlx.win, 800, 600);
@@ -98,9 +98,9 @@ int	main(void)
 		return (puts(mlx_strerror(mlx_errno)), mlx_terminate(mlx.win), 2);
 	if (load_textures(&mlx))
 		return (mlx_delete_image(mlx.win, mlx.img), mlx_terminate(mlx.win), 3);
-	g_player_angle = angle_fix(90);
-	g_dir_x = cos(deg_to_rad(g_player_angle) * 5);
-	g_dir_y = sin(deg_to_rad(g_player_angle) * 5);
+	g_player_angle = start_looking_fix(90);
+	g_dir_x = cos(RAD_1 * g_player_angle);
+	g_dir_y = sin(RAD_1 * g_player_angle);
 	mlx_key_hook(mlx.win, &keyboard, &mlx);
 	mlx_cursor_hook(mlx.win, &mouse, &mlx);
 	mlx_loop_hook(mlx.win, &render, &mlx);

@@ -126,7 +126,7 @@ void	render(void *var)
 
 	mlx = (t_mlx *)var;
 	draw_background(mlx);
-	cast_rays(mlx, 80);
+	cast_rays(mlx, 100);
 	i = 0;
 	while (g_map[i] != NULL)
 	{
