@@ -54,34 +54,18 @@ double	deg_to_rad(int deg)
 
 bool	load_textures(t_mlx *mlx)
 {
-	mlx->tex = mlx_load_png("NORTH.png");
-	if (mlx->tex == NULL)
+	mlx->tex[NO] = mlx_load_png("NORTH.png");
+	if (mlx->tex[NO] == NULL)
 		return (puts(mlx_strerror(mlx_errno)), true);
-	mlx->tex_img[NO] = mlx_texture_to_image(mlx->win, mlx->tex);
-	mlx_delete_texture(mlx->tex);
-	if (mlx->tex_img[NO] == NULL)
-		return (puts(mlx_strerror(mlx_errno)), true);
-	mlx->tex = mlx_load_png("SOUTH.png");
-	if (mlx->tex == NULL)
-		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), true);
-	mlx->tex_img[SO] = mlx_texture_to_image(mlx->win, mlx->tex);
-	mlx_delete_texture(mlx->tex);
-	if (mlx->tex_img[SO] == NULL)
-		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), true);
-	mlx->tex = mlx_load_png("WEST.png");
-	if (mlx->tex == NULL)
-		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), mlx_delete_image(mlx->win, mlx->tex_img[SO]), true);
-	mlx->tex_img[WE] = mlx_texture_to_image(mlx->win, mlx->tex);
-	mlx_delete_texture(mlx->tex);
-	if (mlx->tex_img[WE] == NULL)
-		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), mlx_delete_image(mlx->win, mlx->tex_img[SO]), true);
-	mlx->tex = mlx_load_png("EAST.png");
-	if (mlx->tex == NULL)
-		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), mlx_delete_image(mlx->win, mlx->tex_img[SO]), mlx_delete_image(mlx->win, mlx->tex_img[WE]), true);
-	mlx->tex_img[EA] = mlx_texture_to_image(mlx->win, mlx->tex);
-	mlx_delete_texture(mlx->tex);
-	if (mlx->tex_img[EA] == NULL)
-		return (puts(mlx_strerror(mlx_errno)), mlx_delete_image(mlx->win, mlx->tex_img[NO]), mlx_delete_image(mlx->win, mlx->tex_img[SO]), mlx_delete_image(mlx->win, mlx->tex_img[WE]), true);
+	mlx->tex[SO] = mlx_load_png("SOUTH.png");
+	if (mlx->tex[SO] == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_texture(mlx->tex[NO]), true);
+	mlx->tex[WE] = mlx_load_png("WEST.png");
+	if (mlx->tex[WE] == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_texture(mlx->tex[NO]), mlx_delete_texture(mlx->tex[SO]), true);
+	mlx->tex[EA] = mlx_load_png("EAST.png");
+	if (mlx->tex[EA] == NULL)
+		return (puts(mlx_strerror(mlx_errno)), mlx_delete_texture(mlx->tex[NO]), mlx_delete_texture(mlx->tex[SO]), mlx_delete_texture(mlx->tex[WE]), true);
 	return (false);
 }
 

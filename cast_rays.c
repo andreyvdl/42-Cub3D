@@ -78,31 +78,74 @@ double	cost_x_ray_distance(double *x, double *y, double tangent, \
 	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
 }
 
-void	draw_wall(t_mlx *mlx, double height, int width, int init, \
-					uint32_t color)
+uint32_t	tex_to_col(mlx_texture_t *tex, int x, int y)
 {
-	int	y;
-	int	x;
-	int	length;
+	uint8_t	*ptr;
 
-	if (height > 299)
-		height = 299;
-	y = 300;
-	length = width + init;
-	while ((int)height >= 0)
+	ptr = &tex->pixels[(y % 64 * tex->width + x % 64) * tex->bytes_per_pixel];
+	return (ptr[0] << 24 | ptr[1] << 16 | ptr[2] << 8 | ptr[3]);
+}
+
+void	draw_wall(t_mlx *mlx, double height, int init, mlx_texture_t *tex)
+{
+	int	y_min;
+	int	y_max;
+
+	y_min = 300 - (int)height;
+	if (y_min < 0)
+		y_min = 0;
+	y_max = 300 + (int)height;
+	if (y_max > 599)
+		y_max = 600;
+	while (y_max >= y_min)
 	{
-		x = init;
-		while (x < length)
-		{
-			mlx_put_pixel(mlx->img, x, y + height, color - 100);
-			mlx_put_pixel(mlx->img, x, y - height, color - 100);
-			++x;
-		}
-		--height;
+		mlx_put_pixel(mlx->img, init, y_max, \
+						tex_to_col(tex, init % 64, y_max));
+		--y_max;
 	}
 }
 
 void	cast_rays(t_mlx *mlx, int fov)
+{
+	double	dist[2];
+	double	x[2];
+	double	y[2];
+	double	ray_ang;
+	double	fisheye;
+	double	ray_inc;
+
+	ray_ang = RAD_1 * (g_player_angle - fov / 2.0);
+	ray_inc = 0.002; // RAD_360 / 3200; // 800 vezes 4
+	for (int px = 0; px < 800; ++px)
+	{
+		ray_ang = rad_overflow(ray_ang);
+		dist[H] = (double)INT_MAX;
+		dist[W] = (double)INT_MAX;
+		dist[H] = cost_y_ray_distance(&x[H], &y[H], 1 / -tan(ray_ang), ray_ang);
+		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(ray_ang), ray_ang);
+		fisheye = fisheye_fix(ray_ang);
+		if (dist[H] < dist[W])
+		{
+			// draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
+			if (g_player_angle >= 180 && g_player_angle <= 360)
+				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, mlx->tex[SO]);
+			else if (g_player_angle <= 180 && g_player_angle >= 0)
+				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, mlx->tex[NO]);
+		}
+		else
+		{
+			// draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
+			if (g_player_angle >= 90 && g_player_angle <= 270)
+				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, mlx->tex[WE]);
+			else if (g_player_angle <= 90 || g_player_angle >= 270)
+				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, mlx->tex[EA]);
+		}
+		ray_ang += ray_inc;
+	}
+}
+
+// original
+/* void	cast_rays(t_mlx *mlx, int fov)
 {
 	double	ray_ang;
 	double	dist[2];
@@ -143,4 +186,4 @@ void	cast_rays(t_mlx *mlx, int fov)
 		start_x -= thickness;
 		ray_ang -= RAD_1;
 	}
-}
+} */

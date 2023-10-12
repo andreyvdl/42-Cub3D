@@ -28,7 +28,7 @@ void	keyboard(mlx_key_data_t data, void *var)
 			g_player_angle = 360 + g_player_angle;
 	}
 	if (mlx_is_key_down(mlx->win, MLX_KEY_RIGHT))
-		g_player_angle = (int)(g_player_angle + ROT_ANG) % 360;
+		g_player_angle = (g_player_angle + ROT_ANG) % 360;
 	g_dir_x = cos(g_player_angle * RAD_1);
 	g_dir_y = sin(g_player_angle * RAD_1);
 	if (data.key == MLX_KEY_L && data.action == MLX_RELEASE)

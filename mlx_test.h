@@ -7,7 +7,7 @@
 # include <limits.h>
 
 # define SIZE 8
-# define ROT_ANG 1
+# define ROT_ANG 5
 # define RAD_1 0.0174532925199
 # define RAD_90 1.57079632679
 # define RAD_270 4.71238898037
@@ -29,8 +29,7 @@
 
 typedef struct s_mlx
 {
-	mlx_image_t		*tex_img[4];
-	mlx_texture_t	*tex;
+	mlx_texture_t	*tex[4];
 	mlx_image_t		*img;
 	mlx_t			*win;
 	bool			m_cntl;
@@ -57,8 +56,7 @@ double	cost_y_ray_distance(double *x, double *y, double tangent, \
 double	cost_x_ray_distance(double *x, double *y, double tangent, \
 							double ray_angle);
 void	update_distance(double *x, double *y, double *ray, double *off);
-void	draw_wall(t_mlx *mlx, double height, int width, int init, \
-					uint32_t color);
+void	draw_wall(t_mlx *mlx, double height, int init, mlx_texture_t *tex);
 void	cast_rays(t_mlx *mlx, int fov);
 
 // utils.c ===========================================================
