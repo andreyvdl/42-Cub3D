@@ -54,16 +54,16 @@ double	deg_to_rad(int deg)
 
 bool	load_textures(t_mlx *mlx)
 {
-	mlx->tex[NO] = mlx_load_png("NORTH.png");
+	mlx->tex[NO] = mlx_load_png("NORTH2.png");
 	if (mlx->tex[NO] == NULL)
 		return (puts(mlx_strerror(mlx_errno)), true);
-	mlx->tex[SO] = mlx_load_png("SOUTH.png");
+	mlx->tex[SO] = mlx_load_png("SOUTH2.png");
 	if (mlx->tex[SO] == NULL)
 		return (puts(mlx_strerror(mlx_errno)), mlx_delete_texture(mlx->tex[NO]), true);
-	mlx->tex[WE] = mlx_load_png("WEST.png");
+	mlx->tex[WE] = mlx_load_png("WEST2.png");
 	if (mlx->tex[WE] == NULL)
 		return (puts(mlx_strerror(mlx_errno)), mlx_delete_texture(mlx->tex[NO]), mlx_delete_texture(mlx->tex[SO]), true);
-	mlx->tex[EA] = mlx_load_png("EAST.png");
+	mlx->tex[EA] = mlx_load_png("EAST2.png");
 	if (mlx->tex[EA] == NULL)
 		return (puts(mlx_strerror(mlx_errno)), mlx_delete_texture(mlx->tex[NO]), mlx_delete_texture(mlx->tex[SO]), mlx_delete_texture(mlx->tex[WE]), true);
 	return (false);

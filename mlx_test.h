@@ -20,12 +20,17 @@
 # define YELLOW 0xFFFF00FF
 # define CYAN 0x00FFFFFF
 # define PINK 0xFF00FFFF
+
 # define H 0
 # define W 1
 # define NO 0
 # define SO 1
 # define WE 2
 # define EA 3
+# define R 0
+# define G 1
+# define B 2
+# define A 3
 
 typedef struct s_mlx
 {
