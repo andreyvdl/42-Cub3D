@@ -82,11 +82,12 @@ uint32_t	tex_to_col(mlx_texture_t *tex, int x, int y)
 {
 	uint8_t	*ptr;
 
-	ptr = &tex->pixels[(y * tex->width + x % 64) * tex->bytes_per_pixel];
+	ptr = &tex->pixels[(y * tex->width + x) * tex->bytes_per_pixel];
 	return (ptr[R] << 24 | ptr[G] << 16 | ptr[B] << 8 | ptr[A]);
+	// return ((*ptr)++ << 24 | (*ptr)++ << 16 | (*ptr)++ << 8 | *ptr); // ataque epiletico
 }
 
-void	draw_wall(t_mlx *mlx, double height, int init, mlx_texture_t *tex)
+void	draw_wall(t_mlx *mlx, double height, int init, int ray_x, mlx_texture_t *tex)
 {
 	int		y_min;
 	int		y_max;
@@ -107,7 +108,7 @@ void	draw_wall(t_mlx *mlx, double height, int init, mlx_texture_t *tex)
 	while (y_max >= y_min)
 	{
 		mlx_put_pixel(mlx->img, init, y_min, \
-						tex_to_col(tex, init, tex_y));
+						tex_to_col(tex, ray_x, tex_y));
 		tex_y += inc_tex;
 		++y_min;
 	}
@@ -136,17 +137,17 @@ void	cast_rays(t_mlx *mlx, int fov)
 		{
 			// draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
 			if (ray_ang >= M_PI && ray_ang <= RAD_360)
-				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, mlx->tex[NO]);
+				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, (int)(x[H] * SIZE) % 64, mlx->tex[NO]);
 			else
-				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, mlx->tex[SO]);
+				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, 63 - (int)(x[H] * SIZE) % 64, mlx->tex[SO]);
 		}
 		else
 		{
 			// draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
 			if (ray_ang >= RAD_90 && ray_ang <= RAD_270)
-				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, mlx->tex[WE]);
+				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, 63 - (int)(y[W] * SIZE) % 64, mlx->tex[WE]);
 			else
-				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, mlx->tex[EA]);
+				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, (int)(y[W] * SIZE) % 64, mlx->tex[EA]);
 		}
 		ray_ang += ray_inc;
 	}

@@ -61,7 +61,7 @@ double	cost_y_ray_distance(double *x, double *y, double tangent, \
 double	cost_x_ray_distance(double *x, double *y, double tangent, \
 							double ray_angle);
 void	update_distance(double *x, double *y, double *ray, double *off);
-void	draw_wall(t_mlx *mlx, double height, int init, mlx_texture_t *tex);
+void	draw_wall(t_mlx *mlx, double height, int init, int ray_x, mlx_texture_t *tex);
 void	cast_rays(t_mlx *mlx, int fov);
 
 // utils.c ===========================================================
