@@ -28,25 +28,25 @@ double	cost_y_ray_distance(double *x, double *y, double tangent, \
 
 	if (ray_angle > M_PI)
 	{
-		ray[H] = ((int)(g_player_y / SIZE) * SIZE) - 0.00001;
-		ray[W] = (g_player_y - ray[H]) * tangent + g_player_x;
+		ray[H] = ((int)(*g_player_y() / SIZE) * SIZE) - 0.00001;
+		ray[W] = (*g_player_y() - ray[H]) * tangent + *g_player_x();
 		off[H] = -SIZE;
 		off[W] = -off[H] * tangent;
 	}
 	if (ray_angle < M_PI)
 	{
-		ray[H] = ((int)(g_player_y / SIZE) * SIZE) + SIZE;
-		ray[W] = (g_player_y - ray[H]) * tangent + g_player_x;
+		ray[H] = ((int)(*g_player_y() / SIZE) * SIZE) + SIZE;
+		ray[W] = (*g_player_y() - ray[H]) * tangent + *g_player_x();
 		off[H] = SIZE;
 		off[W] = -off[H] * tangent;
 	}
 	if (ray_angle == 0 || ray_angle == (double)M_PI)
 	{
-		ray[W] = g_player_x;
-		ray[H] = g_player_y;
+		ray[W] = *g_player_x();
+		ray[H] = *g_player_y();
 	}
 	update_distance(x, y, ray, off);
-	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
+	return (pythagoras(*g_player_x(), *g_player_y(), ray[W], ray[H]));
 }
 
 double	cost_x_ray_distance(double *x, double *y, double tangent, \
@@ -57,25 +57,25 @@ double	cost_x_ray_distance(double *x, double *y, double tangent, \
 
 	if (ray_angle > RAD_90 && ray_angle < RAD_270)
 	{
-		ray[W] = ((int)(g_player_x / SIZE) * SIZE) - 0.00001;
-		ray[H] = (g_player_x - ray[W]) * tangent + g_player_y;
+		ray[W] = ((int)(*g_player_x() / SIZE) * SIZE) - 0.00001;
+		ray[H] = (*g_player_x() - ray[W]) * tangent + *g_player_y();
 		off[W] = -SIZE;
 		off[H] = -off[W] * tangent;
 	}
 	if (ray_angle < RAD_90 || ray_angle > RAD_270)
 	{
-		ray[W] = ((int)(g_player_x / SIZE) * SIZE) + SIZE;
-		ray[H] = (g_player_x - ray[W]) * tangent + g_player_y;
+		ray[W] = ((int)(*g_player_x() / SIZE) * SIZE) + SIZE;
+		ray[H] = (*g_player_x() - ray[W]) * tangent + *g_player_y();
 		off[W] = SIZE;
 		off[H] = -off[W] * tangent;
 	}
 	if (ray_angle == (double)RAD_90 || ray_angle == (double)RAD_270)
 	{
-		ray[W] = g_player_x;
-		ray[H] = g_player_y;
+		ray[W] = *g_player_x();
+		ray[H] = *g_player_y();
 	}
 	update_distance(x, y, ray, off);
-	return (pythagoras(g_player_x, g_player_y, ray[W], ray[H]));
+	return (pythagoras(*g_player_x(), *g_player_y(), ray[W], ray[H]));
 }
 
 uint32_t	tex_to_col(mlx_texture_t *tex, int x, int y)
@@ -123,7 +123,7 @@ void	cast_rays(t_mlx *mlx, int fov)
 	double	fisheye;
 	double	ray_inc;
 
-	ray_ang = RAD_1 * (g_player_angle - fov / 2.0);
+	ray_ang = RAD_1 * (*g_player_angle() - fov / 2.0);
 	ray_inc = 0.002; // RAD_360 / 3200; // 800 vezes 4
 	for (int px = 0; px < 800; ++px)
 	{

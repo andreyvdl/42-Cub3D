@@ -47,15 +47,15 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 void	draw_player(t_mlx *mlx)
 {
 	static const int	size = SIZE >> 2;
-	const int			limit_y = (int)g_player_y + size;
-	const int			limit_x = (int)g_player_x + size;
+	const int			limit_y = (int)*g_player_y() + size;
+	const int			limit_x = (int)*g_player_x() + size;
 	int					x;
 	int					y;
 
-	y = (int)g_player_y - size;
+	y = (int)*g_player_y() - size;
 	while (y < limit_y)
 	{
-		x = (int)g_player_x - size;
+		x = (int)*g_player_x() - size;
 		while (x < limit_x)
 		{
 			if (y < 0 || x < 0)
@@ -73,8 +73,8 @@ void	draw_direction(t_mlx *mlx, double x0, double y0)
 	double	dist_y;
 	double	step;
 
-	dist_x = g_dir_x * 8;
-	dist_y = g_dir_y * 8;
+	dist_x = *g_dir_x() * 8;
+	dist_y = *g_dir_y() * 8;
 	if (fabs(dist_x) > fabs(dist_y))
 		step = fabs(dist_x);
 	else
@@ -96,13 +96,13 @@ void	draw_direction(t_mlx *mlx, double x0, double y0)
 	uint32_t	color;
 	int			counter;
 
-	if (g_player_angle < 45 || g_player_angle > 315)
+	if (*g_player_angle()< 45 || *g_player_angle()> 315)
 		color = BLUE;
-	else if (g_player_angle > 45 && g_player_angle < 135)
+	else if (*g_player_angle()> 45 && *g_player_angle()< 135)
 		color = PINK;
-	else if (g_player_angle > 135 && g_player_angle < 225)
+	else if (*g_player_angle()> 135 && *g_player_angle()< 225)
 		color = CYAN;
-	else if (g_player_angle > 225 && g_player_angle < 315)
+	else if (*g_player_angle()> 225 && *g_player_angle()< 315)
 		color = YELLOW;
 	else
 		color = WHITE;
@@ -139,6 +139,6 @@ void	render(void *var)
 		++i;
 	}
 	// draw_aim(mlx);
-	draw_direction(mlx, g_player_x, g_player_y);
+	draw_direction(mlx, *g_player_x(), *g_player_y());
 	draw_player(mlx);
 }

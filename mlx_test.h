@@ -80,4 +80,11 @@ void	movement_keys(t_mlx *mlx);
 void	keyboard(mlx_key_data_t data, void *var);
 
 
+// fake_globals.c ====================================================
+double	*g_player_x(void);
+double	*g_player_y(void);
+int		*g_player_angle(void);
+double	*g_dir_x(void);
+double	*g_dir_y(void);
+
 #endif

@@ -19,19 +19,19 @@ int	start_looking_fix(int angle)
 
 void	change_pos(double x, double y)
 {
-	if (g_player_x + x > 1 \
-	&& g_map[(int)(g_player_y / SIZE)][(int)((g_player_x + x) / SIZE)] != '1')
-		g_player_x += x;
-	if (g_player_y + y > 1 \
-	&& g_map[(int)((g_player_y + y) / SIZE)][(int)(g_player_x / SIZE)] != '1')
-		g_player_y += y;
+	if (*g_player_x() + x > 1 \
+	&& g_map[(int)(*g_player_y() / SIZE)][(int)((*g_player_x() + x) / SIZE)] != '1')
+		*g_player_x() += x;
+	if (*g_player_y() + y > 1 \
+	&& g_map[(int)((*g_player_y() + y) / SIZE)][(int)(*g_player_x() / SIZE)] != '1')
+		*g_player_y() += y;
 }
 
 double	fisheye_fix(double ray_angle)
 {
 	double	fisheye;
 
-	fisheye = RAD_1 * g_player_angle - ray_angle;
+	fisheye = RAD_1 * *g_player_angle()- ray_angle;
 	fisheye = rad_overflow(fisheye);
 	return (cos(fisheye));
 }

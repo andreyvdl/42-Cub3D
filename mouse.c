@@ -24,14 +24,14 @@ void	mouse(double x_pos, double y_pos, void *var)
 	if (mlx->m_cntl == true)
 		return ;
 	if (x_pos < 400)
-		g_player_angle -= ROT_ANG;
+		*g_player_angle()-= ROT_ANG;
 	else if (x_pos > 400)
-		g_player_angle += ROT_ANG;
-	if (g_player_angle < 0)
-		g_player_angle += 360;
-	if (g_player_angle > 360)
-		g_player_angle -= 360;
-	g_dir_x = cos(RAD_1 * g_player_angle);
-	g_dir_y = sin(RAD_1 * g_player_angle);
+		*g_player_angle()+= ROT_ANG;
+	if (*g_player_angle()< 0)
+		*g_player_angle()+= 360;
+	if (*g_player_angle()> 360)
+		*g_player_angle()-= 360;
+	*g_dir_x() = cos(RAD_1 * *g_player_angle());
+	*g_dir_y() = sin(RAD_1 * *g_player_angle());
 	mlx_set_mouse_pos(mlx->win, 400, 300);
 }
