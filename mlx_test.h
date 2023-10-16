@@ -41,11 +41,6 @@ typedef struct s_mlx
 }	t_mlx;
 
 extern const char	*g_map[];
-extern double		g_player_x;
-extern double		g_player_y;
-extern int	 		g_player_angle;
-extern double		g_dir_x;
-extern double		g_dir_y;
 
 // render.c =========================================================
 void	draw_background(t_mlx *mlx);

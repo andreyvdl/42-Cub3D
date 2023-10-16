@@ -1,10 +1,5 @@
 #include "mlx_test.h"
 
-double		g_player_x = SIZE * 1.5;
-double		g_player_y = SIZE * 1.5;
-int	 		g_player_angle;
-double		g_dir_x;
-double		g_dir_y;
 const char	*g_map[]= {
 	"1111111111111111",
 	"1000000000000001",
