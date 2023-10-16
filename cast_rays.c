@@ -99,7 +99,7 @@ void	draw_wall(t_mlx *mlx, double height, int init, int ray_x, mlx_texture_t *te
 	tex_off = 0;
 	if (height > 300)
 	{
-		tex_off = (height - 300); // removi a divisão por 2 do vídeo
+		tex_off = (height - 300);
 		height = 300;
 	}
 	y_min = 300 - height;
@@ -135,7 +135,6 @@ void	cast_rays(t_mlx *mlx, int fov)
 		fisheye = fisheye_fix(ray_ang);
 		if (dist[H] < dist[W])
 		{
-			// draw_ray(mlx, g_player_x, g_player_y, x[H], y[H], RED);
 			if (ray_ang >= M_PI && ray_ang <= RAD_360)
 				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, (int)(x[H] * SIZE) % 64, mlx->tex[NO]);
 			else
@@ -143,7 +142,6 @@ void	cast_rays(t_mlx *mlx, int fov)
 		}
 		else
 		{
-			// draw_ray(mlx, g_player_x, g_player_y, x[W], y[W], GREEN);
 			if (ray_ang >= RAD_90 && ray_ang <= RAD_270)
 				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, 63 - (int)(y[W] * SIZE) % 64, mlx->tex[WE]);
 			else
