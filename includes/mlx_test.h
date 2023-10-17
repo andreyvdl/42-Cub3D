@@ -34,6 +34,7 @@
 
 typedef struct s_mlx
 {
+	char			**attributes;
 	mlx_texture_t	*tex[4];
 	mlx_image_t		*img;
 	mlx_t			*win;
