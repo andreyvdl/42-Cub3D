@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   files.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 12:21:07 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/17 16:37:53 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cube.h"
-# include "mlx_test.h"
+#include "includes/cube.h"
+#include "includes/mlx_test.h"
+
 int	error_checker(int argc, char *argv[])
 {
 	char	*file;
@@ -28,6 +29,30 @@ int	error_checker(int argc, char *argv[])
 		return (you_made_the_l("Make the L! 3"));
 	close(fd);
 	return (0);
+}
+
+int	where_to_look(char **map)
+{
+	char	*inside;
+
+	while (map != NULL)
+	{
+		inside = *map;
+		while (*inside != 0)
+		{
+			if (*inside == 'N')
+				return (90);
+			else if (*inside == 'W')
+				return (180);
+			else if (*inside == 'S')
+				return (270);
+			else if (*inside == 'E')
+				return (360);
+			++inside;
+		}
+		++map;
+	}
+	return (SEILA RAPAZ!!!);
 }
 
 int	main(int argc, char *argv[])
@@ -52,7 +77,7 @@ int	main(int argc, char *argv[])
 	}
 	*g_map() = map;
 	mlx.attributes = attributes;
-	make_it_visual(&mlx);
+	make_it_visual(&mlx, where_to_look(map));
 	ft_free_matrix((void **)map);
 	free_local_matrix(attributes);
 	return (0);

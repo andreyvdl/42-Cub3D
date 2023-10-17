@@ -1,4 +1,16 @@
-#include "mlx_test.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/17 14:57:40 by adantas-          #+#    #+#             */
+/*   Updated: 2023/10/17 15:12:14 by adantas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "includes/mlx_test.h"
 
 void	draw_background(t_mlx *mlx)
 {
@@ -6,12 +18,12 @@ void	draw_background(t_mlx *mlx)
 	int	x;
 
 	y = 0;
-	while (y < 600)
+	while (y < HEIGHT)
 	{
 		x = 0;
-		while (x < 800)
+		while (x < WIDTH)
 		{
-			if (y < 300)
+			if (y < HEIGHT_2)
 				mlx_put_pixel(mlx->img, x, y, 0x888888FF);
 			else
 				mlx_put_pixel(mlx->img, x, y, 0x444444FF);
@@ -36,6 +48,8 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 		{
 			if (g_map[map_y][map_x] == '1')
 				mlx_put_pixel(mlx->img, x, y, WHITE);
+			/*else if (ft_strchr("Dd", g_map[map_y][map_x]) != NULL)
+				mlx_put_pixel(mlx->img, x, y, RED);*/
 			else
 				mlx_put_pixel(mlx->img, x, y, BLACK);
 			++x;
@@ -47,15 +61,15 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 void	draw_player(t_mlx *mlx)
 {
 	static const int	size = SIZE >> 2;
-	const int			limit_y = (int)*g_player_y() + size;
-	const int			limit_x = (int)*g_player_x() + size;
+	const int			limit_y = (int)*getter_player_y() + size;
+	const int			limit_x = (int)*getter_player_x() + size;
 	int					x;
 	int					y;
 
-	y = (int)*g_player_y() - size;
+	y = (int)*getter_player_y() - size;
 	while (y < limit_y)
 	{
-		x = (int)*g_player_x() - size;
+		x = (int)*getter_player_x() - size;
 		while (x < limit_x)
 		{
 			if (y < 0 || x < 0)
@@ -73,8 +87,8 @@ void	draw_direction(t_mlx *mlx, double x0, double y0)
 	double	dist_y;
 	double	step;
 
-	dist_x = *g_dir_x() * 8;
-	dist_y = *g_dir_y() * 8;
+	dist_x = *getter_dir_x() * DIR_SIZE;
+	dist_y = *getter_dir_y() * DIR_SIZE;
 	if (fabs(dist_x) > fabs(dist_y))
 		step = fabs(dist_x);
 	else
@@ -96,13 +110,13 @@ void	draw_direction(t_mlx *mlx, double x0, double y0)
 	uint32_t	color;
 	int			counter;
 
-	if (*g_player_angle()< 45 || *g_player_angle()> 315)
+	if (*getter_player_ang()< 45 || *getter_player_ang()> 315)
 		color = BLUE;
-	else if (*g_player_angle()> 45 && *g_player_angle()< 135)
+	else if (*getter_player_ang()> 45 && *getter_player_ang()< 135)
 		color = PINK;
-	else if (*g_player_angle()> 135 && *g_player_angle()< 225)
+	else if (*getter_player_ang()> 135 && *getter_player_ang()< 225)
 		color = CYAN;
-	else if (*g_player_angle()> 225 && *g_player_angle()< 315)
+	else if (*getter_player_ang()> 225 && *getter_player_ang()< 315)
 		color = YELLOW;
 	else
 		color = WHITE;
@@ -139,6 +153,6 @@ void	render(void *var)
 		++i;
 	}
 	// draw_aim(mlx);
-	draw_direction(mlx, *g_player_x(), *g_player_y());
+	draw_direction(mlx, *getter_player_x(), *getter_player_y());
 	draw_player(mlx);
 }

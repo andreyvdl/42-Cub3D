@@ -1,4 +1,4 @@
-#include "mlx_test.h"
+#include "includes/mlx_test.h"
 
 void	update_distance(double *x, double *y, double *ray, double *off)
 {
@@ -6,17 +6,17 @@ void	update_distance(double *x, double *y, double *ray, double *off)
 
 	while (1)
 	{
-		map[W] = (int)(ray[W] / SIZE);
-		map[H] = (int)(ray[H] / SIZE);
-		if (map[W] < 0 || map[H] < 0 || map[W] > 15 || map[H] > 13
-			|| g_map[map[H]][map[W]] == '1')
+		map[X] = (int)(ray[X] / SIZE);
+		map[Y] = (int)(ray[Y] / SIZE);
+		if (map[X] < 0 || map[Y] < 0 || map[X] > 15 || map[Y] > 13
+			|| g_map[map[Y]][map[X]] == '1')
 		{
-			*x = ray[W];
-			*y = ray[H];
+			*x = ray[X];
+			*y = ray[Y];
 			break ;
 		}
-		ray[W] += off[W];
-		ray[H] += off[H];
+		ray[X] += off[X];
+		ray[Y] += off[Y];
 	}
 }
 
@@ -28,25 +28,25 @@ double	cost_y_ray_distance(double *x, double *y, double tangent, \
 
 	if (ray_angle > M_PI)
 	{
-		ray[H] = ((int)(*g_player_y() / SIZE) * SIZE) - 0.00001;
-		ray[W] = (*g_player_y() - ray[H]) * tangent + *g_player_x();
-		off[H] = -SIZE;
-		off[W] = -off[H] * tangent;
+		ray[Y] = ((int)(*getter_player_y() / SIZE) * SIZE) - 0.00001;
+		ray[X] = (*getter_player_y() - ray[Y]) * tangent + *getter_player_x();
+		off[Y] = -SIZE;
+		off[X] = -off[Y] * tangent;
 	}
 	if (ray_angle < M_PI)
 	{
-		ray[H] = ((int)(*g_player_y() / SIZE) * SIZE) + SIZE;
-		ray[W] = (*g_player_y() - ray[H]) * tangent + *g_player_x();
-		off[H] = SIZE;
-		off[W] = -off[H] * tangent;
+		ray[Y] = ((int)(*getter_player_y() / SIZE) * SIZE) + SIZE;
+		ray[X] = (*getter_player_y() - ray[Y]) * tangent + *getter_player_x();
+		off[Y] = SIZE;
+		off[X] = -off[Y] * tangent;
 	}
 	if (ray_angle == 0 || ray_angle == (double)M_PI)
 	{
-		ray[W] = *g_player_x();
-		ray[H] = *g_player_y();
+		ray[X] = *getter_player_x();
+		ray[Y] = *getter_player_y();
 	}
 	update_distance(x, y, ray, off);
-	return (pythagoras(*g_player_x(), *g_player_y(), ray[W], ray[H]));
+	return (pythagoras(*getter_player_x(), *getter_player_y(), ray[X], ray[Y]));
 }
 
 double	cost_x_ray_distance(double *x, double *y, double tangent, \
@@ -57,25 +57,25 @@ double	cost_x_ray_distance(double *x, double *y, double tangent, \
 
 	if (ray_angle > RAD_90 && ray_angle < RAD_270)
 	{
-		ray[W] = ((int)(*g_player_x() / SIZE) * SIZE) - 0.00001;
-		ray[H] = (*g_player_x() - ray[W]) * tangent + *g_player_y();
-		off[W] = -SIZE;
-		off[H] = -off[W] * tangent;
+		ray[X] = ((int)(*getter_player_x() / SIZE) * SIZE) - 0.00001;
+		ray[Y] = (*getter_player_x() - ray[X]) * tangent + *getter_player_y();
+		off[X] = -SIZE;
+		off[Y] = -off[X] * tangent;
 	}
 	if (ray_angle < RAD_90 || ray_angle > RAD_270)
 	{
-		ray[W] = ((int)(*g_player_x() / SIZE) * SIZE) + SIZE;
-		ray[H] = (*g_player_x() - ray[W]) * tangent + *g_player_y();
-		off[W] = SIZE;
-		off[H] = -off[W] * tangent;
+		ray[X] = ((int)(*getter_player_x() / SIZE) * SIZE) + SIZE;
+		ray[Y] = (*getter_player_x() - ray[X]) * tangent + *getter_player_y();
+		off[X] = SIZE;
+		off[Y] = -off[X] * tangent;
 	}
 	if (ray_angle == (double)RAD_90 || ray_angle == (double)RAD_270)
 	{
-		ray[W] = *g_player_x();
-		ray[H] = *g_player_y();
+		ray[X] = *getter_player_x();
+		ray[Y] = *getter_player_y();
 	}
 	update_distance(x, y, ray, off);
-	return (pythagoras(*g_player_x(), *g_player_y(), ray[W], ray[H]));
+	return (pythagoras(*getter_player_x(), *getter_player_y(), ray[X], ray[Y]));
 }
 
 uint32_t	tex_to_col(mlx_texture_t *tex, int x, int y)
@@ -87,7 +87,8 @@ uint32_t	tex_to_col(mlx_texture_t *tex, int x, int y)
 	// return ((*ptr)++ << 24 | (*ptr)++ << 16 | (*ptr)++ << 8 | *ptr); // ataque epiletico
 }
 
-void	draw_wall(t_mlx *mlx, double height, int init, int ray_x, mlx_texture_t *tex)
+void	draw_wall(t_mlx *mlx, double height, int init, int ray_x, \
+					mlx_texture_t *tex)
 {
 	int		y_min;
 	int		y_max;
@@ -120,32 +121,31 @@ void	cast_rays(t_mlx *mlx, int fov)
 	double	x[2];
 	double	y[2];
 	double	ray_ang;
-	double	fisheye;
+	double	fisheye; // passar o fisheye pra fora
 	double	ray_inc;
 
-	ray_ang = RAD_1 * (*g_player_angle() - fov / 2.0);
-	ray_inc = 0.002; // RAD_360 / 3200; // 800 vezes 4
+	ray_ang = RAD_1 * (*getter_player_ang() - fov / 2.0);
+	ray_inc = 0.002; // n pergunta como cheguei nesse valor, foi so tentativa e erro // RAD_360 / 3200; // 800 vezes 4
 	for (int px = 0; px < 800; ++px)
 	{
 		ray_ang = rad_overflow(ray_ang);
-		dist[H] = (double)INT_MAX;
-		dist[W] = (double)INT_MAX;
-		dist[H] = cost_y_ray_distance(&x[H], &y[H], 1 / -tan(ray_ang), ray_ang);
-		dist[W] = cost_x_ray_distance(&x[W], &y[W], -tan(ray_ang), ray_ang);
+		dist[Y] = cost_y_ray_distance(&x[Y], &y[Y], 1 / -tan(ray_ang), ray_ang);
+		dist[X] = cost_x_ray_distance(&x[X], &y[X], -tan(ray_ang), ray_ang);
 		fisheye = fisheye_fix(ray_ang);
-		if (dist[H] < dist[W])
+		// remover esse if pra outra função
+		if (dist[Y] < dist[X])
 		{
 			if (ray_ang >= M_PI && ray_ang <= RAD_360)
-				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, (int)(x[H] * SIZE) % 64, mlx->tex[NO]);
+				draw_wall(mlx, (SIZE * 800) / (dist[Y] * fisheye), px, (int)(x[Y] * SIZE) % 64, mlx->tex[NO]);
 			else
-				draw_wall(mlx, (SIZE * 800) / (dist[H] * fisheye), px, 63 - (int)(x[H] * SIZE) % 64, mlx->tex[SO]);
+				draw_wall(mlx, (SIZE * 800) / (dist[Y] * fisheye), px, 63 - (int)(x[Y] * SIZE) % 64, mlx->tex[SO]);
 		}
 		else
 		{
 			if (ray_ang >= RAD_90 && ray_ang <= RAD_270)
-				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, 63 - (int)(y[W] * SIZE) % 64, mlx->tex[WE]);
+				draw_wall(mlx, (SIZE * 800) / (dist[X] * fisheye), px, 63 - (int)(y[X] * SIZE) % 64, mlx->tex[WE]);
 			else
-				draw_wall(mlx, (SIZE * 800) / (dist[W] * fisheye), px, (int)(y[W] * SIZE) % 64, mlx->tex[EA]);
+				draw_wall(mlx, (SIZE * 800) / (dist[X] * fisheye), px, (int)(y[X] * SIZE) % 64, mlx->tex[EA]);
 		}
 		ray_ang += ray_inc;
 	}

@@ -1,14 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_functions.c                               :+:      :+:    :+:   */
+/*   has_invalid_functions.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:22:38 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 11:27:46 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/17 14:59:42 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "includes/cube.h"
 
 int	has_invalid_character(char **map)
 {
@@ -125,4 +127,3 @@ int	has_invalid_number(char *str)
 		return (-1);
 	return (0);
 }
-

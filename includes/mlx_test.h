@@ -1,6 +1,6 @@
 #ifndef MLX_TEST_H
 # define MLX_TEST_H
-# include "MLX42/include/MLX42/MLX42.h"
+# include "../MLX42/include/MLX42/MLX42.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
@@ -21,16 +21,34 @@
 # define CYAN 0x00FFFFFF
 # define PINK 0xFF00FFFF
 
-# define H 0
-# define W 1
-# define NO 0
-# define SO 1
-# define WE 2
-# define EA 3
-# define R 0
-# define G 1
-# define B 2
-# define A 3
+enum e_attributes
+{
+	NO = 0,
+	SO,
+	WE,
+	EA
+};
+
+enum e_colors
+{
+	R = 0,
+	G,
+	B,
+	A
+};
+
+enum e_positions
+{
+	X = 0,
+	Y
+};
+
+# define WIDTH 800
+# define HEIGHT 600
+# define WIDTH_2 400
+# define HEIGHT_2 300
+
+# define DIR_SIZE 8
 
 typedef struct s_mlx
 {
@@ -61,7 +79,6 @@ void	draw_wall(t_mlx *mlx, double height, int init, int ray_x, mlx_texture_t *te
 void	cast_rays(t_mlx *mlx, int fov);
 
 // utils.c ===========================================================
-int		start_looking_fix(int angle);
 double	rad_overflow(double radians);
 double	fisheye_fix(double ray_angle);
 double	pythagoras(double x0, double y0, double x1, double y1);
@@ -77,10 +94,10 @@ void	keyboard(mlx_key_data_t data, void *var);
 
 
 // fake_globals.c ====================================================
-double	*g_player_x(void);
-double	*g_player_y(void);
-int		*g_player_angle(void);
-double	*g_dir_x(void);
-double	*g_dir_y(void);
+double	*getter_player_x(void);
+double	*getter_player_y(void);
+int		*getter_player_ang(void);
+double	*getter_dir_x(void);
+double	*getter_dir_y(void);
 
 #endif

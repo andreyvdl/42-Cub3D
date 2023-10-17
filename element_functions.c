@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   element_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:18:26 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 11:26:12 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/17 13:42:19 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "includes/cube.h"
 
 int	validate_element(char *line)
 {

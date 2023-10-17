@@ -1,4 +1,16 @@
-#include "mlx_test.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mouse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/17 14:58:54 by adantas-          #+#    #+#             */
+/*   Updated: 2023/10/17 15:12:14 by adantas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "includes/mlx_test.h"
 
 void	toggle_mouse(t_mlx *mlx)
 {
@@ -12,7 +24,7 @@ void	toggle_mouse(t_mlx *mlx)
 		mlx_set_cursor_mode(mlx->win, MLX_MOUSE_NORMAL);
 		mlx->m_cntl = true;
 	}
-	mlx_set_mouse_pos(mlx->win, 400, 300);
+	mlx_set_mouse_pos(mlx->win, WIDTH_2, HEIGHT_2);
 }
 
 void	mouse(double x_pos, double y_pos, void *var)
@@ -23,15 +35,15 @@ void	mouse(double x_pos, double y_pos, void *var)
 	mlx = (t_mlx *)var;
 	if (mlx->m_cntl == true)
 		return ;
-	if (x_pos < 400)
-		*g_player_angle()-= ROT_ANG;
-	else if (x_pos > 400)
-		*g_player_angle()+= ROT_ANG;
-	if (*g_player_angle()< 0)
-		*g_player_angle()+= 360;
-	if (*g_player_angle()> 360)
-		*g_player_angle()-= 360;
-	*g_dir_x() = cos(RAD_1 * *g_player_angle());
-	*g_dir_y() = sin(RAD_1 * *g_player_angle());
-	mlx_set_mouse_pos(mlx->win, 400, 300);
+	if (x_pos < WIDTH_2)
+		*getter_player_ang() -= ROT_ANG;
+	else if (x_pos > WIDTH_2)
+		*getter_player_ang() += ROT_ANG;
+	if (*getter_player_ang() < 0)
+		*getter_player_ang() += 360;
+	if (*getter_player_ang() > 360)
+		*getter_player_ang() -= 360;
+	*getter_dir_x() = cos(RAD_1 * *getter_player_ang());
+	*getter_dir_y() = sin(RAD_1 * *getter_player_ang());
+	mlx_set_mouse_pos(mlx->win, WIDTH_2, HEIGHT_2);
 }

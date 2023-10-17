@@ -1,4 +1,17 @@
-#include "mlx_test.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/17 13:54:22 by adantas-          #+#    #+#             */
+/*   Updated: 2023/10/17 16:20:03 by adantas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "includes/cube.h"
+#include "includes/mlx_test.h"
 
 double	rad_overflow(double radians)
 {
@@ -9,29 +22,23 @@ double	rad_overflow(double radians)
 	return (radians);
 }
 
-int	start_looking_fix(int angle)
-{
-	if (angle > 90)
-		return (360 - angle);
-	else
-		return (90 - angle);
-}
-
 void	change_pos(double x, double y)
 {
-	if (*g_player_x() + x > 1 \
-	&& g_map[(int)(*g_player_y() / SIZE)][(int)((*g_player_x() + x) / SIZE)] != '1')
-		*g_player_x() += x;
-	if (*g_player_y() + y > 1 \
-	&& g_map[(int)((*g_player_y() + y) / SIZE)][(int)(*g_player_x() / SIZE)] != '1')
-		*g_player_y() += y;
+	if (*getter_player_x() + x > 1 \
+	&& g_map[(int)(*getter_player_y() / SIZE)] \
+			[(int)((*getter_player_x() + x) / SIZE)] != '1')
+		*getter_player_x() += x;
+	if (*getter_player_y() + y > 1 \
+	&& g_map[(int)((*getter_player_y() + y) / SIZE)] \
+			[(int)(*getter_player_x() / SIZE)] != '1')
+		*getter_player_y() += y;
 }
 
 double	fisheye_fix(double ray_angle)
 {
 	double	fisheye;
 
-	fisheye = RAD_1 * *g_player_angle()- ray_angle;
+	fisheye = RAD_1 * *getter_player_ang() - ray_angle;
 	fisheye = rad_overflow(fisheye);
 	return (cos(fisheye));
 }

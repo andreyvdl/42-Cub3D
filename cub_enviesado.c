@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cub_enviesado.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:00:24 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 12:19:23 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/17 16:20:21 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mlx_test.h"
+#include "includes/mlx_test.h"
 
-const char	*g_map[]= {
+const char	*g_map[] = {
 	"1111111111111111",
 	"1000000000000001",
 	"1000000000000001",
@@ -44,7 +44,6 @@ bool	load_textures(t_mlx *mlx)
 	if (mlx->tex[NO] == NULL || mlx->tex[SO] == NULL || mlx->tex[WE] == NULL
 		|| mlx->tex[EA] == NULL)
 	{
-		you_made_the_l(mlx_strerror(mlx_errno));
 		if (mlx->tex[NO])
 			mlx_delete_texture(mlx->tex[NO]);
 		if (mlx->tex[SO])
@@ -58,35 +57,39 @@ bool	load_textures(t_mlx *mlx)
 	return (false);
 }
 
-int	make_it_visual(t_mlx *mlx)
+void	free_mlx(t_mlx *mlx)
 {
-	mlx->win = mlx_init(800, 600, "uowfem-istaim", false);
+	mlx_delete_image(mlx->win, mlx->img);
+	mlx_delete_texture(mlx->tex[NO]);
+	mlx_delete_texture(mlx->tex[SO]);
+	mlx_delete_texture(mlx->tex[WE]);
+	mlx_delete_texture(mlx->tex[EA]);
+	mlx_terminate(mlx->win);
+}
+
+int	make_it_visual(t_mlx *mlx, int vision_dir)
+{
+	mlx->win = mlx_init(WIDTH, HEIGHT, "uowfem-istaim", false);
 	if (mlx->win == NULL)
-		return (puts(mlx_strerror(mlx_errno)), 1);
-	mlx->img = mlx_new_image(mlx->win, 800, 600);
-	if (mlx->img == NULL)
-		return (puts(mlx_strerror(mlx_errno)), mlx_terminate(mlx->win), 2);
+		return (you_made_the_l(mlx_strerror(mlx_errno)));
 	if (load_textures(mlx))
-		return (mlx_delete_image(mlx->win, mlx->img), mlx_terminate(mlx->win), 3);
-	*g_player_angle() = start_looking_fix(90);
-	*g_dir_x() = cos(RAD_1 * *g_player_angle());
-	*g_dir_y() = sin(RAD_1 * *g_player_angle());
+		return (you_made_the_l(mlx_strerror(mlx_errno)));
+	mlx->img = mlx_new_image(mlx->win, WIDTH, HEIGHT);
+	if (mlx->img == NULL)
+	{
+		mlx_terminate(mlx->win);
+		return (you_made_the_l(mlx_strerror(mlx_errno)));
+	}
+	*getter_player_ang() = 360 - vision_dir;
+	*getter_dir_x() = cos(RAD_1 * *getter_player_ang());
+	*getter_dir_y() = sin(RAD_1 * *getter_player_ang());
 	mlx_key_hook(mlx->win, keyboard, mlx);
 	mlx_cursor_hook(mlx->win, mouse, mlx);
 	mlx_loop_hook(mlx->win, render, mlx);
-	mlx_set_mouse_pos(mlx->win, 400, 300);
+	mlx_set_mouse_pos(mlx->win, WIDTH_2, HEIGHT_2);
 	mlx_set_cursor_mode(mlx->win, MLX_MOUSE_HIDDEN);
 	mlx_image_to_window(mlx->win, mlx->img, 0, 0);
 	mlx_loop(mlx->win);
-	mlx_delete_image(mlx->win, mlx->img);
-	if (mlx->tex[NO])
-		mlx_delete_texture(mlx->tex[NO]);
-	if (mlx->tex[SO])
-		mlx_delete_texture(mlx->tex[SO]);
-	if (mlx->tex[WE])
-		mlx_delete_texture(mlx->tex[WE]);
-	if (mlx->tex[EA])
-		mlx_delete_texture(mlx->tex[EA]);
-	mlx_terminate(mlx->win);
+	free_mlx(mlx);
 	return (0);
 }

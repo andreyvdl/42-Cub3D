@@ -3,31 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   map_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:16:33 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 11:17:12 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/17 14:59:06 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "includes/cube.h"
 
-int	count_map_lines(char *file_path) // Norm
+int	count_map_lines(int fd, int map_lines, int itens_ignore, int map_start)
 {
 	char	*line;
-	int		fd;
-	int		map_lines;
-	int		itens_ignore;
-	int		map_start;
 
-	fd = open(file_path, O_RDONLY);
-	if (fd < 0)
-		return (you_made_the_l("Make the L! 5"));
 	line = get_next_line(fd);
 	if (!line)
-		return (-1);
-	map_lines = 0;
-	map_start = 0;
-	itens_ignore = 0;
+		return (you_made_the_l("Make the L! 5"));
 	while (line && map_lines >= 0)
 	{
 		if (line[0] != '\n' && itens_ignore < 6)
@@ -50,21 +41,17 @@ int	count_map_lines(char *file_path) // Norm
 	return (map_lines);
 }
 
-char	**do_the_map(char *file_path, int map_lines) // Norm
+char	**do_the_map(int fd, int map_lines)
 {
-	int		fd;
 	int		map_start;
 	char	*line;
 	char	**map;
 
-	fd = open(file_path, O_RDONLY);
-	if (fd == -1)
+	line = get_next_line(fd);
+	if (!line)
 		return (NULL);
 	map = malloc((map_lines + 1) * sizeof(char *));
 	if (!map)
-		return (NULL);
-	line = get_next_line(fd);
-	if (!line)
 		return (NULL);
 	map_start = 0;
 	map_lines = 0;
@@ -133,10 +120,10 @@ char	**get_map(char *filename)
 	int		map_lines;
 	char	**map;
 
-	map_lines = count_map_lines(filename);
+	map_lines = count_map_lines(open(filename, O_RDONLY), 0, 0, 0);
 	if (map_lines < 0)
 		return (NULL);
-	map = do_the_map(filename, map_lines);
+	map = do_the_map(open(filename, O_RDONLY), map_lines);
 	if (!map)
 		return (NULL);
 	if (map_normalizer(map))
@@ -148,4 +135,3 @@ char	**get_map(char *filename)
 	}
 	return (map);
 }
-

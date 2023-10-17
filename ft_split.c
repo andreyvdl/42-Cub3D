@@ -1,4 +1,16 @@
-#include "cube.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/17 15:04:26 by adantas-          #+#    #+#             */
+/*   Updated: 2023/10/17 15:09:34 by adantas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "includes/cube.h"
 
 static void	clear_matrix(char **matrix)
 {
@@ -37,7 +49,8 @@ static size_t	get_word_size(const char *s, char c)
 	return (size);
 }
 
-static char	**allocate_strings(const char *s, char c, char **matrix, size_t words)
+static char	**allocate_strings(const char *s, char c, char **matrix, \
+								size_t words)
 {
 	size_t	index;
 	size_t	line;

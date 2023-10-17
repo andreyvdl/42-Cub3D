@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   attributes_functions.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:22:01 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 11:22:03 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/17 13:40:57 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
+#include "includes/cube.h"
 
 void	adjust_attributes(char *textures[])
 {
