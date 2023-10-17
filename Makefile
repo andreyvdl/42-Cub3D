@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+         #
+#    By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/16 11:01:50 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/16 11:51:52 by adantas-, r      ###   ########.fr        #
+#    Updated: 2023/10/17 13:32:40 by adantas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME					=	cub3D
 
-SCRS					=	cub_enviesado.c cast_rays.c keyboard.c mouse.c render.c utils.c fake_globals.c
+SCRS					=	arg_validate.c attributes_functions.c cub_enviesado.c cast_rays.c element_functions.c error_message.c files.c ft_split.c get_next_line.c has_invalid_functions.c keyboard.c map_functions.c map_utils.c mouse.c render.c utils.c utils1.c fake_globals.c
 OBJS_FOLDER_DIR_PATH	=	objs/
 OBJS					=	$(addprefix $(OBJS_FOLDER_DIR_PATH),$(SCRS:%.c=%.o))
 
