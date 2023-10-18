@@ -6,11 +6,11 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:49:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 15:12:14 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:45:00 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/mlx_test.h"
+#include "../includes/cube.h"
 
 double	*getter_player_x(void)
 {
