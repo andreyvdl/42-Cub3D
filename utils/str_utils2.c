@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   str_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 11:46:20 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 11:46:24 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/18 17:35:30 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/cube.h"
 
 char	*ft_strtrim(char *s1, char *set)
 {
@@ -45,4 +47,16 @@ int	ft_strcmp(char *s1, char *s2)
 	}
 	difference = (int)*s1 - (int)*s2;
 	return (difference);
+}
+
+void	ft_putendl_fd(int fd, char *str)
+{
+	if (fd < 0 || str == NULL)
+		return ;
+	while (*str)
+	{
+		write(fd, str, 1);
+		str++;
+	}
+	write(fd, "\n", 1);
 }
