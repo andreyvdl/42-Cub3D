@@ -3,13 +3,17 @@
 void	update_distance(double *x, double *y, double *ray, double *off)
 {
 	int	map[2];
+	int	map_height;
+	int	map_width;
 
+	map_width = ft_strlen(**g_map());
+	map_height = ft_matrixlen(*g_map());
 	while (1)
 	{
 		map[X] = (int)(ray[X] / SIZE);
 		map[Y] = (int)(ray[Y] / SIZE);
-		if (map[X] < 0 || map[Y] < 0 || map[X] > 15 || map[Y] > 13
-			|| g_map[map[Y]][map[X]] == '1')
+		if (map[X] < 0 || map[Y] < 0 || map[X] > map_width
+			|| map[Y] > map_height || *g_map()[map[Y]][map[X]] == '1')
 		{
 			*x = ray[X];
 			*y = ray[Y];
@@ -132,7 +136,6 @@ void	cast_rays(t_mlx *mlx, int fov)
 		dist[Y] = cost_y_ray_distance(&x[Y], &y[Y], 1 / -tan(ray_ang), ray_ang);
 		dist[X] = cost_x_ray_distance(&x[X], &y[X], -tan(ray_ang), ray_ang);
 		fisheye = fisheye_fix(ray_ang);
-		// remover esse if pra outra função
 		if (dist[Y] < dist[X])
 		{
 			if (ray_ang >= M_PI && ray_ang <= RAD_360)

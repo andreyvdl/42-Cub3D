@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub_enviesado.c                                    :+:      :+:    :+:   */
+/*   visual_start.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:00:24 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 16:20:21 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 11:18:20 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,13 @@ const char	*g_map[] = {
 	NULL
 };
 
+char	***g_map(void)
+{
+	static char	**map;
+
+	return (&map);
+}
+
 double	deg_to_rad(int deg)
 {
 	return (deg * RAD_1);
@@ -44,14 +51,7 @@ bool	load_textures(t_mlx *mlx)
 	if (mlx->tex[NO] == NULL || mlx->tex[SO] == NULL || mlx->tex[WE] == NULL
 		|| mlx->tex[EA] == NULL)
 	{
-		if (mlx->tex[NO])
-			mlx_delete_texture(mlx->tex[NO]);
-		if (mlx->tex[SO])
-			mlx_delete_texture(mlx->tex[SO]);
-		if (mlx->tex[WE])
-			mlx_delete_texture(mlx->tex[WE]);
-		if (mlx->tex[EA])
-			mlx_delete_texture(mlx->tex[EA]);
+		
 		return (true);
 	}
 	return (false);
@@ -67,19 +67,33 @@ void	free_mlx(t_mlx *mlx)
 	mlx_terminate(mlx->win);
 }
 
+int	free_mlx_error(t_mlx *mlx)
+{
+	if (mlx->tex[NO])
+		mlx_delete_texture(mlx->tex[NO]);
+	if (mlx->tex[SO])
+		mlx_delete_texture(mlx->tex[SO]);
+	if (mlx->tex[WE])
+		mlx_delete_texture(mlx->tex[WE]);
+	if (mlx->tex[EA])
+		mlx_delete_texture(mlx->tex[EA]);
+	if (mlx->img)
+		mlx_delete_image(mlx->win, mlx->img);
+	if (mlx->win)
+		mlx_terminate(mlx->win);
+	return (you_made_the_l(mlx_strerror(mlx_errno)));	
+}
+
 int	make_it_visual(t_mlx *mlx, int vision_dir)
 {
 	mlx->win = mlx_init(WIDTH, HEIGHT, "uowfem-istaim", false);
 	if (mlx->win == NULL)
-		return (you_made_the_l(mlx_strerror(mlx_errno)));
+		return (free_mlx_error(mlx));
 	if (load_textures(mlx))
-		return (you_made_the_l(mlx_strerror(mlx_errno)));
+		return (free_mlx_error(mlx));
 	mlx->img = mlx_new_image(mlx->win, WIDTH, HEIGHT);
 	if (mlx->img == NULL)
-	{
-		mlx_terminate(mlx->win);
-		return (you_made_the_l(mlx_strerror(mlx_errno)));
-	}
+		return (free_mlx_error(mlx));
 	*getter_player_ang() = 360 - vision_dir;
 	*getter_dir_x() = cos(RAD_1 * *getter_player_ang());
 	*getter_dir_y() = sin(RAD_1 * *getter_player_ang());

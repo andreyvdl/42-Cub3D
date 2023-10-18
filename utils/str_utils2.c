@@ -1,16 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   str_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/17 13:51:46 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/17 13:52:16 by adantas-         ###   ########.fr       */
+/*   Created: 2023/10/18 11:46:20 by adantas-, r       #+#    #+#             */
+/*   Updated: 2023/10/18 11:46:24 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "includes/cube.h"
 
 char	*ft_strtrim(char *s1, char *set)
 {
@@ -47,34 +45,4 @@ int	ft_strcmp(char *s1, char *s2)
 	}
 	difference = (int)*s1 - (int)*s2;
 	return (difference);
-}
-
-int	ft_isdigit(int c)
-{
-	return (c >= '0' && c <= '9');
-}
-
-size_t	ft_matrixlen(char **matrix)
-{
-	size_t	size;
-
-	if (matrix == NULL)
-		return (0);
-	size = 0;
-	while (matrix[size] != NULL)
-		++size;
-	return (size);
-}
-
-void	ft_free_matrix(void **matrix)
-{
-	char	**temp;
-
-	if (matrix)
-	{
-		temp = (char **)matrix;
-		while (*temp)
-			free(*temp++);
-		free(matrix);
-	}
 }

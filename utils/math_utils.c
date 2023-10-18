@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 13:54:22 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/17 16:20:03 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 11:20:07 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ double	rad_overflow(double radians)
 void	change_pos(double x, double y)
 {
 	if (*getter_player_x() + x > 1 \
-	&& g_map[(int)(*getter_player_y() / SIZE)] \
+	&& *g_map()[(int)(*getter_player_y() / SIZE)] \
 			[(int)((*getter_player_x() + x) / SIZE)] != '1')
 		*getter_player_x() += x;
 	if (*getter_player_y() + y > 1 \
-	&& g_map[(int)((*getter_player_y() + y) / SIZE)] \
+	&& *g_map()[(int)((*getter_player_y() + y) / SIZE)] \
 			[(int)(*getter_player_x() / SIZE)] != '1')
 		*getter_player_y() += y;
 }

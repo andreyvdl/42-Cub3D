@@ -3,39 +3,44 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+         #
+#    By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/16 11:01:50 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/17 13:32:40 by adantas-         ###   ########.fr        #
+#    Updated: 2023/10/18 12:10:51 by rleite-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME					=	cub3D
 
-SCRS					=	arg_validate.c attributes_functions.c cub_enviesado.c cast_rays.c element_functions.c error_message.c files.c ft_split.c get_next_line.c has_invalid_functions.c keyboard.c map_functions.c map_utils.c mouse.c render.c utils.c utils1.c fake_globals.c
-OBJS_FOLDER_DIR_PATH	=	objs/
-OBJS					=	$(addprefix $(OBJS_FOLDER_DIR_PATH),$(SCRS:%.c=%.o))
+SCRS					=	$(addprefix scrs/, attributes_functions.c cast_rays.c \
+							element_functions.c error_message.c fake_globals.c \
+							ft_atoi.c ft_split.c get_next_line.c has_invalid_functions.c \
+							keyboard.c main.c map_functions.c mouse.c render.c visual_start.c) \
+							$(addprefix utils/, map_utils.c math_utils.c matrix_utils.c \
+							mem_utils.c str_utils2.c str_utils.c)
+#OBJS_FOLDER_DIR_PATH	=	objs/
+OBJS					=	$(SCRS:%.c=%.o)
 
-FLAGS					=	-g
+FLAGS					=	-Wall -Wextra -Werror -g
+MLX_FLAGS				=	-lm -ldl -pthread -lglfw
+INCLUDE					=	-I includes
 
 RM						=	rm -f
 
-all: dir $(NAME)
+all: $(NAME)
 
-$(OBJS_FOLDER_DIR_PATH)%.o: %.c
-	cc $(FLAGS) -c $< -o $@
+%.o: %.c
+	cc $(FLAGS) -c $< -o $@ $(INCLUDE)
 
 $(NAME): $(OBJS)
-#												-g -lm -ldl -pthread -lglfw 
-#	cc $(FLAGS) $^ MLX42/build/libmlx42.a -o $@ -g -ldl -lglfw -pthread -lm
-	cc $(FLAGS) $^ MLX42/build/libmlx42.a -o $@ -g -lm -ldl -pthread -lglfw 
+	cc $(FLAGS) $^ MLX42/build/libmlx42.a -o $@ $(MLX_FLAGS) $(INCLUDE)
 
 dir:
 	$(if ifeq ($(wildcard $(OBJS_FOLDER_DIR_PATH)),), \
 		$(shell mkdir -p $(OBJS_FOLDER_DIR_PATH)))
 
 clean:
-	$(RM) $(OBJS) -r $(OBJS_FOLDER_DIR_PATH)
+	$(RM) $(OBJS)
 
 fclean: clean
 	$(RM) $(NAME)

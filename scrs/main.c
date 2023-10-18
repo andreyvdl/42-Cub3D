@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   files.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 16:37:53 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 12:12:42 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
-#include "includes/mlx_test.h"
+#include "cube.h"
 
 int	error_checker(int argc, char *argv[])
 {
@@ -52,7 +51,7 @@ int	where_to_look(char **map)
 		}
 		++map;
 	}
-	return (SEILA RAPAZ!!!);
+	return (0);
 }
 
 int	main(int argc, char *argv[])

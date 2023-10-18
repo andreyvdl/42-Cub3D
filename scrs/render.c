@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 14:57:40 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/17 15:12:14 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 11:26:54 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 		x = map_x * SIZE;
 		while (x < limit_x)
 		{
-			if (g_map[map_y][map_x] == '1')
+			if (*g_map()[map_y][map_x] == '1')
 				mlx_put_pixel(mlx->img, x, y, WHITE);
 			/*else if (ft_strchr("Dd", g_map[map_y][map_x]) != NULL)
 				mlx_put_pixel(mlx->img, x, y, RED);*/
@@ -142,10 +142,10 @@ void	render(void *var)
 	draw_background(mlx);
 	cast_rays(mlx, 90);
 	i = 0;
-	while (g_map[i] != NULL)
+	while (*g_map()[i] != NULL)
 	{
 		j = 0;
-		while (g_map[i][j] != '\0')
+		while (*g_map()[i][j] != '\0')
 		{
 			draw_map(mlx, j, i);
 			++j;
