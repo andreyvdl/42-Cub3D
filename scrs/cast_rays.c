@@ -1,4 +1,16 @@
-#include "includes/mlx_test.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cast_rays.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/18 13:32:22 by adantas-          #+#    #+#             */
+/*   Updated: 2023/10/18 17:30:12 by adantas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/cube.h"
 
 void	update_distance(double *x, double *y, double *ray, double *off)
 {
@@ -6,14 +18,14 @@ void	update_distance(double *x, double *y, double *ray, double *off)
 	int	map_height;
 	int	map_width;
 
-	map_width = ft_strlen(**g_map());
-	map_height = ft_matrixlen(*g_map());
+	map_width = ft_strlen(**getter_map());
+	map_height = ft_matrixlen(*getter_map());
 	while (1)
 	{
 		map[X] = (int)(ray[X] / SIZE);
 		map[Y] = (int)(ray[Y] / SIZE);
 		if (map[X] < 0 || map[Y] < 0 || map[X] > map_width
-			|| map[Y] > map_height || *g_map()[map[Y]][map[X]] == '1')
+			|| map[Y] > map_height || *getter_map()[map[Y]][map[X]] == '1')
 		{
 			*x = ray[X];
 			*y = ray[Y];
@@ -82,74 +94,37 @@ double	cost_x_ray_distance(double *x, double *y, double tangent, \
 	return (pythagoras(*getter_player_x(), *getter_player_y(), ray[X], ray[Y]));
 }
 
-uint32_t	tex_to_col(mlx_texture_t *tex, int x, int y)
+mlx_texture_t	*texture_ternary(mlx_texture_t *cond1, mlx_texture_t *cond2,
+									bool result)
 {
-	uint8_t	*ptr;
-
-	ptr = &tex->pixels[(y * tex->width + x) * tex->bytes_per_pixel];
-	return (ptr[R] << 24 | ptr[G] << 16 | ptr[B] << 8 | ptr[A]);
-	// return ((*ptr)++ << 24 | (*ptr)++ << 16 | (*ptr)++ << 8 | *ptr); // ataque epiletico
+	if (result)
+		return (cond1);
+	return (cond2);
 }
 
-void	draw_wall(t_mlx *mlx, double height, int init, int ray_x, \
-					mlx_texture_t *tex)
-{
-	int		y_min;
-	int		y_max;
-	double	tex_y;
-	double	inc_tex;
-	double	tex_off;
-
-	inc_tex = 63.0 / height * 0.5;
-	tex_off = 0;
-	if (height > 300)
-	{
-		tex_off = (height - 300);
-		height = 300;
-	}
-	y_min = 300 - height;
-	y_max = 300 + height;
-	tex_y = tex_off * inc_tex;
-	while (y_max >= y_min)
-	{
-		mlx_put_pixel(mlx->img, init, y_min, \
-						tex_to_col(tex, ray_x, tex_y));
-		tex_y += inc_tex;
-		++y_min;
-	}
-}
-
-void	cast_rays(t_mlx *mlx, int fov)
+void	cast_rays(t_mlx *mlx, int pixel, int width_sz) // to fix
 {
 	double	dist[2];
 	double	x[2];
 	double	y[2];
 	double	ray_ang;
-	double	fisheye; // passar o fisheye pra fora
 	double	ray_inc;
 
-	ray_ang = RAD_1 * (*getter_player_ang() - fov / 2.0);
-	ray_inc = 0.002; // n pergunta como cheguei nesse valor, foi so tentativa e erro // RAD_360 / 3200; // 800 vezes 4
-	for (int px = 0; px < 800; ++px)
+	ray_ang = RAD_1 * (*getter_player_ang() - FOV / 2.0);
+	ray_inc = RAD_90 / WIDTH; // 0.002;
+	while (++pixel < WIDTH)
 	{
 		ray_ang = rad_overflow(ray_ang);
 		dist[Y] = cost_y_ray_distance(&x[Y], &y[Y], 1 / -tan(ray_ang), ray_ang);
 		dist[X] = cost_x_ray_distance(&x[X], &y[X], -tan(ray_ang), ray_ang);
-		fisheye = fisheye_fix(ray_ang);
 		if (dist[Y] < dist[X])
-		{
-			if (ray_ang >= M_PI && ray_ang <= RAD_360)
-				draw_wall(mlx, (SIZE * 800) / (dist[Y] * fisheye), px, (int)(x[Y] * SIZE) % 64, mlx->tex[NO]);
-			else
-				draw_wall(mlx, (SIZE * 800) / (dist[Y] * fisheye), px, 63 - (int)(x[Y] * SIZE) % 64, mlx->tex[SO]);
-		}
+			draw_wall(mlx, width_sz / (dist[Y] * fisheye_fix(ray_ang)), pixel, \
+			(int)(x[Y] * SIZE) % 64, texture_ternary(mlx->tex[NO], \
+			mlx->tex[SO], ray_ang >= M_PI && ray_ang <= RAD_360));
 		else
-		{
-			if (ray_ang >= RAD_90 && ray_ang <= RAD_270)
-				draw_wall(mlx, (SIZE * 800) / (dist[X] * fisheye), px, 63 - (int)(y[X] * SIZE) % 64, mlx->tex[WE]);
-			else
-				draw_wall(mlx, (SIZE * 800) / (dist[X] * fisheye), px, (int)(y[X] * SIZE) % 64, mlx->tex[EA]);
-		}
+			draw_wall(mlx, width_sz / (dist[X] * fisheye_fix(ray_ang)), pixel, \
+			(int)(y[X] * SIZE) % 64, texture_ternary(mlx->tex[WE], \
+			mlx->tex[EA], ray_ang >= RAD_90 && ray_ang <= RAD_270));
 		ray_ang += ray_inc;
 	}
 }

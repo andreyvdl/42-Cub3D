@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   mem_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 11:45:40 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 11:45:41 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/18 13:28:53 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/cube.h"
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {

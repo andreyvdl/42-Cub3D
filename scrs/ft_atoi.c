@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 13:52:35 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/18 11:45:27 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/18 16:47:45 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "../includes/cube.h"
 
 int	ft_isdigit(int c)
 {

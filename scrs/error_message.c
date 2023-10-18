@@ -6,15 +6,15 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:14:33 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 15:28:37 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 17:33:46 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "../includes/cube.h"
 
 int	you_made_the_l(char *str)
 {
-	ft_putendl_fd(1, "Error", 5);
-	ft_putendl_fd(1, str, ft_strlen(str));
+	ft_putendl_fd(STDERR_FILENO, "Error");
+	ft_putendl_fd(STDERR_FILENO, str);
 	return (-1);
 }

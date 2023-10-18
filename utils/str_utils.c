@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   str_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 11:46:48 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 11:46:53 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/18 13:29:27 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "../includes/cube.h"
 
 size_t	ft_strlen(const char *s)
 {

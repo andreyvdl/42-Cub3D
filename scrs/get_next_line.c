@@ -1,5 +1,5 @@
 
-#include "cube.h"
+#include "../includes/cube.h"
 
 char	*ft_realloc(char *s1, char *s2)
 {

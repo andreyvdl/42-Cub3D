@@ -6,11 +6,11 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:16:33 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 14:59:06 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 16:53:05 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "../includes/cube.h"
 
 int	count_map_lines(int fd, int map_lines, int itens_ignore, int map_start)
 {

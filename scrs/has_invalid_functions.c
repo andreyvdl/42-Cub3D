@@ -6,11 +6,11 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:22:38 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 14:59:42 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 16:50:34 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "../includes/cube.h"
 
 int	has_invalid_character(char **map)
 {

@@ -6,11 +6,11 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 14:56:01 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/17 15:12:14 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 16:51:47 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/mlx_test.h"
+#include "../includes/cube.h"
 
 void	movement_keys(t_mlx *mlx)
 {

@@ -6,11 +6,11 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 15:04:26 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/17 15:09:34 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 16:49:26 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "../includes/cube.h"
 
 static void	clear_matrix(char **matrix)
 {

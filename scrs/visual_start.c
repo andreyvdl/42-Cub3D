@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   visual_start.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:00:24 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 11:18:20 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/18 16:59:33 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/mlx_test.h"
+#include "../includes/cube.h"
 
 const char	*g_map[] = {
 	"1111111111111111",
@@ -30,18 +30,6 @@ const char	*g_map[] = {
 	NULL
 };
 
-char	***g_map(void)
-{
-	static char	**map;
-
-	return (&map);
-}
-
-double	deg_to_rad(int deg)
-{
-	return (deg * RAD_1);
-}
-
 bool	load_textures(t_mlx *mlx)
 {
 	mlx->tex[NO] = mlx_load_png(mlx->attributes[NO]);
@@ -50,10 +38,7 @@ bool	load_textures(t_mlx *mlx)
 	mlx->tex[EA] = mlx_load_png(mlx->attributes[EA]);
 	if (mlx->tex[NO] == NULL || mlx->tex[SO] == NULL || mlx->tex[WE] == NULL
 		|| mlx->tex[EA] == NULL)
-	{
-		
 		return (true);
-	}
 	return (false);
 }
 
@@ -81,12 +66,12 @@ int	free_mlx_error(t_mlx *mlx)
 		mlx_delete_image(mlx->win, mlx->img);
 	if (mlx->win)
 		mlx_terminate(mlx->win);
-	return (you_made_the_l(mlx_strerror(mlx_errno)));	
+	return (you_made_the_l((char *)mlx_strerror(mlx_errno)));
 }
 
 int	make_it_visual(t_mlx *mlx, int vision_dir)
 {
-	mlx->win = mlx_init(WIDTH, HEIGHT, "uowfem-istaim", false);
+	mlx->win = mlx_init(WIDTH, HEIGHT, "Cub3D", false);
 	if (mlx->win == NULL)
 		return (free_mlx_error(mlx));
 	if (load_textures(mlx))

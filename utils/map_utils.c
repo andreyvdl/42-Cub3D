@@ -6,11 +6,11 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:30:57 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 14:23:51 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 13:24:12 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "../includes/cube.h"
 
 int	all_chars_is_in_set(char *arg, char *set)
 {

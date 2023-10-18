@@ -6,11 +6,11 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:18:26 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/17 13:42:19 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:42:03 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/cube.h"
+#include "../includes/cube.h"
 
 int	validate_element(char *line)
 {

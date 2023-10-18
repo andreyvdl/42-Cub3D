@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 12:12:42 by rleite-s         ###   ########.fr       */
+/*   Updated: 2023/10/18 16:52:24 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "../includes/cube.h"
 
 int	error_checker(int argc, char *argv[])
 {
@@ -74,7 +74,7 @@ int	main(int argc, char *argv[])
 		ft_free_matrix((void **)map);
 		return (1);
 	}
-	*g_map() = map;
+	*getter_map() = map;
 	mlx.attributes = attributes;
 	make_it_visual(&mlx, where_to_look(map));
 	ft_free_matrix((void **)map);
