@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cast_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 13:32:22 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/18 17:30:12 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 11:07:52 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ double	cost_y_ray_distance(double *x, double *y, double tangent, \
 
 	if (ray_angle > M_PI)
 	{
-		ray[Y] = ((int)(*getter_player_y() / SIZE) * SIZE) - 0.00001;
+		ray[Y] = ((int)(*getter_player_y() / SIZE)) * SIZE - 0.00001;
 		ray[X] = (*getter_player_y() - ray[Y]) * tangent + *getter_player_x();
 		off[Y] = -SIZE;
 		off[X] = -off[Y] * tangent;
 	}
 	if (ray_angle < M_PI)
 	{
-		ray[Y] = ((int)(*getter_player_y() / SIZE) * SIZE) + SIZE;
+		ray[Y] = (((int)(*getter_player_y() / SIZE)) * SIZE) + SIZE;
 		ray[X] = (*getter_player_y() - ray[Y]) * tangent + *getter_player_x();
 		off[Y] = SIZE;
 		off[X] = -off[Y] * tangent;
@@ -73,14 +73,14 @@ double	cost_x_ray_distance(double *x, double *y, double tangent, \
 
 	if (ray_angle > RAD_90 && ray_angle < RAD_270)
 	{
-		ray[X] = ((int)(*getter_player_x() / SIZE) * SIZE) - 0.00001;
+		ray[X] = ((int)(*getter_player_x() / SIZE)) * SIZE - 0.00001;
 		ray[Y] = (*getter_player_x() - ray[X]) * tangent + *getter_player_y();
 		off[X] = -SIZE;
 		off[Y] = -off[X] * tangent;
 	}
 	if (ray_angle < RAD_90 || ray_angle > RAD_270)
 	{
-		ray[X] = ((int)(*getter_player_x() / SIZE) * SIZE) + SIZE;
+		ray[X] = ((int)(*getter_player_x() / SIZE)) * SIZE + SIZE;
 		ray[Y] = (*getter_player_x() - ray[X]) * tangent + *getter_player_y();
 		off[X] = SIZE;
 		off[Y] = -off[X] * tangent;
@@ -102,7 +102,7 @@ mlx_texture_t	*texture_ternary(mlx_texture_t *cond1, mlx_texture_t *cond2,
 	return (cond2);
 }
 
-void	cast_rays(t_mlx *mlx, int pixel, int width_sz) // to fix
+void	cast_rays(t_mlx *mlx, int pixel, int width_sz)
 {
 	double	dist[2];
 	double	x[2];
