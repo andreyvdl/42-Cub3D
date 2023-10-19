@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   element_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:18:26 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 11:27:48 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:51:29 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	validate_element(char *line)
 	if (i == 6)
 		return (-1);
 	if (matched[i] != NULL)
-		return (you_made_the_l("Make the L! 7"));
+		return (you_made_the_l("Duplicated element."));
 	matched[i] = (char *)elements[i];
 	matches++;
 	splited = ft_split(line, ' ');
@@ -71,7 +71,7 @@ int	element_checker(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		return (you_made_the_l("Depois penso numa mensagem"));
+		return (you_made_the_l("Error while trying open the file."));
 	match = 0;
 	while (match != 6)
 	{
@@ -87,6 +87,6 @@ int	element_checker(char *filename)
 	}
 	close(fd);
 	if (match == -1)
-		return (you_made_the_l("Make the L! 6"));
+		return (you_made_the_l("Invalid element."));
 	return (0);
 }

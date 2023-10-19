@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:16:33 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 11:44:27 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:01:17 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	count_map_lines(int fd, int map_lines, int itens_ignore, int map_start)
 
 	line = get_next_line(fd);
 	if (!line)
-		return (you_made_the_l("Make the L! 5"));
+		return (you_made_the_l("Error while trying read the file."));
 	while (line && map_lines >= 0)
 	{
 		if (line[0] != '\n' && itens_ignore < 6)
@@ -26,7 +26,7 @@ int	count_map_lines(int fd, int map_lines, int itens_ignore, int map_start)
 		else if (line[0] != '\n' && itens_ignore == 6)
 		{
 			if (map_start == 2)
-				map_lines = (you_made_the_l("Abyss, mother fucker!")) - 1;
+				map_lines = (you_made_the_l("We can't have a map! Abyss.")) - 1;
 			if (is_only_spaces(line))
 				map_lines = (you_made_the_l("Line with only spaces.")) - 1;
 			map_lines++;
@@ -102,13 +102,13 @@ int	map_normalizer(char **map)
 int	validate_map(char **map)
 {
 	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
-		return (you_made_the_l("Make the L! 11"));
+		return (you_made_the_l("Invalid map size."));
 	if (has_invalid_character(map))
-		return (you_made_the_l("Make the L! 8"));
+		return (you_made_the_l("The map has a invalid character."));
 	if (has_invalid_number_of_players(map))
-		return (you_made_the_l("Make the L! 9"));
+		return (you_made_the_l("Invalid number of players, Dude!"));
 	if (has_invalid_walls(map))
-		return (you_made_the_l("Make the L! 10"));
+		return (you_made_the_l("The map is dangerous to the player."));
 	return (0);
 }
 

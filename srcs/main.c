@@ -6,7 +6,7 @@
 /*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 16:41:27 by rleite-s         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:16:39 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ int	error_checker(int argc, char *argv[])
 	int		fd;
 
 	if (argc != 2)
-		return (you_made_the_l("Make the L!"));
+		return (you_made_the_l("Wrong Number of arguments!"));
 	file = argv[1];
 	if (ft_strlen(file) < 5 || ft_strrchr(file, '.') == NULL \
 	|| ft_strcmp(ft_strrchr(file, '.'), ".cub"))
-		return (you_made_the_l("Make the L! 2"));
+		return (you_made_the_l("Invalid filename."));
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (you_made_the_l("Make the L! 3"));
+		return (you_made_the_l("Error while trying open the file."));
 	close(fd);
 	return (0);
 }
