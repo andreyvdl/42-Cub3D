@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   str_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 11:46:20 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 17:35:30 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:22:34 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,6 @@ void	ft_putendl_fd(int fd, char *str)
 {
 	if (fd < 0 || str == NULL)
 		return ;
-	while (*str)
-	{
-		write(fd, str, 1);
-		str++;
-	}
+	write(fd, str, ft_strlen(str));
 	write(fd, "\n", 1);
 }
