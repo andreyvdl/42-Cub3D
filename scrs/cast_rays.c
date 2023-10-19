@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cast_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 13:32:22 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/19 11:07:52 by rleite-s         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:00:09 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	update_distance(double *x, double *y, double *ray, double *off)
 	{
 		map[X] = (int)(ray[X] / SIZE);
 		map[Y] = (int)(ray[Y] / SIZE);
-		if (map[X] < 0 || map[Y] < 0 || map[X] > map_width
-			|| map[Y] > map_height || *getter_map()[map[Y]][map[X]] == '1')
+		if (map[X] < 0 || map[Y] < 0 || map[X] > map_width - 1 || map[Y] > \
+			map_height - 1 || (*getter_map())[map[Y]][map[X]] == '1')
 		{
 			*x = ray[X];
 			*y = ray[Y];

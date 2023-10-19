@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_wall.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 14:04:42 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/19 11:09:00 by rleite-s         ###   ########.fr       */
+/*   Updated: 2023/10/19 14:57:33 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,19 @@ void	draw_wall(t_mlx *mlx, t_wall wall, mlx_texture_t *tex)
 	double	inc_tex;
 	double	tex_off;
 
-	if (tex == mlx->tex[SO] || tex == mlx->tex[EA])
+	if (tex == mlx->tex[SO] || tex == mlx->tex[WE])
 		wall.ray_x = 63 - wall.ray_x;
 	inc_tex = 63.0 / wall.height * 0.5;
 	tex_off = 0;
-	if (wall.height > 300)
+	if (wall.height > HEIGHT_2)
 	{
-		tex_off = (wall.height - 300);
-		wall.height = 300;
+		tex_off = (wall.height - HEIGHT_2);
+		wall.height = HEIGHT_2;
 	}
-	y_min = 300 - wall.height;
-	y_max = 300 + wall.height;
+	y_min = HEIGHT_2 - wall.height;
+	y_max = HEIGHT_2 + wall.height;
 	tex_y = tex_off * inc_tex;
-	while (y_max >= y_min)
+	while (y_max > y_min)
 	{
 		mlx_put_pixel(mlx->img, wall.init, y_min, \
 						tex_to_col(tex, wall.ray_x, tex_y));

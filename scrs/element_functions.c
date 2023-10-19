@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:18:26 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 15:42:03 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 11:27:48 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	normalize_element(char *start)
 	}
 }
 
-int	element_checker(char *filename, char **map)
+int	element_checker(char *filename)
 {
 	int		fd;
 	char	*line;

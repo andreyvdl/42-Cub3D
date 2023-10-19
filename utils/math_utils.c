@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 13:54:22 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/18 15:08:49 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 11:52:03 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ double	rad_overflow(double radians)
 void	change_pos(double x, double y)
 {
 	if (*getter_player_x() + x > 1 \
-	&& *getter_map()[(int)(*getter_player_y() / SIZE)] \
+	&& (*getter_map())[(int)(*getter_player_y() / SIZE)] \
 			[(int)((*getter_player_x() + x) / SIZE)] != '1')
 		*getter_player_x() += x;
 	if (*getter_player_y() + y > 1 \
-	&& *getter_map()[(int)((*getter_player_y() + y) / SIZE)] \
+	&& (*getter_map())[(int)((*getter_player_y() + y) / SIZE)] \
 			[(int)(*getter_player_x() / SIZE)] != '1')
 		*getter_player_y() += y;
 }

@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:16:33 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 16:53:05 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 11:44:27 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,6 @@ int	map_normalizer(char **map)
 
 int	validate_map(char **map)
 {
-	size_t	line_index;
-	size_t	column_index;
-
 	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
 		return (you_made_the_l("Make the L! 11"));
 	if (has_invalid_character(map))

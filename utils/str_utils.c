@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 11:46:48 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 13:29:27 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 11:29:55 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ char	*ft_strchr(char *s, int c)
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	int		difference;
-	size_t	index;
 
 	if (n == 0)
 		return (0);

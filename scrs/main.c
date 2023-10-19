@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 16:52:24 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 13:57:13 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,58 @@ int	error_checker(int argc, char *argv[])
 
 int	where_to_look(char **map)
 {
-	char	*inside;
+	int	direction;
 
-	while (map != NULL)
+	direction = 360;
+	if (map[(int)*getter_player_y() / SIZE] \
+			[(int)*getter_player_x() / SIZE] == 'N')
+		direction = 90;
+	else if (map[(int)*getter_player_y() / SIZE] \
+			[(int)*getter_player_x() / SIZE] == 'S')
+		direction = 270;
+	else if (map[(int)*getter_player_y() / SIZE] \
+			[(int)*getter_player_x() / SIZE] == 'W')
+		direction = 180;
+	return (direction);
+}
+
+void	set_player_pos(void)
+{
+	const char	**map = (const char **)(*getter_map());
+	size_t		i;
+	size_t		j;
+
+	i = 0;
+	while (map[i] != NULL)
 	{
-		inside = *map;
-		while (*inside != 0)
+		j = 0;
+		while (map[i][j] != 0)
 		{
-			if (*inside == 'N')
-				return (90);
-			else if (*inside == 'W')
-				return (180);
-			else if (*inside == 'S')
-				return (270);
-			else if (*inside == 'E')
-				return (360);
-			++inside;
+			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' \
+				|| map[i][j] == 'W')
+			{
+				*getter_player_x() = j * SIZE;
+				*getter_player_y() = i * SIZE;
+				return ;
+			}
+			++j;
 		}
-		++map;
+		++i;
 	}
-	return (0);
+}
+
+void	set_colors_and_get_player_pos(t_mlx *mlx)
+{
+	char	**split;
+
+	split = ft_split(mlx->attributes[4], ',');
+	mlx->floor = (uint32_t)(ft_atoi(split[R]) << 24 | ft_atoi(split[G]) << 16 \
+							| ft_atoi(split[B]) << 8 | 255);
+	ft_free_matrix((void **)split);
+	split = ft_split(mlx->attributes[5], ',');
+	mlx->ceil = (uint32_t)(ft_atoi(split[R]) << 24 | ft_atoi(split[G]) << 16 \
+							| ft_atoi(split[B]) << 8 | 255);
+	set_player_pos();
 }
 
 int	main(int argc, char *argv[])
@@ -63,7 +95,7 @@ int	main(int argc, char *argv[])
 	mlx = (t_mlx){0};
 	if (error_checker(argc, argv))
 		return (1);
-	if (element_checker(argv[1], map))
+	if (element_checker(argv[1]))
 		return (1);
 	map = get_map(argv[1]);
 	if (map == NULL)
@@ -76,6 +108,7 @@ int	main(int argc, char *argv[])
 	}
 	*getter_map() = map;
 	mlx.attributes = attributes;
+	set_colors_and_get_player_pos(&mlx);
 	make_it_visual(&mlx, where_to_look(map));
 	ft_free_matrix((void **)map);
 	free_local_matrix(attributes);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+         #
+#    By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/16 11:01:50 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/19 11:01:04 by rleite-s         ###   ########.fr        #
+#    Updated: 2023/10/19 15:03:28 by adantas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,10 +52,10 @@ re: fclean all
 .PHONY: all clean fclean re
 
 r: all
-	./$(NAME) #f.cub
+	./$(NAME) maps/valid.cub
 
 v: all
-	clear && valgrind --suppressions=log1 --log-file=log ./$(NAME) #f.cub
+	clear && valgrind --leak-check=summary --suppressions=codam.sup --log-file=log ./$(NAME) maps/valid.cub
 	
 #############################
 # 			MLX CODAM		#

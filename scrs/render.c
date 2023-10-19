@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 14:57:40 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/18 16:57:33 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:35:52 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	draw_background(t_mlx *mlx)
 		while (x < WIDTH)
 		{
 			if (y < HEIGHT_2)
-				mlx_put_pixel(mlx->img, x, y, 0x888888FF);
+				mlx_put_pixel(mlx->img, x, y, mlx->ceil);
 			else
-				mlx_put_pixel(mlx->img, x, y, 0x444444FF);
+				mlx_put_pixel(mlx->img, x, y, mlx->floor);
 			++x;
 		}
 		++y;
@@ -46,12 +46,12 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 		x = map_x * SIZE;
 		while (x < limit_x)
 		{
-			if (*getter_map()[map_y][map_x] == '1')
-				mlx_put_pixel(mlx->img, x, y, WHITE);
+			if (ft_strchr("1 ", (*getter_map())[map_y][map_x]))
+				mlx_put_pixel(mlx->img, x, y, 0xFFA500FF);
 			/*else if (ft_strchr("Dd", getter_map[map_y][map_x]) != NULL)
 				mlx_put_pixel(mlx->img, x, y, RED);*/
 			else
-				mlx_put_pixel(mlx->img, x, y, BLACK);
+				mlx_put_pixel(mlx->img, x, y, CYAN);
 			++x;
 		}
 		++y;
@@ -61,20 +61,20 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 void	draw_player(t_mlx *mlx)
 {
 	static const int	size = SIZE >> 2;
-	const int			limit_y = (int)*getter_player_y() + size;
-	const int			limit_x = (int)*getter_player_x() + size;
+	const int			limit_y = (int)(*getter_player_y()) + size;
+	const int			limit_x = (int)(*getter_player_x()) + size;
 	int					x;
 	int					y;
 
-	y = (int)*getter_player_y() - size;
+	y = (int)(*getter_player_y()) - size;
 	while (y < limit_y)
 	{
-		x = (int)*getter_player_x() - size;
+		x = (int)(*getter_player_x()) - size;
 		while (x < limit_x)
 		{
 			if (y < 0 || x < 0)
 				break ;
-			mlx_put_pixel(mlx->img, x, y, YELLOW);
+			mlx_put_pixel(mlx->img, x, y, BLACK);
 			++x;
 		}
 		++y;
@@ -99,7 +99,7 @@ void	draw_direction(t_mlx *mlx, double x0, double y0)
 	{
 		if (x0 < 0 || y0 < 0)
 			break ;
-		mlx_put_pixel(mlx->img, x0, y0, CYAN);
+		mlx_put_pixel(mlx->img, x0, y0, BLACK);
 		x0 += dist_x;
 		y0 += dist_y;
 	}
@@ -142,10 +142,10 @@ void	render(void *var)
 	draw_background(mlx);
 	cast_rays(mlx, -1, SIZE * WIDTH);
 	i = 0;
-	while (*getter_map()[i] != NULL)
+	while ((*getter_map())[i] != NULL)
 	{
 		j = 0;
-		while (*getter_map()[i][j] != '\0')
+		while ((*getter_map())[i][j] != '\0')
 		{
 			draw_map(mlx, j, i);
 			++j;

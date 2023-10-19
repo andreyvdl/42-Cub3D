@@ -40,14 +40,16 @@ typedef struct s_mlx
 	mlx_image_t		*img;
 	mlx_t			*win;
 	bool			m_cntl;
+	uint32_t		ceil;
+	uint32_t		floor;
 }	t_mlx;
 
 typedef struct s_wall_parameters
 {
 	double	height;
-	int 	init;
+	int		init;
 	int		ray_x;
-} t_wall;
+}	t_wall;
 
 
 // attributes_functions.c
@@ -72,7 +74,7 @@ void			draw_wall(t_mlx *mlx, t_wall wall, mlx_texture_t *tex);
 // element_functions.c
 int				validate_element(char *line);
 void			normalize_element(char *start);
-int				element_checker(char *filename, char **map);
+int				element_checker(char *filename);
 
 // error_message.c
 int				you_made_the_l(char *str);
@@ -132,7 +134,7 @@ int				free_mlx_error(t_mlx *mlx);
 int				make_it_visual(t_mlx *mlx, int vision_dir);
 
 // world_globals.c
-char			***getter_map(void); // !!!!!!!!!!!
+char			***getter_map(void);
 mlx_texture_t	**getter_tex(void);
 
 // map_utils.c

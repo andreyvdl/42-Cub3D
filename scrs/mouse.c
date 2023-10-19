@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 14:58:54 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/18 16:54:41 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 15:35:20 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	mouse(double x_pos, double y_pos, void *var)
 	if (mlx->m_cntl == true)
 		return ;
 	if (x_pos < WIDTH_2)
-		*getter_player_ang() -= ROT_ANG;
+		*getter_player_ang() -= ROT_ANG * 0.5;
 	else if (x_pos > WIDTH_2)
-		*getter_player_ang() += ROT_ANG;
+		*getter_player_ang() += ROT_ANG * 0.5;
 	if (*getter_player_ang() < 0)
 		*getter_player_ang() += 360;
 	if (*getter_player_ang() > 360)
