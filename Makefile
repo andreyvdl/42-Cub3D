@@ -74,3 +74,6 @@ temp:
 
 norm:
 	norminette $(SCRS)
+
+w:
+	watch -n0 norminette $(SCRS)
