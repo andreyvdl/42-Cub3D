@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+         #
+#    By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/16 11:01:50 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/19 15:03:28 by adantas-         ###   ########.fr        #
+#    Updated: 2023/10/19 16:11:02 by rleite-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME					=	cub3D
 
-SCRS					=	$(addprefix scrs/, attributes_functions.c cast_rays.c \
+SCRS					=	$(addprefix srcs/, attributes_functions.c cast_rays.c \
 							draw_wall.c element_functions.c error_message.c ft_atoi.c \
 							ft_split.c get_next_line.c has_invalid_functions.c \
 							keyboard.c main.c map_functions.c mouse.c player_globals.c \
