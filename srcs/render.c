@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 14:57:40 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/19 15:35:52 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:18:06 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ void	draw_map(t_mlx *mlx, int map_x, int map_y)
 		{
 			if (ft_strchr("1 ", (*getter_map())[map_y][map_x]))
 				mlx_put_pixel(mlx->img, x, y, 0xFFA500FF);
-			/*else if (ft_strchr("Dd", getter_map[map_y][map_x]) != NULL)
-				mlx_put_pixel(mlx->img, x, y, RED);*/
 			else
 				mlx_put_pixel(mlx->img, x, y, CYAN);
 			++x;
@@ -105,33 +103,6 @@ void	draw_direction(t_mlx *mlx, double x0, double y0)
 	}
 }
 
-/* void	draw_aim(t_mlx *mlx)
-{
-	uint32_t	color;
-	int			counter;
-
-	if (*getter_player_ang()< 45 || *getter_player_ang()> 315)
-		color = BLUE;
-	else if (*getter_player_ang()> 45 && *getter_player_ang()< 135)
-		color = PINK;
-	else if (*getter_player_ang()> 135 && *getter_player_ang()< 225)
-		color = CYAN;
-	else if (*getter_player_ang()> 225 && *getter_player_ang()< 315)
-		color = YELLOW;
-	else
-		color = WHITE;
-	counter = 1;
-	mlx_put_pixel(mlx->img, 400, 300, color);
-	while (counter < 10)
-	{
-		mlx_put_pixel(mlx->img, 400 + counter, 300, color);
-		mlx_put_pixel(mlx->img, 400 - counter, 300, color);
-		mlx_put_pixel(mlx->img, 400, 300 + counter, color);
-		mlx_put_pixel(mlx->img, 400, 300 - counter, color);
-		++counter;
-	}
-} */
-
 void	render(void *var)
 {
 	t_mlx	*mlx;
@@ -152,7 +123,6 @@ void	render(void *var)
 		}
 		++i;
 	}
-	// draw_aim(mlx);
 	draw_direction(mlx, *getter_player_x(), *getter_player_y());
 	draw_player(mlx);
 }
