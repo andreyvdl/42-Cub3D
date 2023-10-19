@@ -6,7 +6,7 @@
 /*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:00:24 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 16:42:02 by rleite-s         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:25:20 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ void	free_mlx(t_mlx *mlx)
 	mlx_terminate(mlx->win);
 }
 
-int	free_mlx_error(t_mlx *mlx)
+int	free_mlx_error(t_mlx *mlx, mlx_errno_t mlx_error)
 {
+	
 	if (mlx->tex[NO])
 		mlx_delete_texture(mlx->tex[NO]);
 	if (mlx->tex[SO])
@@ -48,19 +49,19 @@ int	free_mlx_error(t_mlx *mlx)
 		mlx_delete_image(mlx->win, mlx->img);
 	if (mlx->win)
 		mlx_terminate(mlx->win);
-	return (you_made_the_l((char *)mlx_strerror(mlx_errno)));
+	return (you_made_the_l((char *)mlx_strerror(mlx_error)));
 }
 
 int	make_it_visual(t_mlx *mlx, int vision_dir)
 {
 	mlx->win = mlx_init(WIDTH, HEIGHT, "Cub3D", false);
 	if (mlx->win == NULL)
-		return (free_mlx_error(mlx));
+		return (free_mlx_error(mlx, MLX_WINFAIL));
 	if (load_textures(mlx))
-		return (free_mlx_error(mlx));
+		return (free_mlx_error(mlx, MLX_INVPNG));
 	mlx->img = mlx_new_image(mlx->win, WIDTH, HEIGHT);
 	if (mlx->img == NULL)
-		return (free_mlx_error(mlx));
+		return (free_mlx_error(mlx, MLX_MEMFAIL));
 	*getter_player_ang() = 360 - vision_dir;
 	*getter_dir_x() = cos(RAD_1 * *getter_player_ang());
 	*getter_dir_y() = sin(RAD_1 * *getter_player_ang());
