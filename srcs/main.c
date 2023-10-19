@@ -77,10 +77,24 @@ void	set_colors_and_get_player_pos(t_mlx *mlx)
 	char	**split;
 
 	split = ft_split(mlx->elements[4], ',');
+	if (split == NULL)
+	{
+		ft_free_matrix(*getter_map());
+		free_local_matrix(mlx->elements);
+		you_made_the_l("Malloc error. You computer is burning.");
+		exit(2);
+	}
 	mlx->floor = (uint32_t)(ft_atoi(split[R]) << 24 | ft_atoi(split[G]) << 16 \
 							| ft_atoi(split[B]) << 8 | 255);
 	ft_free_matrix((void **)split);
 	split = ft_split(mlx->elements[5], ',');
+	if (split == NULL)
+	{
+		ft_free_matrix(*getter_map());
+		free_local_matrix(mlx->elements);
+		you_made_the_l("Malloc error. You computer is burning.");
+		exit(2);
+	}
 	mlx->ceil = (uint32_t)(ft_atoi(split[R]) << 24 | ft_atoi(split[G]) << 16 \
 							| ft_atoi(split[B]) << 8 | 255);
 	set_player_pos();
