@@ -6,18 +6,19 @@
 #    By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/16 11:01:50 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/18 12:10:51 by rleite-s         ###   ########.fr        #
+#    Updated: 2023/10/19 11:01:04 by rleite-s         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME					=	cub3D
 
 SCRS					=	$(addprefix scrs/, attributes_functions.c cast_rays.c \
-							element_functions.c error_message.c fake_globals.c \
-							ft_atoi.c ft_split.c get_next_line.c has_invalid_functions.c \
-							keyboard.c main.c map_functions.c mouse.c render.c visual_start.c) \
+							draw_wall.c element_functions.c error_message.c ft_atoi.c \
+							ft_split.c get_next_line.c has_invalid_functions.c \
+							keyboard.c main.c map_functions.c mouse.c player_globals.c \
+							render.c visual_start.c world_globals.c) \
 							$(addprefix utils/, map_utils.c math_utils.c matrix_utils.c \
-							mem_utils.c str_utils2.c str_utils.c)
+							mem_utils.c str_utils.c str_utils2.c)
 #OBJS_FOLDER_DIR_PATH	=	objs/
 OBJS					=	$(SCRS:%.c=%.o)
 
