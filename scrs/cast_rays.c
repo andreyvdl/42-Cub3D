@@ -111,19 +111,19 @@ void	cast_rays(t_mlx *mlx, int pixel, int width_sz)
 	double	ray_inc;
 
 	ray_ang = RAD_1 * (*getter_player_ang() - FOV / 2.0);
-	ray_inc = RAD_90 / WIDTH; // 0.002;
+	ray_inc = RAD_90 / WIDTH;
 	while (++pixel < WIDTH)
 	{
 		ray_ang = rad_overflow(ray_ang);
 		dist[Y] = cost_y_ray_distance(&x[Y], &y[Y], 1 / -tan(ray_ang), ray_ang);
 		dist[X] = cost_x_ray_distance(&x[X], &y[X], -tan(ray_ang), ray_ang);
 		if (dist[Y] < dist[X])
-			draw_wall(mlx, width_sz / (dist[Y] * fisheye_fix(ray_ang)), pixel, \
-			(int)(x[Y] * SIZE) % 64, texture_ternary(mlx->tex[NO], \
+			draw_wall(mlx, (t_wall){width_sz / (dist[Y] * fisheye_fix(ray_ang) \
+			), pixel, (int)(x[Y] * SIZE) % 64}, texture_ternary(mlx->tex[NO], \
 			mlx->tex[SO], ray_ang >= M_PI && ray_ang <= RAD_360));
 		else
-			draw_wall(mlx, width_sz / (dist[X] * fisheye_fix(ray_ang)), pixel, \
-			(int)(y[X] * SIZE) % 64, texture_ternary(mlx->tex[WE], \
+			draw_wall(mlx, (t_wall){width_sz / (dist[X] * fisheye_fix(ray_ang) \
+			), pixel, (int)(y[X] * SIZE) % 64}, texture_ternary(mlx->tex[WE], \
 			mlx->tex[EA], ray_ang >= RAD_90 && ray_ang <= RAD_270));
 		ray_ang += ray_inc;
 	}

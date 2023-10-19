@@ -42,6 +42,14 @@ typedef struct s_mlx
 	bool			m_cntl;
 }	t_mlx;
 
+typedef struct s_wall_parameters
+{
+	double	height;
+	int 	init;
+	int		ray_x;
+} t_wall;
+
+
 // attributes_functions.c
 void			adjust_attributes(char *textures[]);
 int				got_new_attribute(char *textures[], char **elements, char *new);
@@ -59,8 +67,7 @@ void			cast_rays(t_mlx *mlx, int pixel, int width_sz);
 
 // draw_wall.c
 uint32_t		tex_to_col(mlx_texture_t *tex, int x, int y);
-void			draw_wall(t_mlx *mlx, double height, int init, int ray_x, \
-							mlx_texture_t *tex);
+void			draw_wall(t_mlx *mlx, t_wall wall, mlx_texture_t *tex);
 
 // element_functions.c
 int				validate_element(char *line);
