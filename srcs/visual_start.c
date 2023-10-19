@@ -3,39 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   visual_start.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:00:24 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/18 16:59:33 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:42:02 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube.h"
 
-const char	*g_map[] = {
-	"1111111111111111",
-	"1000000000000001",
-	"1000000000000001",
-	"1001100000011001",
-	"1001100000011001",
-	"1000000000000001",
-	"1000000000000001",
-	"1000000000000001",
-	"1000000000000001",
-	"1001100000011001",
-	"1001100000011001",
-	"1000000000000001",
-	"1000000000000001",
-	"1111111111111111",
-	NULL
-};
-
 bool	load_textures(t_mlx *mlx)
 {
-	mlx->tex[NO] = mlx_load_png(mlx->attributes[NO]);
-	mlx->tex[SO] = mlx_load_png(mlx->attributes[SO]);
-	mlx->tex[WE] = mlx_load_png(mlx->attributes[WE]);
-	mlx->tex[EA] = mlx_load_png(mlx->attributes[EA]);
+	mlx->tex[NO] = mlx_load_png(mlx->elements[NO]);
+	mlx->tex[SO] = mlx_load_png(mlx->elements[SO]);
+	mlx->tex[WE] = mlx_load_png(mlx->elements[WE]);
+	mlx->tex[EA] = mlx_load_png(mlx->elements[EA]);
 	if (mlx->tex[NO] == NULL || mlx->tex[SO] == NULL || mlx->tex[WE] == NULL
 		|| mlx->tex[EA] == NULL)
 		return (true);

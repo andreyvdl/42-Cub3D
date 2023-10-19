@@ -35,7 +35,7 @@ enum e_positions
 
 typedef struct s_mlx
 {
-	char			**attributes;
+	char			**elements;
 	mlx_texture_t	*tex[4];
 	mlx_image_t		*img;
 	mlx_t			*win;
@@ -53,9 +53,9 @@ typedef struct s_wall_parameters
 
 
 // attributes_functions.c
-void			adjust_attributes(char *textures[]);
-int				got_new_attribute(char *textures[], char **elements, char *new);
-int				get_view_attributes(char *textures[], char *filename);
+void			adjust_elements(char *textures[]);
+int				got_new_element(char *textures[], char **elements, char *new);
+int				get_view_elements(char *textures[], char *filename);
 
 // cast_rays.c
 void			update_distance(double *x, double *y, double *ray, double *off);

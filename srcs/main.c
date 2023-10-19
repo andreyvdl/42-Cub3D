@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 13:57:13 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:41:27 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,11 @@ void	set_colors_and_get_player_pos(t_mlx *mlx)
 {
 	char	**split;
 
-	split = ft_split(mlx->attributes[4], ',');
+	split = ft_split(mlx->elements[4], ',');
 	mlx->floor = (uint32_t)(ft_atoi(split[R]) << 24 | ft_atoi(split[G]) << 16 \
 							| ft_atoi(split[B]) << 8 | 255);
 	ft_free_matrix((void **)split);
-	split = ft_split(mlx->attributes[5], ',');
+	split = ft_split(mlx->elements[5], ',');
 	mlx->ceil = (uint32_t)(ft_atoi(split[R]) << 24 | ft_atoi(split[G]) << 16 \
 							| ft_atoi(split[B]) << 8 | 255);
 	set_player_pos();
@@ -89,7 +89,7 @@ void	set_colors_and_get_player_pos(t_mlx *mlx)
 int	main(int argc, char *argv[])
 {
 	char	**map;
-	char	*attributes[7];
+	char	*elements[7];
 	t_mlx	mlx;
 
 	mlx = (t_mlx){0};
@@ -100,17 +100,17 @@ int	main(int argc, char *argv[])
 	map = get_map(argv[1]);
 	if (map == NULL)
 		return (1);
-	ft_memset(attributes, 0, sizeof(char *[7]));
-	if (get_view_attributes(attributes, argv[1]))
+	ft_memset(elements, 0, sizeof(char *[7]));
+	if (get_view_elements(elements, argv[1]))
 	{
 		ft_free_matrix((void **)map);
 		return (1);
 	}
 	*getter_map() = map;
-	mlx.attributes = attributes;
+	mlx.elements = elements;
 	set_colors_and_get_player_pos(&mlx);
 	make_it_visual(&mlx, where_to_look(map));
 	ft_free_matrix((void **)map);
-	free_local_matrix(attributes);
+	free_local_matrix(elements);
 	return (0);
 }

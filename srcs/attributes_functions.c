@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   attributes_functions.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:22:01 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 13:29:43 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:41:13 by rleite-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube.h"
 
-void	adjust_attributes(char *textures[])
+void	adjust_elements(char *textures[])
 {
 	int	i;
 
@@ -30,7 +30,7 @@ void	adjust_attributes(char *textures[])
 	}
 }
 
-int	got_new_attribute(char *textures[], char **elements, char *new)
+int	got_new_element(char *textures[], char **elements, char *new)
 {
 	int	i;
 
@@ -46,7 +46,7 @@ int	got_new_attribute(char *textures[], char **elements, char *new)
 	return (1);
 }
 
-int	get_view_attributes(char *textures[], char *filename)
+int	get_view_elements(char *textures[], char *filename)
 {
 	const char	*elements[6] = {"NO ", "SO ", "WE ", "EA ", "F ", "C "};
 	char		*line;
@@ -67,10 +67,10 @@ int	get_view_attributes(char *textures[], char *filename)
 			return (-1);
 		}
 		normalize_element(line);
-		if (got_new_attribute(textures, (char **)elements, line))
+		if (got_new_element(textures, (char **)elements, line))
 			++i;
 	}
 	close(fd);
-	adjust_attributes(textures);
+	adjust_elements(textures);
 	return (0);
 }
