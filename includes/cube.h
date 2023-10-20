@@ -33,6 +33,12 @@ enum e_positions
 	Y
 };
 
+typedef struct s_text
+{
+	char			letter;
+	struct s_text	*next;
+}	t_text;
+
 typedef struct s_mlx
 {
 	char			**elements;

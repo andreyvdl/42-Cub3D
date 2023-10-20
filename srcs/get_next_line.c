@@ -1,118 +1,106 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/20 17:55:53 by rleite-s          #+#    #+#             */
+/*   Updated: 2023/10/20 20:07:06 by rleite-s         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/cube.h"
 
-char	*ft_realloc(char *s1, char *s2)
+int	has_line_feed(t_text *text)
 {
-	char	*new;
-	size_t	index1 = 0;
-	size_t	index2 = 0;
-	size_t	index_new = 0;
+	while (text)
+	{
+		if (text->letter == '\n')
+			return (1);
+		text = text->next;
+	}
+	return (0);
+}
 
-	if (s1 == NULL && s2 == NULL)
+size_t	get_line_len(t_text *text)
+{
+	size_t	len;
+
+	len = 0;
+	while (text)
 	{
+		if (text->letter == '\n')
+			return (len + 1);
+		text = text->next;
+		len++;
+	}
+	return (len);
+}
+
+int	read_text(int fd, t_text **text)
+{
+	char	*line;
+	size_t	i;
+	ssize_t	returned;
+
+	line = malloc(BUFFER_SIZE);
+	if (!line)
+		return (-1);
+	while (!has_line_feed(*text))
+	{
+		returned = read(fd, line, BUFFER_SIZE);
+		if (returned <= 0)
+			break ;
+		i = 0;
+		while (i < returned)
+		{
+			if (insert_into_list(text, line[i++]))
+			{
+				free (line);
+				return (-1);
+			}
+		}
+	}
+	free(line);
+	return (returned);
+}
+
+char	*get_line(t_text **text)
+{
+	char	*line;
+	size_t	line_len;
+	size_t	i;
+
+	if (!text || !*text)
+		return (NULL);
+	line_len = get_line_len(text);
+	line = malloc(line_len + 1);
+	if (!line)
+	{
+		free_list(text);
 		return (NULL);
 	}
-	new = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!new)
+	i = 0;
+	while (i < line_len)
 	{
-		return (NULL);
+		line[i++] = (*text)->letter;
+		free_node(text);
 	}
-	while (s1 != NULL && s1[index1] != '\0')
-	{
-		new[index_new] = s1[index1];
-		index_new++;
-		index1++;
-	}
-	free(s1);
-	while (s2 != NULL && s2[index2] != '\0')
-	{
-		new[index_new] = s2[index2];
-		index_new++;
-		index2++;
-	}
-	new[index_new] = 0;
-	return (new);
+	line[i] = 0;
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
-	char		*line;
-	char		*aux;
-	int			i = 0;
-	long		bytes_read = 1;
+	static t_text	*text;
 
-	if (rest != NULL)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 	{
-		while (rest[i] != '\n' && rest[i] != '\0')
-			i++;
-		if (rest[i] == '\n')
-		{
-			char	bkp = rest[i + 1];
-			rest[i + 1] = '\0';
-			line = ft_strdup(rest);
-			if (!line)
-			{
-				free(rest);
-				rest = NULL;
-				return (NULL);
-			}
-			rest[i + 1] = bkp;
-			aux = rest;
-			rest = ft_strdup(&rest[i + 1]);
-			free(aux);
-			return (line);
-		}
-	}
-	line = malloc(BUFFER_SIZE + 1);
-	while (bytes_read > 0)
-	{
-		bytes_read = read(fd, line, BUFFER_SIZE);
-		if (bytes_read < 0)
-		{
-			free(line);
-			free(rest);
-			rest = NULL;
-			return (NULL);
-		}
-		line[bytes_read] = '\0';
-		if (bytes_read == 0)
-			break;
-		rest = ft_realloc(rest, line);
-		i = 0;
-		while (line[i] != '\n' && line[i] != '\0')
-			i++;
-		if (line[i] == '\n')
-		{
-			break ;
-		}
-	}
-	free(line);
-	if (rest == NULL)
+		free_list(&text);
 		return (NULL);
-	i = 0;
-	while (rest[i] != '\n' && rest[i] != '\0')
-		i++;
-	if (rest[i] == '\n')
-	{
-		char	bkp = rest[i + 1];
-		rest[i + 1] = '\0';
-		line = ft_strdup(rest);
-		if (!line)
-		{
-			free(rest);
-			rest = NULL;
-			return (NULL);
-		}
-		rest[i + 1] = bkp;
-		aux = rest;
-		rest = ft_strdup(&rest[i + 1]);
-		free(aux);
 	}
-	else
-	{
-		line = rest;
-		rest = NULL;
-	}
-	return (line);
+	if (read_text(fd, &text) == -1)
+		free_list(&text);
+	return (get_line(&text));
 }
