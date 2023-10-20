@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 17:16:39 by rleite-s         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:06:01 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	set_colors_and_get_player_pos(t_mlx *mlx)
 	split = ft_split(mlx->elements[4], ',');
 	if (split == NULL)
 	{
-		ft_free_matrix(*getter_map());
+		ft_free_matrix((void **)*getter_map());
 		free_local_matrix(mlx->elements);
 		you_made_the_l("Malloc error. You computer is burning.");
 		exit(2);
@@ -90,7 +90,7 @@ void	set_colors_and_get_player_pos(t_mlx *mlx)
 	split = ft_split(mlx->elements[5], ',');
 	if (split == NULL)
 	{
-		ft_free_matrix(*getter_map());
+		ft_free_matrix((void **)*getter_map());
 		free_local_matrix(mlx->elements);
 		you_made_the_l("Malloc error. You computer is burning.");
 		exit(2);

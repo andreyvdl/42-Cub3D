@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   visual_start.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rleite-s <rleite-s@student.42.fr>          +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/16 11:00:24 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 17:25:20 by rleite-s         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:06:34 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	free_mlx(t_mlx *mlx)
 
 int	free_mlx_error(t_mlx *mlx, mlx_errno_t mlx_error)
 {
-	
 	if (mlx->tex[NO])
 		mlx_delete_texture(mlx->tex[NO]);
 	if (mlx->tex[SO])

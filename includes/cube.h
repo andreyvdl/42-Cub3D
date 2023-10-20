@@ -130,7 +130,7 @@ void			render(void *var);
 // visual_start.c
 bool			load_textures(t_mlx *mlx);
 void			free_mlx(t_mlx *mlx);
-int				free_mlx_error(t_mlx *mlx);
+int				free_mlx_error(t_mlx *mlx, mlx_errno_t mlx_error);
 int				make_it_visual(t_mlx *mlx, int vision_dir);
 
 // world_globals.c
