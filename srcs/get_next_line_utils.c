@@ -6,7 +6,7 @@
 /*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 20:13:48 by rleite-s          #+#    #+#             */
-/*   Updated: 2023/10/20 20:24:05 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/20 20:45:43 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	insert_into_list(t_text **text, char letter)
 	aux->next = malloc(sizeof(t_text));
 	if (!aux->next)
 		return (-1);
-	aux->letter = letter;
-	aux->next = NULL;
+	aux->next->letter = letter;
+	aux->next->next = NULL;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:18:26 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/20 20:23:46 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/20 20:33:05 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,10 @@ int	element_checker(char *filename)
 	while (match != 6)
 	{
 		line = get_next_line(fd);
+		if (!line)
+		{
+			return (you_made_the_l("Somenthing went wrong!"));
+		}
 		if (line[0] != '\n')
 		{
 			normalize_element(line);

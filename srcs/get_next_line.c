@@ -6,7 +6,7 @@
 /*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:55:53 by rleite-s          #+#    #+#             */
-/*   Updated: 2023/10/20 20:24:10 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/20 20:31:03 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ size_t	get_line_len(t_text *text)
 int	read_text(int fd, t_text **text)
 {
 	char	*line;
-	size_t	i;
+	ssize_t	i;
 	ssize_t	returned;
 
 	line = malloc(BUFFER_SIZE);
@@ -74,7 +74,7 @@ char	*get_line(t_text **text)
 
 	if (!text || !*text)
 		return (NULL);
-	line_len = get_line_len(text);
+	line_len = get_line_len(*text);
 	line = malloc(line_len + 1);
 	if (!line)
 	{

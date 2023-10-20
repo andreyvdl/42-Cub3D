@@ -92,6 +92,11 @@ int				ft_atoi(const char *nptr);
 // ft_split.c
 char			**ft_split(const char *s, char c);
 
+// get_next_line_utis.c
+void			free_node(t_text **text);
+void			free_list(t_text **text);
+int				insert_into_list(t_text **text, char letter);
+
 // get_next_line.c
 char			*get_next_line(int fd);
 
