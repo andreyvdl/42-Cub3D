@@ -1,7 +1,7 @@
-NO       textures/NORTH2.png
-           SO        textures/SOUTH2.png
-WE ./textures/WEST2.png
-EA ./textures/EAST2.png
+NO       textures/fern_north.png
+           SO        textures/fern_south.png
+WE ./textures/fern_west.png
+EA ./textures/fern_east.png
 
 C     255,255,255
 F 42,84,168
