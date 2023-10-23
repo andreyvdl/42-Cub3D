@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 11:28:40 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/19 15:49:44 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/23 15:33:31 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,15 @@
 // GNL
 # define BUFFER_SIZE	1
 
-// 
+// Scale to 3d
 # define SIZE			8
 
-// fov
-# define FOV			90
+// Fov
+# define FOV			30
 
 // Screen size
 # define WIDTH			800
 # define HEIGHT			600
-
-// Mini-map size
 # define WIDTH_2		400
 # define HEIGHT_2		300
 
@@ -34,7 +32,7 @@
 # define DIR_SIZE		8
 
 // Angles
-# define ROT_ANG		5
+# define ROT_ANG		2
 # define RAD_1			0.0174532925199
 # define RAD_90			1.57079632679
 # define RAD_270		4.71238898037

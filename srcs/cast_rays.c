@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cast_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 20:23:27 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/20 20:23:28 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/23 14:09:38 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	cast_rays(t_mlx *mlx, int pixel, int width_sz)
 	double	ray_inc;
 
 	ray_ang = RAD_1 * (*getter_player_ang() - FOV / 2.0);
-	ray_inc = RAD_90 / WIDTH;
+	ray_inc = RAD_1 * FOV / WIDTH;
 	while (++pixel < WIDTH)
 	{
 		ray_ang = rad_overflow(ray_ang);
