@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/20 20:24:24 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/23 13:11:43 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	set_player_pos(void)
 			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' \
 				|| map[i][j] == 'W')
 			{
-				*getter_player_x() = j * SIZE;
-				*getter_player_y() = i * SIZE;
+				*getter_player_x() = j * SIZE + 1.5;
+				*getter_player_y() = i * SIZE + 1.5;
 				return ;
 			}
 			++j;
@@ -97,6 +97,7 @@ void	set_colors_and_get_player_pos(t_mlx *mlx)
 	}
 	mlx->ceil = (uint32_t)(ft_atoi(split[R]) << 24 | ft_atoi(split[G]) << 16 \
 							| ft_atoi(split[B]) << 8 | 255);
+	ft_free_matrix((void **)split);
 	set_player_pos();
 }
 

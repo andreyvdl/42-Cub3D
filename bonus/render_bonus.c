@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.c                                           :+:      :+:    :+:   */
+/*   render_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/17 14:57:40 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/23 12:01:15 by adantas-         ###   ########.fr       */
+/*   Created: 2023/10/23 11:59:19 by adantas-          #+#    #+#             */
+/*   Updated: 2023/10/23 11:59:26 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,23 @@ void	draw_direction(t_mlx *mlx, double x0, double y0)
 void	render(void *var)
 {
 	t_mlx	*mlx;
+	int		i;
+	int		j;
 
 	mlx = (t_mlx *)var;
 	draw_background(mlx);
 	cast_rays(mlx, -1, SIZE * WIDTH);
+	i = 0;
+	while ((*getter_map())[i] != NULL)
+	{
+		j = 0;
+		while ((*getter_map())[i][j] != '\0')
+		{
+			draw_map(mlx, j, i);
+			++j;
+		}
+		++i;
+	}
+	draw_direction(mlx, *getter_player_x(), *getter_player_y());
+	draw_player(mlx);
 }

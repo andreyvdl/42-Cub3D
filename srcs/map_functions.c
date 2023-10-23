@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:16:33 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/20 20:24:31 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/23 11:58:03 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,5 +130,6 @@ char	**get_map(char *filename)
 		ft_free_matrix((void **)map);
 		map = NULL;
 	}
+	change_walls(map);
 	return (map);
 }

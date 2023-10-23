@@ -111,6 +111,9 @@ int				has_invalid_number(char *str);
 void			movement_keys(t_mlx *mlx);
 void			keyboard(mlx_key_data_t data, void *var);
 
+//map_change_walls.c
+void			change_walls(char **map);
+
 // map_functions.c
 int				count_map_lines(int fd, int map_lines, int itens_ignore, \
 								int map_start);
