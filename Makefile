@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+         #
+#    By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/20 20:23:03 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/24 11:50:26 by adantas-, r      ###   ########.fr        #
+#    Updated: 2023/10/24 17:59:56 by adantas-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,14 @@ RM					=	rm -f
 BONUS_EXISTS		=	$(wildcard $(addprefix bonus/, keyboard_bonus.o render_bonus.o visual_start_bonus.o))
 MANDATORY_EXISTS	=	$(wildcard $(addprefix srcs/, keyboard.o render.o visual_start.o))
 
-all: $(NAME)
+all: MLX42/build/libmlx42.a $(NAME)
+
+MLX42/build/libmlx42.a:
+ifeq (, $(wildcard MLX42/build))
+	cmake -S MLX42 -B MLX42/build
+	cmake -S MLX42 --build MLX42/build
+endif
+	@make -j4 -C MLX42/build
 
 %.o: %.c includes/cube.h includes/defines.h
 	cc $(FLAGS) -c $< -o $@ $(INCLUDE)
@@ -50,9 +57,15 @@ $(NAME): $(if $(BONUS_EXISTS), $(OBJS_BONUS), $(OBJS))
 	cc $(FLAGS) $^ MLX42/build/libmlx42.a -o $@ $(MLX_FLAGS) $(INCLUDE)
 
 clean:
+ifeq (MLX42/build, $(wildcard MLX42/build))
+	@make -C MLX42/build clean
+else
+	$(RM) -r MLX42/build
+endif
 	$(RM) $(OBJS) $(OBJS_BONUS)
 
 fclean: clean
+	$(RM) -r MLX42/build
 	$(RM) $(NAME)
 
 re: fclean
