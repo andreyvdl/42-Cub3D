@@ -6,7 +6,7 @@
 /*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 11:59:19 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/23 11:59:26 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/24 14:02:00 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,17 +112,20 @@ void	render(void *var)
 	mlx = (t_mlx *)var;
 	draw_background(mlx);
 	cast_rays(mlx, -1, SIZE * WIDTH);
-	i = 0;
-	while ((*getter_map())[i] != NULL)
+	if (mlx->map_render == false)
 	{
-		j = 0;
-		while ((*getter_map())[i][j] != '\0')
+		i = 0;
+		while ((*getter_map())[i] != NULL)
 		{
-			draw_map(mlx, j, i);
-			++j;
+			j = 0;
+			while ((*getter_map())[i][j] != '\0')
+			{
+				draw_map(mlx, j, i);
+				++j;
+			}
+			++i;
 		}
-		++i;
+		draw_direction(mlx, *getter_player_x(), *getter_player_y());
+		draw_player(mlx);
 	}
-	draw_direction(mlx, *getter_player_x(), *getter_player_y());
-	draw_player(mlx);
 }

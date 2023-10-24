@@ -45,7 +45,8 @@ typedef struct s_mlx
 	mlx_texture_t	*tex[4];
 	mlx_image_t		*img;
 	mlx_t			*win;
-	bool			m_cntl;
+	bool			mouse_control;
+	bool			map_render;
 	uint32_t		ceil;
 	uint32_t		floor;
 }	t_mlx;
@@ -110,6 +111,7 @@ int				has_invalid_number(char *str);
 // keyboard.c
 void			movement_keys(t_mlx *mlx);
 void			keyboard(mlx_key_data_t data, void *var);
+void			toggle_minimap(t_mlx *mlx);
 
 //map_change_walls.c
 void			change_walls(char **map);
