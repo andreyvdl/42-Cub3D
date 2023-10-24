@@ -63,6 +63,20 @@ void	normalize_element(char *start)
 	}
 }
 
+static int	match_validate(char *line, int match)
+{
+	if (!line && !match)
+		return (you_made_the_l("Empty file.") * 7);
+	else if (!line)
+		return (you_made_the_l("Read corruption, or the file ends too soon."));
+	if (line[0] != '\n')
+	{
+		normalize_element(line);
+		match = validate_element(line);
+	}
+	return (match);
+}
+
 int	element_checker(char *filename)
 {
 	int		fd;
@@ -76,21 +90,15 @@ int	element_checker(char *filename)
 	while (match != 6)
 	{
 		line = get_next_line(fd);
-		if (!line)
-		{
-			return (you_made_the_l("Somenthing went wrong!"));
-		}
-		if (line[0] != '\n')
-		{
-			normalize_element(line);
-			match = validate_element(line);
-		}
+		match = match_validate(line, match);
 		free(line);
-		if (match == -1)
+		if (match <= -1)
 			break ;
 	}
 	close(fd);
 	if (match == -1)
 		return (you_made_the_l("Invalid element."));
+	if (match < -1)
+		return (-1);
 	return (0);
 }
