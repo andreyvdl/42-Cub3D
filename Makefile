@@ -3,80 +3,70 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+         #
+#    By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/20 20:23:03 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/23 12:20:25 by adantas-         ###   ########.fr        #
+#    Updated: 2023/10/24 11:50:26 by adantas-, r      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME					=	cub3D
+NAME				=	cub3D
 
-SCRS					=	$(addprefix srcs/, attributes_functions.c cast_rays.c \
+SCRS				=	$(addprefix srcs/, attributes_functions.c cast_rays.c \
 							draw_wall.c element_functions.c error_message.c ft_atoi.c \
 							ft_split.c get_next_line.c get_next_line_utils.c map_change_walls.c\
 							has_invalid_functions.c keyboard.c main.c map_functions.c \
 							player_globals.c render.c visual_start.c world_globals.c) \
 							$(addprefix utils/, map_utils.c math_utils.c matrix_utils.c \
 							mem_utils.c str_utils.c str_utils2.c)
-#OBJS_FOLDER_DIR_PATH	=	objs/
-OBJS					=	$(SCRS:%.c=%.o)
+OBJS				=	$(SCRS:%.c=%.o)
 
-FLAGS					=	-Wall -Wextra -Werror -g
-MLX_FLAGS				=	-lm -ldl -pthread -lglfw
-INCLUDE					=	-I includes
+SCRS_BONUS			=	$(addprefix srcs/, attributes_functions.c cast_rays.c \
+							draw_wall.c element_functions.c error_message.c ft_atoi.c \
+							ft_split.c get_next_line.c get_next_line_utils.c map_change_walls.c\
+							has_invalid_functions.c main.c map_functions.c \
+							player_globals.c world_globals.c) \
+							$(addprefix utils/, map_utils.c matrix_utils.c \
+							mem_utils.c str_utils.c str_utils2.c) \
+							$(addprefix bonus/, keyboard_bonus.c math_utils_bonus.c \
+							mouse_bonus.c render_bonus.c visual_start_bonus.c)
+OBJS_BONUS			=	$(SCRS_BONUS:%.c=%.o)
 
-RM						=	rm -f
+FLAGS				=	-Wall -Wextra -Werror -g
+MLX_FLAGS			=	-lm -ldl -pthread -lglfw
+INCLUDE				=	-I includes
 
-all: $(if $(SCRS_BONUS), ,$(NAME))
+RM					=	rm -f
 
-%.o: %.c
+BONUS_EXISTS		=	$(wildcard $(addprefix bonus/, keyboard_bonus.o render_bonus.o visual_start_bonus.o))
+MANDATORY_EXISTS	=	$(wildcard $(addprefix srcs/, keyboard.o render.o visual_start.o))
+
+all: $(NAME)
+
+%.o: %.c includes/cube.h includes/defines.h
 	cc $(FLAGS) -c $< -o $@ $(INCLUDE)
 
-$(NAME): $(if $(SCRS_BONUS), ,$(OBJS))
+$(NAME): $(if $(BONUS_EXISTS), $(OBJS_BONUS), $(OBJS))
 	cc $(FLAGS) $^ MLX42/build/libmlx42.a -o $@ $(MLX_FLAGS) $(INCLUDE)
 
-dir:
-	$(if ifeq ($(wildcard $(OBJS_FOLDER_DIR_PATH)),), \
-		$(shell mkdir -p $(OBJS_FOLDER_DIR_PATH)))
-
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(OBJS_BONUS)
 
 fclean: clean
 	$(RM) $(NAME)
 
-re: fclean all
-#	make
+re: fclean
+	@make --no-print-directory
+	
+re_bonus: fclean bonus
 
-bonus: $(if $(SCRS), fclean $(SCRS_BONUS), $(SCRS_BONUS))
-# Fazer um binário com o $(NAME)...
+bonus: $(if $(MANDATORY_EXISTS), fclean)
+	@make OBJS="$(OBJS_BONUS)" --no-print-directory
 
 .PHONY: all clean fclean re bonus
-
-r: all
-	./$(NAME) maps/valid.cub
 
 v: all
 	clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=codam.sup --log-file=log ./$(NAME) maps/valid.cub
 	
-#############################
-# 			MLX CODAM		#
-#############################
-#
-# Remover as pastas: .git e .github
-#
-# Tem que mudar a versão do cmake pra uma que a máquina aguente (cmake --version)
-# cmake -B <nome de pasta>
-# cmake --build <nome da pasta criada anteriormente>
-# (libmlx42.a) estará criada na pasta que você atribuiu o nome
-
-
-temp:
-	cc cub_enviesado.c cast_rays.c keyboard.c mouse.c render.c utils.c MLX42/build/libmlx42.a -Wall -Wextra -Werror -g -lm -ldl -pthread -lglfw && valgrind ./a.out
-
 norm:
-	norminette $(SCRS)
-
-w:
-	watch -n0 norminette $(SCRS)
+	@norminette $(SCRS) $(SCRS_BONUS)
