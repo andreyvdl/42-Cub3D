@@ -1,7 +1,0 @@
-/nfs/homes/adantas-/C/quadradinho_de_3/MLX42/build/CMakeFiles/install/strip.dir
-/nfs/homes/adantas-/C/quadradinho_de_3/MLX42/build/CMakeFiles/install.dir
-/nfs/homes/adantas-/C/quadradinho_de_3/MLX42/build/CMakeFiles/list_install_components.dir
-/nfs/homes/adantas-/C/quadradinho_de_3/MLX42/build/CMakeFiles/rebuild_cache.dir
-/nfs/homes/adantas-/C/quadradinho_de_3/MLX42/build/CMakeFiles/edit_cache.dir
-/nfs/homes/adantas-/C/quadradinho_de_3/MLX42/build/CMakeFiles/install/local.dir
-/nfs/homes/adantas-/C/quadradinho_de_3/MLX42/build/CMakeFiles/mlx42.dir
