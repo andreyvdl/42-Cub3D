@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   visual_start_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 11:59:56 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/23 12:00:16 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/23 17:27:35 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "cube.h"
 
 bool	load_textures(t_mlx *mlx)
 {

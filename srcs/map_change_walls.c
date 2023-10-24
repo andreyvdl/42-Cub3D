@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   map_change_walls.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 11:57:42 by adantas-          #+#    #+#             */
-/*   Updated: 2023/10/23 11:58:08 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/24 10:59:27 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 void	change_walls(char **map)
 {
