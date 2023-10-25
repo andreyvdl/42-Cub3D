@@ -6,7 +6,7 @@
 #    By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/20 20:23:03 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/25 11:47:23 by adantas-, r      ###   ########.fr        #
+#    Updated: 2023/10/25 12:03:42 by adantas-, r      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -78,7 +78,7 @@ bonus: $(if $(MANDATORY_EXISTS), fclean)
 .PHONY: all clean fclean re bonus
 
 v: all
-	clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=codam.sup --log-file=log ./$(NAME) maps/valid.cub
+	clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=codam.sup --log-file=log ./$(NAME) maps/$(MAP).cub
 	
 norm:
 	@norminette $(SCRS) $(SCRS_BONUS)
