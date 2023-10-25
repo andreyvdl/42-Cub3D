@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   element_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:18:26 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/24 11:13:18 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/25 16:52:34 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	element_checker(char *filename)
 			break ;
 	}
 	close(fd);
+	get_next_line(-1);
 	if (match == -1)
 		return (you_made_the_l("Invalid element."));
 	if (match < -1)

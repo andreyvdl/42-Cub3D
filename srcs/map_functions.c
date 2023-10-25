@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:16:33 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/25 12:25:08 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/25 16:51:55 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ char	**get_map(char *filename)
 	map = do_the_map(open(filename, O_RDONLY), map_lines);
 	if (!map)
 		return (NULL);
+	get_next_line(-1);
 	if (map_normalizer(map))
 		return (NULL);
 	if (validate_map(map))

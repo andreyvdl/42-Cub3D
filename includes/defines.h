@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 11:28:40 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/25 12:30:18 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/25 17:01:23 by adantas-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define DEFINES_H
 
 // GNL
-# define BUFFER_SIZE	1
+# define BUFFER_SIZE	4096
 
 // Scale to 3d
 # define SIZE			8
