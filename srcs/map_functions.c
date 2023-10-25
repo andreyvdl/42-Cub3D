@@ -6,7 +6,7 @@
 /*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:16:33 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/25 12:10:25 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/25 12:25:08 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	validate_map(char **map)
 {
 	if (ft_matrixlen(map) < 3 || ft_strlen(map[0]) < 3)
 		return (you_made_the_l("Invalid map size."));
-	if (ft_matrixlen(map) > 75 || ft_strlen(map[0]) > 100)
+	if (ft_matrixlen(map) > HEIGHT / 8 || ft_strlen(map[0]) > WIDTH / 8)
 		return (you_made_the_l("Too large, the computer will be destroyed!"));
 	if (has_invalid_character(map))
 		return (you_made_the_l("The map has a invalid character."));
