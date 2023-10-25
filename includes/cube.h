@@ -1,15 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cube.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/25 12:28:30 by adantas-, r       #+#    #+#             */
+/*   Updated: 2023/10/25 12:28:52 by adantas-, r      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef CUBE_H
 # define CUBE_H
 
 # include <fcntl.h>
 # include <math.h>
-//# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "defines.h"
-//# include <limits.h>
 
 enum e_attributes
 {
@@ -57,7 +66,6 @@ typedef struct s_wall_parameters
 	int		init;
 	int		ray_x;
 }	t_wall;
-
 
 // attributes_functions.c
 void			adjust_elements(char *textures[]);
