@@ -6,7 +6,7 @@
 #    By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/20 20:23:03 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/25 12:03:42 by adantas-, r      ###   ########.fr        #
+#    Updated: 2023/10/25 12:28:06 by adantas-, r      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,4 +81,4 @@ v: all
 	clear && valgrind --leak-check=full --show-leak-kinds=all --suppressions=codam.sup --log-file=log ./$(NAME) maps/$(MAP).cub
 	
 norm:
-	@norminette $(SCRS) $(SCRS_BONUS)
+	@norminette $(SCRS) $(SCRS_BONUS) $(wildcard $(addprefix includes/, defines.h cube.h))
