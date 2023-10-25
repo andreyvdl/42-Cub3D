@@ -6,7 +6,7 @@
 /*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:22:38 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/20 20:24:14 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/25 10:55:23 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,12 @@ int	has_invalid_walls(char **map)
 				|| ft_strchr("NSEW", map[line_index][column_index])) \
 			&& ((line_index == 0 || !map[line_index + 1])
 				|| (column_index == 0)
-				|| (!map[line_index][column_index + 1]
-				|| map[line_index][column_index + 1] == ' ')
-				|| (column_index > 0 && (!map[line_index][column_index - 1]
-				|| map[line_index][column_index - 1] == ' '))
-			))
+				|| !map[line_index][column_index + 1]
+				|| map[line_index][column_index + 1] == ' '
+				|| map[line_index][column_index - 1] == ' '
+				|| map[line_index + 1][column_index] == ' '
+				|| map[line_index - 1][column_index] == ' ')
+			)
 				return (1);
 			column_index++;
 		}
