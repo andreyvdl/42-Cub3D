@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+         #
+#    By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/20 20:23:03 by adantas-, r       #+#    #+#              #
-#    Updated: 2023/10/24 17:59:56 by adantas-         ###   ########.fr        #
+#    Updated: 2023/10/25 11:47:23 by adantas-, r      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,11 +57,10 @@ $(NAME): $(if $(BONUS_EXISTS), $(OBJS_BONUS), $(OBJS))
 	cc $(FLAGS) $^ MLX42/build/libmlx42.a -o $@ $(MLX_FLAGS) $(INCLUDE)
 
 clean:
-ifeq (MLX42/build, $(wildcard MLX42/build))
+ifeq (MLX42/build/Makefile, $(wildcard MLX42/build/Makefile))
 	@make -C MLX42/build clean
-else
-	$(RM) -r MLX42/build
 endif
+	$(RM) -r MLX42/build
 	$(RM) $(OBJS) $(OBJS_BONUS)
 
 fclean: clean
