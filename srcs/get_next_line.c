@@ -6,101 +6,98 @@
 /*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 17:55:53 by rleite-s          #+#    #+#             */
-/*   Updated: 2023/10/20 20:31:03 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/26 11:30:51 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube.h"
 
-int	has_line_feed(t_text *text)
+ssize_t	where_line_feed(char *buffer)
 {
-	while (text)
+	ssize_t	index;
+
+	index = 0;
+	while (buffer[index] != '\n' && buffer[index])
+		index++;
+	return (index);
+}
+
+short int	check_buffer(char **buffer, char **line, char *aux)
+{
+	ssize_t	index;
+
+	if (*buffer)
 	{
-		if (text->letter == '\n')
-			return (1);
-		text = text->next;
+		index = where_line_feed(*buffer);
+		if (!(*buffer)[index])
+		{
+			*line = *buffer;
+			*buffer = NULL;
+		}
+		else
+		{
+			aux = *buffer;
+			*line = ft_substr(*buffer, 0, index + 1);
+			if ((*buffer)[index + 1])
+				*buffer = ft_strdup(*buffer + index + 1);
+			else
+				*buffer = NULL;
+			free(aux);
+			return (0);
+		}
+	}
+	return (1);
+}
+
+short int	check_readed(ssize_t *readed, int fd, char **text, char **buffer)
+{
+	free(*text);
+	*text = (char *)malloc(BUFFER_SIZE + *readed + 1);
+	*readed = read(fd, *text, BUFFER_SIZE + *readed);
+	if (*readed < 0)
+	{
+		free(*buffer);
+		*buffer = NULL;
+		return (1);
 	}
 	return (0);
 }
 
-size_t	get_line_len(t_text *text)
+char	*get_next_line_1(int fd, char **buffer)
 {
-	size_t	len;
+	char		*text;
+	char		*line;
+	ssize_t		readed;
 
-	len = 0;
-	while (text)
+	line = NULL;
+	if (check_buffer(buffer, &line, NULL))
 	{
-		if (text->letter == '\n')
-			return (len + 1);
-		text = text->next;
-		len++;
-	}
-	return (len);
-}
-
-int	read_text(int fd, t_text **text)
-{
-	char	*line;
-	ssize_t	i;
-	ssize_t	returned;
-
-	line = malloc(BUFFER_SIZE);
-	if (!line)
-		return (-1);
-	while (!has_line_feed(*text))
-	{
-		returned = read(fd, line, BUFFER_SIZE);
-		if (returned <= 0)
-			break ;
-		i = 0;
-		while (i < returned)
+		text = (char *)malloc(BUFFER_SIZE + 1);
+		readed = read(fd, text, BUFFER_SIZE);
+		while (readed > 0)
 		{
-			if (insert_into_list(text, line[i++]))
-			{
-				free (line);
-				return (-1);
-			}
+			text[readed] = 0;
+			*buffer = ft_strjoin(line, text);
+			free(line);
+			if (check_buffer(buffer, &line, NULL) == 0)
+				break ;
+			if (check_readed(&readed, fd, &text, buffer))
+				return (*buffer);
 		}
+		free(text);
 	}
-	free(line);
-	return (returned);
-}
-
-char	*get_line(t_text **text)
-{
-	char	*line;
-	size_t	line_len;
-	size_t	i;
-
-	if (!text || !*text)
-		return (NULL);
-	line_len = get_line_len(*text);
-	line = malloc(line_len + 1);
-	if (!line)
-	{
-		free_list(text);
-		return (NULL);
-	}
-	i = 0;
-	while (i < line_len)
-	{
-		line[i++] = (*text)->letter;
-		free_node(text);
-	}
-	line[i] = 0;
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static t_text	*text;
+	static char	*buffer;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 	{
-		free_list(&text);
+		free(buffer);
+		buffer = NULL;
 		return (NULL);
 	}
-	if (read_text(fd, &text) == -1)
-		free_list(&text);
-	return (get_line(&text));
+	return (get_next_line_1(fd, &buffer));
 }

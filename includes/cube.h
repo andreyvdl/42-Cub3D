@@ -6,7 +6,7 @@
 /*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 12:28:30 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/25 12:28:52 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/26 11:27:19 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,6 @@ enum e_positions
 	X = 0,
 	Y
 };
-
-typedef struct s_text
-{
-	char			letter;
-	struct s_text	*next;
-}	t_text;
 
 typedef struct s_mlx
 {
@@ -102,9 +96,8 @@ int				ft_atoi(const char *nptr);
 char			**ft_split(const char *s, char c);
 
 // get_next_line_utis.c
-void			free_node(t_text **text);
-void			free_list(t_text **text);
-int				insert_into_list(t_text **text, char letter);
+char			*ft_substr(char *s, unsigned int start, size_t len);
+char			*ft_strjoin(char *s1, char *s2);
 
 // get_next_line.c
 char			*get_next_line(int fd);

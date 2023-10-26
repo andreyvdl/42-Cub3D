@@ -116,7 +116,7 @@ int	main(int argc, char *argv[])
 	if (map == NULL)
 		return (1);
 	ft_memset(elements, 0, sizeof(char *[7]));
-	if (get_view_elements(elements, argv[1]))
+	if (get_view_elements(elements, argv[1]) & !get_next_line(-1))
 	{
 		ft_free_matrix((void **)map);
 		return (1);
