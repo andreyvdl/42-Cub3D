@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adantas- <adantas-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 11:31:56 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/24 17:48:36 by adantas-         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:45:12 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	error_checker(int argc, char *argv[])
 		return (you_made_the_l("Invalid filename."));
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (you_made_the_l("Error while trying open the file."));
+		return (you_made_the_l("Maybe the file doesn't exists."));
 	close(fd);
 	return (0);
 }
