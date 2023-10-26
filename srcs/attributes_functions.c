@@ -6,7 +6,7 @@
 /*   By: adantas-, rleite-s <adantas-@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 20:23:19 by adantas-, r       #+#    #+#             */
-/*   Updated: 2023/10/20 20:23:21 by adantas-, r      ###   ########.fr       */
+/*   Updated: 2023/10/26 11:42:57 by adantas-, r      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	get_view_elements(char *textures[], char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		return (-1);
+		return (you_made_the_l("A change occurs in the file to get elements."));
 	i = 0;
 	while (i < 6)
 	{
@@ -64,7 +64,7 @@ int	get_view_elements(char *textures[], char *filename)
 		{
 			close(fd);
 			free_local_matrix(textures);
-			return (-1);
+			return (you_made_the_l("Somenthing went wrong when get elements."));
 		}
 		normalize_element(line);
 		if (got_new_element(textures, (char **)elements, line))
